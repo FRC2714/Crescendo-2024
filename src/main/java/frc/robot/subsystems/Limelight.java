@@ -15,7 +15,7 @@ public class Limelight extends SubsystemBase {
 	private String limelightName = "limelight-back";
 	private double kCameraHeight = 9.14;
 	private double kMountingAngle = 35.0;
-	private double GoalHeight = 24.5; //inches, deg
+	private double GoalHeight = 24.5; //inches, deg NEEDS TO BE UPDATED
 
 	public Limelight() {}
 
@@ -40,7 +40,7 @@ public class Limelight extends SubsystemBase {
 	}
 
 	public double getXAngleOffsetDegrees() {
-		return -1 * LimelightHelpers.getTX(limelightName); //must be negative
+		return LimelightHelpers.getTX(limelightName);
 	}
 
 	public double getXOffsetRadians() {
@@ -56,18 +56,8 @@ public class Limelight extends SubsystemBase {
         else LimelightHelpers.setLEDMode_ForceOff(limelightName); // LED force off
     }
 
-	//Back Limelight
-	public void setRetroPipeline() {
-		// setGoalHeight(LimelightConstants.kMiddleRetroTapeHeight);
-		LimelightHelpers.setPipelineIndex(limelightName, 7);
-	}
-
 	public void setAprilTagPipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 1);
-	}
-
-	public void setAprilTagFarPipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 2);
+		LimelightHelpers.setPipelineIndex(limelightName, 7);
 	}
 
 	public Command setLEDCommand(boolean lightOn) {
@@ -81,6 +71,6 @@ public class Limelight extends SubsystemBase {
 	@Override
 	public void periodic() {
 		SmartDashboard.putNumber("ll distance to goal", getDistanceToGoalMeters());
-		SmartDashboard.putNumber("ll rotation from apriltag", isTargetVisible() ? LimelightHelpers.getTX(LimelightConstants.kLimelightName) : 30);
+		SmartDashboard.putNumber("ll rotation from apriltag", isTargetVisible() ? getXAngleOffsetDegrees() : 30);
 	}
 }

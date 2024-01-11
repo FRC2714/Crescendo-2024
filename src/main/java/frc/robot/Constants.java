@@ -33,11 +33,6 @@ public final class Constants {
       new Pose3d(
         new Translation3d(15.75, 9.14, 0.0), //inches
         new Rotation3d(0.0, 35.0, 0.0));//degrees
-
-    public static final double kMiddleRetroTapeHeight = 24.5; // inches
-    public static final double kCubeLowHeight = -18; // inches
-    public static final double kCubeMiddleHeight = 5.5; // inches
-    public static final double kCubeHighHeight = 17; // inches
     public static final String kLimelightName = "limelight-back";
   }
 
