@@ -56,8 +56,12 @@ public class Limelight extends SubsystemBase {
         else LimelightHelpers.setLEDMode_ForceOff(limelightName); // LED force off
     }
 
-	public void setAprilTagPipeline() {
+	public void setSpeakerPipeline() {
 		LimelightHelpers.setPipelineIndex(limelightName, 7);
+	}
+
+  public void setStagePipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 2);
 	}
 
 	public Command setLEDCommand(boolean lightOn) {

@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
@@ -15,9 +16,9 @@ public class RotateToGoal extends Command {
   private DriveSubsystem m_drivetrain;
   private Limelight m_limelight;
 
-  private ProfiledPIDController thetaController;
+  private PIDController thetaController;
 
-  private double kPThetaController = 0.4;
+  private double kPThetaController = .8;
 
   /** Creates a new RotateToGoal. */
   public RotateToGoal(DriveSubsystem m_drivetrain, Limelight m_limelight) {
@@ -25,11 +26,11 @@ public class RotateToGoal extends Command {
     this.m_limelight = m_limelight;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(4, 4));
+    thetaController = new PIDController(kPThetaController, 0, 0);
     
     addRequirements(m_drivetrain);
 
-    thetaController.setGoal(0);
+    thetaController.setSetpoint(0);
     thetaController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
   }
@@ -37,7 +38,7 @@ public class RotateToGoal extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_limelight.setAprilTagPipeline();
+    m_limelight.setStagePipeline();
     m_limelight.setLED(false);
   }
 
@@ -50,7 +51,7 @@ public class RotateToGoal extends Command {
         0, 
         thetaController.calculate(m_limelight.getXOffsetRadians()), 
         true,
-        false);
+        true);
     }
   }
 
@@ -64,6 +65,6 @@ public class RotateToGoal extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return thetaController.atGoal();
+    return thetaController.atSetpoint();
   }
 }

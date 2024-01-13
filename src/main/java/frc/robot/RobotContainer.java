@@ -7,12 +7,15 @@ package frc.robot;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
@@ -21,6 +24,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -38,14 +42,24 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Limelight m_limelight = new Limelight();
+  private double kPThetaController = .7;
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+
+
+  ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
+  SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(2, 1);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+
+    
+    thetaController.setGoal(0);
+    thetaController.setTolerance(Units.degreesToRadians(0),0);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
     // Configure the button bindings
     configureButtonBindings();
 
@@ -53,14 +67,23 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-        new RunCommand(
+        // autoAiming ?
+            new RunCommand(
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                thetaController.calculate(m_limelight.getXOffsetRadians()), 
                 true, true),
             m_robotDrive));
-  }
+        // :
+            // new RunCommand(
+            // () -> m_robotDrive.drive(
+            //     -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+            //     -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+            //     -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+            //     true, true),
+            // m_robotDrive));
+    }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -78,6 +101,8 @@ public class RobotContainer {
             m_robotDrive));
 
     m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
+
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
   }
 
   /**
