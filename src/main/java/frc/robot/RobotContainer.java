@@ -26,6 +26,8 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.RotateToGoal;
+import frc.robot.commands.SeekNote;
+
 import java.util.List;
 
 /*
@@ -78,6 +80,7 @@ public class RobotContainer {
             m_robotDrive));
 
     m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
+    m_driverController.leftBumper().whileTrue(new SeekNote(m_robotDrive, m_limelight));
   }
 
   /**
