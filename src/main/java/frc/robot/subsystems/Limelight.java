@@ -57,7 +57,11 @@ public class Limelight extends SubsystemBase {
     }
 
 	public void setAprilTagPipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 7);
+		LimelightHelpers.setPipelineIndex(limelightName, 2);
+	}
+
+	public void setNoteSeekerPipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 6); // tune later
 	}
 
 	public Command setLEDCommand(boolean lightOn) {
