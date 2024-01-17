@@ -24,6 +24,13 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final class IntakeConstants {
+    public static final int kFrontRollerCanId = 0; //TBD
+    public static final int kBackRollerCanId = 0; //TBD
+    public static final double kRollerVoltage = 0; //TBD
+  }
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
