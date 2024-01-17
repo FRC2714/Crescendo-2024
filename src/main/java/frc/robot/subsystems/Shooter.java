@@ -35,9 +35,9 @@ public class Shooter extends SubsystemBase {
 
 
   public Shooter() {
+    pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
     topFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
-    bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
-    pivotMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
+    bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
 
     pivotMotor.setIdleMode(IdleMode.kBrake);
     topFlywheelMotor.setIdleMode(IdleMode.kBrake);
