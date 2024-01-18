@@ -6,7 +6,10 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -25,6 +28,14 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+  public static final class LimelightConstants {
+    public static final Pose3d kBackLimelightPose = 
+      new Pose3d(
+        new Translation3d(15.75, 9.14, 0.0), //inches
+        new Rotation3d(0.0, 35.0, 0.0));//degrees
+    public static final String kLimelightName = "limelight-back";
+  }
+  
   public static final class ShooterConstants {
     public static final int kTopFlywheelCanId = 0; // TBD
     public static final int kBottomFlywheelCanId = 0; // TBD
@@ -87,7 +98,7 @@ public final class Constants {
     public static final int kRearLeftDrivingCanId = 3;
     public static final int kFrontRightDrivingCanId = 1;
     public static final int kRearRightDrivingCanId = 2;
-    
+
 
     public static final int kFrontLeftTurningCanId = 8;
     public static final int kRearLeftTurningCanId = 7;
