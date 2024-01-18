@@ -28,7 +28,7 @@ public class RotateToGoal extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     thetaController = new PIDController(kPThetaController, 0, 0);
     
-    addRequirements(m_drivetrain);
+    addRequirements(m_drivetrain, m_limelight);
 
     thetaController.setSetpoint(0);
     thetaController.setTolerance(Units.degreesToRadians(0),0);
