@@ -43,7 +43,7 @@ public final class Constants {
     public static final int kBottomFlywheelCanId = 0; // TBD
     public static final int kPivotCanId = 0; // TBD
 
-    public static final double kPivotGearRatio = 0;
+    public static final double kPivotGearRatio = 9;
 
     public static final double kPivotEncoderConversionFactor = kPivotGearRatio * (360);
 
