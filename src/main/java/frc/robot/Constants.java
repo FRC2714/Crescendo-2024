@@ -34,6 +34,8 @@ public final class Constants {
         new Translation3d(15.75, 9.14, 0.0), //inches
         new Rotation3d(0.0, 35.0, 0.0));//degrees
     public static final String kLimelightName = "limelight-back";
+
+    public static final double kSpeakerGoalHeight = 0;
   }
   
   public static final class ShooterConstants {
@@ -106,6 +108,13 @@ public final class Constants {
     public static final int kRearRightTurningCanId = 6;
 
     public static final boolean kGyroReversed = false;
+
+    // Swerve PID values
+    public static final class ThetaPIDConstants {
+      public static final double kP = 0.8;
+      public static final double kI = 0;
+      public static final double kD = 0;
+    }
   }
 
   public static final class ModuleConstants {

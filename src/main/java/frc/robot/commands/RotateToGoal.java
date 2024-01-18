@@ -5,20 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class RotateToGoal extends Command {
+  
   private DriveSubsystem m_drivetrain;
   private Limelight m_limelight;
 
   private PIDController thetaController;
-
-  private double kPThetaController = .8;
 
   /** Creates a new RotateToGoal. */
   public RotateToGoal(DriveSubsystem m_drivetrain, Limelight m_limelight) {
@@ -26,9 +24,9 @@ public class RotateToGoal extends Command {
     this.m_limelight = m_limelight;
 
     // Use addRequirements() here to declare subsystem dependencies.
-    thetaController = new PIDController(kPThetaController, 0, 0);
-    
     addRequirements(m_drivetrain, m_limelight);
+
+    thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kP, ThetaPIDConstants.kP);
 
     thetaController.setSetpoint(0);
     thetaController.setTolerance(Units.degreesToRadians(0),0);

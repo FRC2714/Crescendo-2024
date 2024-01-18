@@ -13,6 +13,7 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
@@ -32,6 +33,13 @@ public class Shooter extends SubsystemBase {
   private PIDController pivotController;
   private PIDController flywheelController;
   private SimpleMotorFeedforward flywheelFeedforward;
+
+  private Limelight m_limelight;
+
+  private InterpolatingTreeMap<Double, Double> pivotAngleMap;
+  private InterpolatingTreeMap<Double, Double> flywheelVelocityMap;
+
+  private boolean dynamicEnabled;
 
 
   public Shooter() {
@@ -61,6 +69,23 @@ public class Shooter extends SubsystemBase {
     topFlywheelMotor.burnFlash();
     bottomFlywheelMotor.burnFlash();
     pivotMotor.burnFlash();
+
+    pivotAngleMap = new InterpolatingTreeMap<>(null, null);
+    flywheelVelocityMap = new InterpolatingTreeMap<>(null, null);
+
+    dynamicEnabled = false;
+  }
+
+  public void toggleDynamic() {
+    dynamicEnabled = !dynamicEnabled;
+  }
+
+  public void populatePivotAngleMap() {
+    pivotAngleMap.put(0.0, 0.0); // TBD
+  }
+
+  public void populateFlywheelVelocityMap() {
+    flywheelVelocityMap.put(0.0, 0.0); // TBD
   }
 
   public double getPivotAngle() {
@@ -72,7 +97,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setPivotAngle(double targetAngle) {
-    pivotController.setSetpoint(targetAngle);
+    if (!dynamicEnabled) pivotController.setSetpoint(targetAngle);
   }
 
   public double getFlywheelVelocity() {
@@ -84,7 +109,24 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setFlywheelVelocity(double targetVelocity) {
-    flywheelController.setSetpoint(targetVelocity);
+    if (!dynamicEnabled) flywheelController.setSetpoint(targetVelocity);
+  }
+
+  public double getDynamicPivotAngle() {
+    return m_limelight.isTargetVisible()
+      ? pivotAngleMap.get(m_limelight.getDistanceToGoalMeters())
+      : 0;
+  }
+
+  public double getDynamicFlywheelVelocity() {
+    return m_limelight.isTargetVisible()
+      ? flywheelVelocityMap.get(m_limelight.getDistanceToGoalMeters())
+      : 0;
+  }
+
+  public void setDynamic() {
+    setPivotAngle(getDynamicPivotAngle());
+    setFlywheelVelocity(getDynamicFlywheelVelocity());
   }
 
   public void setCalculatedPivotVoltage() {
@@ -92,7 +134,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setCalculatedFlywheelVoltage() {
-    pivotMotor.setVoltage(flywheelController.calculate(getFlywheelVelocity()) + flywheelFeedforward.calculate(getTargetFlywheelVelocity()));
+    topFlywheelMotor.setVoltage(flywheelController.calculate(getFlywheelVelocity()) + flywheelFeedforward.calculate(getTargetFlywheelVelocity()));
   }
 
   @Override
@@ -102,6 +144,10 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Target Pivot Angle", getTargetPivotAngle());
     SmartDashboard.putNumber("Current Flywheel Velocity", getFlywheelVelocity());
     SmartDashboard.putNumber("Target Flywheel Velocity", getTargetFlywheelVelocity());
+    SmartDashboard.putBoolean("Dynamic Enabled?", dynamicEnabled);
+
+    if (dynamicEnabled) setDynamic();
+
 
     setCalculatedPivotVoltage();
     setCalculatedFlywheelVoltage();
