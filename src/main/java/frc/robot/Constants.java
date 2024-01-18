@@ -32,10 +32,10 @@ public final class Constants {
     public static final Pose3d kBackLimelightPose = 
       new Pose3d(
         new Translation3d(15.75, 9.14, 0.0), //inches
-        new Rotation3d(0.0, 35.0, 0.0));//degrees
+        new Rotation3d(0.0, Units.degreesToRadians(35.0), 0.0));//degrees
     public static final String kLimelightName = "limelight-back";
 
-    public static final double kSpeakerGoalHeight = 0;
+    public static final double kSpeakerGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
   }
   
   public static final class ShooterConstants {

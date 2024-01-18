@@ -12,10 +12,10 @@ import frc.utils.LimelightHelpers;
 
 public class Limelight extends SubsystemBase {
 
-	private String limelightName = "limelight-back";
-	private double kCameraHeight = 9.14;
-	private double kMountingAngle = 35.0;
-	private double GoalHeight = 24.5; //inches, deg NEEDS TO BE UPDATED
+	private String limelightName = LimelightConstants.kLimelightName;
+	private double kCameraHeight = LimelightConstants.kBackLimelightPose.getY();
+	private double kMountingAngle = Units.radiansToDegrees(LimelightConstants.kBackLimelightPose.getRotation().getY());
+	private double GoalHeight = LimelightConstants.kSpeakerGoalHeight;
 
 	public Limelight() {}
 
