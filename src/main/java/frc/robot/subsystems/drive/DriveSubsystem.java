@@ -16,6 +16,8 @@ import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import frc.robot.Constants.DriveConstants;
+import frc.utils.FieldRelativeAcceleration;
+import frc.utils.FieldRelativeVelocity;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -53,6 +55,10 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
+  private FieldRelativeVelocity m_fieldRelativeVelocity = new FieldRelativeVelocity();
+  private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
+  private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
+
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
       DriveConstants.kDriveKinematics,
@@ -79,6 +85,18 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    
+    m_fieldRelativeVelocity = new FieldRelativeVelocity(getChassisSpeed(), new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)));
+    m_fieldRelativeAcceleration = new FieldRelativeAcceleration(m_fieldRelativeVelocity, m_lastFieldRelativeVelocity, 0.02);
+    m_lastFieldRelativeVelocity = m_fieldRelativeVelocity;
+  }
+
+  public FieldRelativeVelocity getFieldRelativeVelocity() {
+    return m_fieldRelativeVelocity;
+  }
+
+  public FieldRelativeAcceleration getFieldRelativeAcceleration() {
+    return m_fieldRelativeAcceleration;
   }
 
   /**
@@ -105,6 +123,18 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         },
         pose);
+  }
+
+  /**
+   * Converts the 4 swerve module states into a chassisSpeed by making use of the
+   * swerve drive kinematics.
+   * 
+   * @return ChassisSpeeds object containing robot X, Y, and Angular velocity
+   */
+  public ChassisSpeeds getChassisSpeed() {
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(),
+        m_rearLeft.getState(),
+        m_rearRight.getState());
   }
 
   /**

@@ -51,6 +51,8 @@ public final class Constants {
     public static final int kTopFlywheelSmartCurrentLimit = 0; // TBD
     public static final int kBottomFlywheelSmartCurrentLimit = 0; // TBD
 
+    public static final double kAccelerationCompensationFactor = 0.1;
+
     public static final class PivotPIDConstants {
       public static final double kP = 0; // TBD
       public static final double kI = 0; // TBD

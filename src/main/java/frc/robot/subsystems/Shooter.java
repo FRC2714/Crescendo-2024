@@ -13,12 +13,12 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.interpolation.InterpolatingTreeMap;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
 import frc.robot.Constants.ShooterConstants.PivotPIDConstants;
+import frc.utils.InterpolatingTreeMap;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -36,8 +36,9 @@ public class Shooter extends SubsystemBase {
 
   private Limelight m_limelight;
 
-  private InterpolatingTreeMap<Double, Double> pivotAngleMap;
-  private InterpolatingTreeMap<Double, Double> flywheelVelocityMap;
+  private InterpolatingTreeMap pivotAngleMap;
+  private InterpolatingTreeMap flywheelVelocityMap;
+  private InterpolatingTreeMap shootTimeMap;
 
   private boolean dynamicEnabled;
 
@@ -70,10 +71,15 @@ public class Shooter extends SubsystemBase {
     bottomFlywheelMotor.burnFlash();
     pivotMotor.burnFlash();
 
-    pivotAngleMap = new InterpolatingTreeMap<>(null, null);
-    flywheelVelocityMap = new InterpolatingTreeMap<>(null, null);
+    pivotAngleMap = new InterpolatingTreeMap();
+    flywheelVelocityMap = new InterpolatingTreeMap();
+    shootTimeMap = new InterpolatingTreeMap();
 
     dynamicEnabled = false;
+    
+    populatePivotAngleMap();
+    populateFlywheelVelocityMap();
+    populateShootTimeMap();
   }
 
   public void toggleDynamic() {
@@ -86,6 +92,14 @@ public class Shooter extends SubsystemBase {
 
   public void populateFlywheelVelocityMap() {
     flywheelVelocityMap.put(0.0, 0.0); // TBD
+  }
+
+  public void populateShootTimeMap() {
+    shootTimeMap.put(0.0, 0.0); // TBD
+  }
+
+  public double getInterpolatedShootTime(double distance) {
+    return shootTimeMap.getInterpolated(distance);
   }
 
   public double getPivotAngle() {
@@ -114,19 +128,36 @@ public class Shooter extends SubsystemBase {
 
   public double getDynamicPivotAngle() {
     return m_limelight.isTargetVisible()
-      ? pivotAngleMap.get(m_limelight.getDistanceToGoalMeters())
+      ? pivotAngleMap.getInterpolated(m_limelight.getDistanceToGoalMeters())
       : 0;
   }
 
   public double getDynamicFlywheelVelocity() {
     return m_limelight.isTargetVisible()
-      ? flywheelVelocityMap.get(m_limelight.getDistanceToGoalMeters())
+      ? flywheelVelocityMap.getInterpolated(m_limelight.getDistanceToGoalMeters())
+      : 0;
+  }
+
+  public double getDynamicPivotAngle(double adjustedDistance) {
+    return m_limelight.isTargetVisible()
+      ? pivotAngleMap.getInterpolated(adjustedDistance)
+      : 0;
+  }
+
+  public double getDynamicFlywheelVelocity(double adjustedDistance) {
+    return m_limelight.isTargetVisible()
+      ? flywheelVelocityMap.getInterpolated(adjustedDistance)
       : 0;
   }
 
   public void setDynamic() {
     setPivotAngle(getDynamicPivotAngle());
     setFlywheelVelocity(getDynamicFlywheelVelocity());
+  }
+
+  public void setMoveAndShoot(double adjustedDistance) {
+    setPivotAngle(getDynamicPivotAngle(adjustedDistance));
+    setFlywheelVelocity(getDynamicFlywheelVelocity(adjustedDistance));
   }
 
   public void setCalculatedPivotVoltage() {

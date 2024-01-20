@@ -23,6 +23,10 @@ public class Limelight extends SubsystemBase {
 		return (GoalHeight - kCameraHeight) / Math.tan(Units.degreesToRadians(kMountingAngle + getYAngleOffsetDegrees()));
 	}
 
+	public double getDistanceToGoalInches(double yOffsetDegrees) {
+		return (GoalHeight - kCameraHeight) / Math.tan(Units.degreesToRadians(kMountingAngle + yOffsetDegrees));
+	}
+
 	public void setGoalHeight(double GoalHeight) {
 		this.GoalHeight = GoalHeight;
 	}
@@ -34,6 +38,11 @@ public class Limelight extends SubsystemBase {
 	public double getDistanceToGoalMeters() {
 		return Units.inchesToMeters(getDistanceToGoalInches());
 	}
+	
+	public double getDistanceToGoalMeters(double yOffsetDegrees) {
+		return Units.inchesToMeters(getDistanceToGoalInches(yOffsetDegrees));
+	}
+
 
 	public double getYAngleOffsetDegrees() {
 		return LimelightHelpers.getTY(limelightName);
@@ -45,6 +54,10 @@ public class Limelight extends SubsystemBase {
 
 	public double getXOffsetRadians() {
 		return Units.degreesToRadians(getXAngleOffsetDegrees());
+	}
+
+	public double getYOffsetRadians() {
+		return Units.degreesToRadians(getYAngleOffsetDegrees());
 	}
 
 	public boolean isTargetVisible() {
