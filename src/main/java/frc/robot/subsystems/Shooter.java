@@ -19,6 +19,7 @@ import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
 import frc.robot.Constants.ShooterConstants.PivotPIDConstants;
 import frc.utils.InterpolatingTreeMap;
+import frc.utils.TunableNumber;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -39,6 +40,9 @@ public class Shooter extends SubsystemBase {
   private InterpolatingTreeMap pivotAngleMap;
   private InterpolatingTreeMap flywheelVelocityMap;
   private InterpolatingTreeMap shootTimeMap;
+
+  private TunableNumber pivotAngleTunableNumber;
+  private TunableNumber flywheelVelocityTunableNumber;
 
   private boolean dynamicEnabled;
 
@@ -80,6 +84,9 @@ public class Shooter extends SubsystemBase {
     populatePivotAngleMap();
     populateFlywheelVelocityMap();
     populateShootTimeMap();
+
+    pivotAngleTunableNumber = new TunableNumber("Tunable Pivot Angle");
+    flywheelVelocityTunableNumber = new TunableNumber("Tunable Flywheel Velocity");
   }
 
   public void toggleDynamic() {
@@ -148,6 +155,14 @@ public class Shooter extends SubsystemBase {
     return m_limelight.isTargetVisible()
       ? flywheelVelocityMap.getInterpolated(adjustedDistance)
       : 0;
+  }
+
+  public void tunePivotAngle() {
+    pivotController.setSetpoint(pivotAngleTunableNumber.get());
+  }
+
+  public void tuneFlywheelVelocity() {
+    pivotController.setSetpoint(flywheelVelocityTunableNumber.get());
   }
 
   public void setDynamic() {
