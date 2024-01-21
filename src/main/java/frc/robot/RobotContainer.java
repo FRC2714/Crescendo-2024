@@ -41,9 +41,9 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Limelight m_limelight = new Limelight();
-  private final Shooter m_shooter = new Shooter();
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelight);
+  private final Shooter m_shooter = new Shooter(m_limelight);
   private double kPThetaController = .7;
 
   // The driver's controller
@@ -148,6 +148,7 @@ public class RobotContainer {
 
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    m_robotDrive.resetPoseEstimator(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));

@@ -47,7 +47,7 @@ public class Shooter extends SubsystemBase {
   private boolean dynamicEnabled;
 
 
-  public Shooter() {
+  public Shooter(Limelight m_limelight) {
     pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
     topFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
     bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
@@ -90,6 +90,8 @@ public class Shooter extends SubsystemBase {
 
     pivotAngleTunableNumber = new TunableNumber("Tunable Pivot Angle");
     flywheelVelocityTunableNumber = new TunableNumber("Tunable Flywheel Velocity");
+
+    this.m_limelight = m_limelight;
   }
 
   public void toggleDynamic() {
