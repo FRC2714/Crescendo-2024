@@ -20,7 +20,7 @@ public class Blinkin {
     public void setRainbowEffect(){
         m_blinkin.set(LEDConstants.kRainbowEffect);
     public void setLavaEffect(){
-        m_blinkin.set(LEDConstants.kLavaEffect);
+        m_blinkin.set(LEDConstants.kLavaEffect);//test
     }
     }
 }
