@@ -1,4 +1,4 @@
-package frc.utils;
+package frc.robot.utils;
 
 public class FieldRelativeAcceleration {
     public double ax;

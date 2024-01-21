@@ -53,6 +53,8 @@ public final class Constants {
 
     public static final double kAccelerationCompensationFactor = 0.1;
 
+    public static final double kNominalVoltage = 11; // TBD
+
     public static final class PivotPIDConstants {
       public static final double kP = 0; // TBD
       public static final double kI = 0; // TBD

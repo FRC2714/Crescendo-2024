@@ -15,8 +15,8 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.utils.FieldRelativeAcceleration;
-import frc.utils.FieldRelativeVelocity;
+import frc.robot.utils.FieldRelativeAcceleration;
+import frc.robot.utils.FieldRelativeVelocity;
 
 public class MoveAndShoot extends Command {
   /** Creates a new MoveAndShoot. */

@@ -18,8 +18,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
 import frc.robot.Constants.ShooterConstants.PivotPIDConstants;
-import frc.utils.InterpolatingTreeMap;
-import frc.utils.TunableNumber;
+import frc.robot.utils.InterpolatingTreeMap;
+import frc.robot.utils.TunableNumber;
 
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
@@ -66,6 +66,9 @@ public class Shooter extends SubsystemBase {
     pivotEncoder.setPositionConversionFactor(ShooterConstants.kPivotEncoderConversionFactor);
 
     flywheelEncoder = topFlywheelMotor.getEncoder();
+
+    topFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
+    bottomFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
 
     pivotController = new PIDController(PivotPIDConstants.kP, PivotPIDConstants.kI, PivotPIDConstants.kD);
     flywheelController = new PIDController(FlywheelPIDConstants.kP, FlywheelPIDConstants.kI, FlywheelPIDConstants.kD);
