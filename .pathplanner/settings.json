@@ -1,9 +1,11 @@
 {
-  "robotWidth": 0.8,
-  "robotLength": 0.8,
+  "robotWidth": 0.9,
+  "robotLength": 0.9,
   "holonomicMode": true,
   "pathFolders": [
-    "fear of god essential"
+    "secrets",
+    "fear of god essential",
+    "other autos"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
