@@ -3,9 +3,9 @@
   "robotLength": 0.8,
   "holonomicMode": true,
   "pathFolders": [
-    "secrets",
-    "fear of god essential",
-    "other autos"
+    "essential",
+    "other autos",
+    "secrets"
   ],
   "autoFolders": [],
   "defaultMaxVel": 3.0,
