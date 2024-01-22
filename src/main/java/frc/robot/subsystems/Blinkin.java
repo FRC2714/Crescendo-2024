@@ -17,10 +17,4 @@ public class Blinkin {
     public void setFireEffect(){
         m_blinkin.set(LEDConstants.kFireEffect);
     }
-    public void setRainbowEffect(){
-        m_blinkin.set(LEDConstants.kRainbowEffect);
-    public void setLavaEffect(){
-        m_blinkin.set(LEDConstants.kLavaEffect);
-    }
-    }
 }
