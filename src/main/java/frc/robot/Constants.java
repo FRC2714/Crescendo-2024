@@ -147,17 +147,4 @@ public final class Constants {
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
   }
-  public static final class LEDConstants {
-    public static final int kArmBlinkinPort = 0;
-
-    public static final double kPurple = 0.91;
-    public static final double kYellow = 0.69;
-    public static final double kGreen = 0.77;
-    public static final double kRed = 0.61;
-
-    //effects
-    public static final double kFireEffect = -0.57;
-    public static final double kRainbowEffect = -0.99;
-    public static final double kLavaEffect = -0.73;
-  }
 }
