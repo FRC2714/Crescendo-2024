@@ -61,6 +61,20 @@ public class Limelight extends SubsystemBase {
 		return Units.degreesToRadians(getYAngleOffsetDegrees());
 	}
 
+	public Pose2d getBotPose2d() {
+		return LimelightHelpers.getBotPose2d(limelightName);
+	}
+
+	public double getTimestampSeconds() {
+		return Timer.getFPGATimestamp()
+		- (LimelightHelpers.getLatency_Pipeline(limelightName) / 1000.0)
+		- (LimelightHelpers.getLatency_Capture(limelightName) / 1000.0);
+	}
+
+	public double getPrimaryAprilTagId() {
+		return LimelightHelpers.getFiducialID(limelightName);
+	}
+
 	public boolean isTargetVisible() {
 		return LimelightHelpers.getTV(limelightName);
 	}
@@ -84,16 +98,6 @@ public class Limelight extends SubsystemBase {
 
 	public Command setLEDCommand(boolean lightOn) {
 		return new InstantCommand(() -> setLED(lightOn));
-	}
-
-	public Pose2d getBotPose2d() {
-		return LimelightHelpers.getBotPose2d(limelightName);
-	}
-
-	public double getTimestampSeconds() {
-		return Timer.getFPGATimestamp()
-		- (LimelightHelpers.getLatency_Pipeline(limelightName) / 1000.0)
-		- (LimelightHelpers.getLatency_Capture(limelightName) / 1000.0);
 	}
 
 	@Override
