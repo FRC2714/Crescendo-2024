@@ -74,8 +74,12 @@ public class Limelight extends SubsystemBase {
 		LimelightHelpers.setPipelineIndex(limelightName, 7);
 	}
 
-  public void setStagePipeline() {
+  	public void setStagePipeline() {
 		LimelightHelpers.setPipelineIndex(limelightName, 2);
+	}
+
+	public void setPosePipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 0); // TBD
 	}
 
 	public Command setLEDCommand(boolean lightOn) {
