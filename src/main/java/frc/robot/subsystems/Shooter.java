@@ -27,6 +27,7 @@ public class Shooter extends SubsystemBase {
   private CANSparkFlex topFlywheelMotor;
   private CANSparkFlex bottomFlywheelMotor;
   private CANSparkFlex pivotMotor;
+  private CANSparkFlex followingPivotMotor;
 
   private AbsoluteEncoder pivotEncoder;
   private RelativeEncoder flywheelEncoder;
@@ -49,17 +50,21 @@ public class Shooter extends SubsystemBase {
 
   public Shooter(Limelight m_limelight) {
     pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
+    followingPivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
     topFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
     bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
 
     pivotMotor.setIdleMode(IdleMode.kBrake);
+    followingPivotMotor.setIdleMode(IdleMode.kBrake);
     topFlywheelMotor.setIdleMode(IdleMode.kBrake);
     bottomFlywheelMotor.setIdleMode(IdleMode.kBrake);
 
     pivotMotor.setSmartCurrentLimit(ShooterConstants.kPivotSmartCurrentLimit);
+    followingPivotMotor.setSmartCurrentLimit(ShooterConstants.kFollowingPivotSmartCurrentLimit);
     topFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kTopFlywheelSmartCurrentLimit);
     bottomFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kBottomFlywheelSmartCurrentLimit);
 
+    followingPivotMotor.follow(pivotMotor, false);
     bottomFlywheelMotor.follow(topFlywheelMotor, true);
 
     pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
@@ -77,6 +82,7 @@ public class Shooter extends SubsystemBase {
     topFlywheelMotor.burnFlash();
     bottomFlywheelMotor.burnFlash();
     pivotMotor.burnFlash();
+    followingPivotMotor.burnFlash();
 
     pivotAngleMap = new InterpolatingTreeMap();
     flywheelVelocityMap = new InterpolatingTreeMap();
