@@ -18,7 +18,9 @@ public class Limelight extends SubsystemBase {
 	private double kMountingAngle = Units.radiansToDegrees(LimelightConstants.kBackLimelightPose.getRotation().getY());
 	private double GoalHeight = LimelightConstants.kSpeakerGoalHeight;
 
-	public Limelight() {}
+	public Limelight() {
+		setPosePipeline();
+	}
 
 	public double getDistanceToGoalInches() {
 		return (GoalHeight - kCameraHeight) / Math.tan(Units.degreesToRadians(kMountingAngle + getYAngleOffsetDegrees()));
