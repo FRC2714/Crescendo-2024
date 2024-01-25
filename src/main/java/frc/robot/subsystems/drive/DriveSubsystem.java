@@ -121,6 +121,10 @@ public class DriveSubsystem extends SubsystemBase {
     m_lastFieldRelativeVelocity = m_fieldRelativeVelocity;
 
     m_field.setRobotPose(getPose());
+
+    SmartDashboard.putNumber("Robot Field Relative X", getPose().getX());
+    SmartDashboard.putNumber("Robot Field Relative Y", getPose().getY());
+    SmartDashboard.putNumber("Robot Field Relative θ", getPose().getRotation().getDegrees());
   }
 
   public FieldRelativeVelocity getFieldRelativeVelocity() {
