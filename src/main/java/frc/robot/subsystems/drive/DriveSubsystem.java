@@ -16,6 +16,8 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.Limelight;
 import frc.robot.utils.FieldRelativeAcceleration;
@@ -62,6 +64,8 @@ public class DriveSubsystem extends SubsystemBase {
   private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
 
   private Limelight m_limelight;
+
+  private Field2d m_field = new Field2d();
   
   // Odometry class for tracking robot pose
   SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
@@ -88,6 +92,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Limelight m_limelight) {
     this.m_limelight = m_limelight;
+    SmartDashboard.putData("Field Position", m_field);
   }
 
   @Override
@@ -114,6 +119,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_fieldRelativeVelocity = new FieldRelativeVelocity(getChassisSpeed(), new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)));
     m_fieldRelativeAcceleration = new FieldRelativeAcceleration(m_fieldRelativeVelocity, m_lastFieldRelativeVelocity, 0.02);
     m_lastFieldRelativeVelocity = m_fieldRelativeVelocity;
+
+    m_field.setRobotPose(getPose());
   }
 
   public FieldRelativeVelocity getFieldRelativeVelocity() {

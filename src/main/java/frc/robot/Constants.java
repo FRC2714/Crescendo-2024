@@ -36,6 +36,9 @@ public final class Constants {
     public static final String kLimelightName = "limelight-back";
 
     public static final double kSpeakerGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
+
+    public static final Translation3d kBlueSpeakerGoalLocation = new Translation3d(-8.308975, 1.442593, 1.451102);
+    public static final Translation3d kRedSpeakerGoalLocation = new Translation3d(8.308467, 1.442593, 1.451102);
   }
   
   public static final class ShooterConstants {
