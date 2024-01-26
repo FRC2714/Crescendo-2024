@@ -67,6 +67,14 @@ public class Limelight extends SubsystemBase {
 		return LimelightHelpers.getBotPose2d(limelightName);
 	}
 
+	public Pose2d getBotPose2d_wpiRed() {
+		return LimelightHelpers.getBotPose2d_wpiRed(limelightName);
+	}
+
+	public Pose2d getBotPose2d_wpiBlue() {
+		return LimelightHelpers.getBotPose2d_wpiBlue(limelightName);
+	}
+
 	public double getTimestampSeconds() {
 		return Timer.getFPGATimestamp()
 		- (LimelightHelpers.getLatency_Pipeline(limelightName) / 1000.0)
@@ -95,7 +103,7 @@ public class Limelight extends SubsystemBase {
 	}
 
 	public void setPosePipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 0); // TBD
+		LimelightHelpers.setPipelineIndex(limelightName, 2); // TBD
 	}
 
 	public Command setLEDCommand(boolean lightOn) {

@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems.drive;
 
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -13,6 +15,9 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
@@ -78,6 +83,9 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
+  Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));
+  Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(5, 5, Units.degreesToRadians(30));
+
   SwerveDrivePoseEstimator m_pose = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
       new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)),
@@ -86,18 +94,21 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      }, getPose());
+      }, new Pose2d(), stateStdDevs, visionMeasurementStdDevs);
   
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Limelight m_limelight) {
     this.m_limelight = m_limelight;
-    SmartDashboard.putData("Field Position", m_field);
+    m_gyro.calibrate();
   }
 
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
+    SmartDashboard.putData("Field Position", m_field);
+    SmartDashboard.putNumber("Pose Rotation", getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Gyro Rotation", m_gyro.getAngle(IMUAxis.kZ));
     m_odometry.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
         new SwerveModulePosition[] {
@@ -114,7 +125,10 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    m_pose.addVisionMeasurement(m_limelight.getBotPose2d(), m_limelight.getTimestampSeconds());
+    if(m_limelight.isTargetVisible()) 
+    {
+      m_pose.addVisionMeasurement(m_limelight.getBotPose2d_wpiRed(), m_limelight.getTimestampSeconds());
+    }
     
     m_fieldRelativeVelocity = new FieldRelativeVelocity(getChassisSpeed(), new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)));
     m_fieldRelativeAcceleration = new FieldRelativeAcceleration(m_fieldRelativeVelocity, m_lastFieldRelativeVelocity, 0.02);
@@ -125,6 +139,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Robot Field Relative X", getPose().getX());
     SmartDashboard.putNumber("Robot Field Relative Y", getPose().getY());
     SmartDashboard.putNumber("Robot Field Relative θ", getPose().getRotation().getDegrees());
+    // SmartDashboard.putData("Field Position", m_field);
   }
 
   public FieldRelativeVelocity getFieldRelativeVelocity() {
@@ -170,7 +185,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         },
-        pose);
+        new Pose2d());
   }
 
   /**
@@ -300,6 +315,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
+    resetPoseEstimator(getPose());
   }
 
   /**

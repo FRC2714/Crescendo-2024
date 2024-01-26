@@ -21,7 +21,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Shooter;
+//import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -29,8 +29,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.MoveAndShoot;
-import frc.robot.commands.RotateToGoal;
+// import frc.robot.commands.RotateToGoal;
 import java.util.List;
 
 /*
@@ -43,7 +42,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final Limelight m_limelight = new Limelight();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelight);
-  private final Shooter m_shooter = new Shooter(m_limelight);
+  //private final Shooter m_shooter = new Shooter(m_limelight);
   private double kPThetaController = .7;
 
   // The driver's controller
@@ -74,17 +73,9 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                thetaController.calculate(m_limelight.getXOffsetRadians()), 
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, true),
             m_robotDrive));
-        // :
-            // new RunCommand(
-            // () -> m_robotDrive.drive(
-            //     -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-            //     -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-            //     -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-            //     true, true),
-            // m_robotDrive));
     }
 
   /**
@@ -102,9 +93,9 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
+    // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
+    //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
   }
 
   /**
