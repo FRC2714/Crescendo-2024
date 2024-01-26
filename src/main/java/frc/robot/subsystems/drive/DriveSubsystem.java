@@ -83,8 +83,8 @@ public class DriveSubsystem extends SubsystemBase {
           m_rearRight.getPosition()
       });
 
-  Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5));
-  Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(5, 5, Units.degreesToRadians(30));
+  Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.02, 0.02, Units.degreesToRadians(.01)); // Increase for less state trust
+  Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(0.1)); // Increase for less vision trust
 
   SwerveDrivePoseEstimator m_pose = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
@@ -185,7 +185,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         },
-        new Pose2d());
+        pose);
   }
 
   /**
