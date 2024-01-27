@@ -84,7 +84,7 @@ public class DriveSubsystem extends SubsystemBase {
       });
 
   Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.02, 0.02, Units.degreesToRadians(.01)); // Increase for less state trust
-  Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(0.1)); // Increase for less vision trust
+  Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(3, 3, Units.degreesToRadians(3)); // Increase for less vision trust
 
   SwerveDrivePoseEstimator m_pose = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
@@ -127,7 +127,7 @@ public class DriveSubsystem extends SubsystemBase {
         });
     if(m_limelight.isTargetVisible()) 
     {
-      m_pose.addVisionMeasurement(m_limelight.getBotPose2d_wpiRed(), m_limelight.getTimestampSeconds());
+      m_pose.addVisionMeasurement(m_limelight.getBotPose2d_wpiBlue(), m_limelight.getTimestampSeconds());
     }
     
     m_fieldRelativeVelocity = new FieldRelativeVelocity(getChassisSpeed(), new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)));
@@ -135,7 +135,6 @@ public class DriveSubsystem extends SubsystemBase {
     m_lastFieldRelativeVelocity = m_fieldRelativeVelocity;
 
     m_field.setRobotPose(getPose());
-
     SmartDashboard.putNumber("Pose X", getPose().getX());
     SmartDashboard.putNumber("Pose Y", getPose().getY());
     SmartDashboard.putNumber("Pose Theta", getPose().getRotation().getDegrees());
