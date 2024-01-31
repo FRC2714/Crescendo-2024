@@ -15,7 +15,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -57,10 +56,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    
-    thetaController.setGoal(0);
-    thetaController.setTolerance(Units.degreesToRadians(0),0);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    m_limelight.setPosePipeline();
     // Configure the button bindings
     configureButtonBindings();
 
@@ -138,7 +134,6 @@ public class RobotContainer {
         m_robotDrive);
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
     m_robotDrive.resetPoseEstimator(exampleTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.

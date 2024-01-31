@@ -4,18 +4,16 @@
 
 package frc.robot.subsystems.drive;
 
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
@@ -72,19 +70,9 @@ public class DriveSubsystem extends SubsystemBase {
 
   private Field2d m_field = new Field2d();
   
-  // Odometry class for tracking robot pose
-  SwerveDriveOdometry m_odometry = new SwerveDriveOdometry(
-      DriveConstants.kDriveKinematics,
-      Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
-      new SwerveModulePosition[] {
-          m_frontLeft.getPosition(),
-          m_frontRight.getPosition(),
-          m_rearLeft.getPosition(),
-          m_rearRight.getPosition()
-      });
-
-  Matrix<N3, N1> stateStdDevs = VecBuilder.fill(0.02, 0.02, Units.degreesToRadians(.01)); // Increase for less state trust
-  Matrix<N3, N1> visionMeasurementStdDevs = VecBuilder.fill(3, 3, Units.degreesToRadians(3)); // Increase for less vision trust
+  // Pose class for tracking robot pose
+  Vector<N3> stateStdDevs = VecBuilder.fill(0.02, 0.02, Units.degreesToRadians(.01)); // Increase for less state trust
+  Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(3, 3, Units.degreesToRadians(3)); // Increase for less vision trust
 
   SwerveDrivePoseEstimator m_pose = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
@@ -106,17 +94,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    SmartDashboard.putData("Field Position", m_field);
-    SmartDashboard.putNumber("Pose Rotation", getPose().getRotation().getDegrees());
-    SmartDashboard.putNumber("Gyro Rotation", m_gyro.getAngle(IMUAxis.kZ));
-    m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        });
+
     m_pose.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
         new SwerveModulePosition[] {
@@ -137,8 +115,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_field.setRobotPose(getPose());
     SmartDashboard.putNumber("Pose X", getPose().getX());
     SmartDashboard.putNumber("Pose Y", getPose().getY());
-    SmartDashboard.putNumber("Pose Theta", getPose().getRotation().getDegrees());
-    // SmartDashboard.putData("Field Position", m_field);
+    SmartDashboard.putNumber("Pose Rotation", getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Gyro Rotation", m_gyro.getAngle(IMUAxis.kZ));
+    SmartDashboard.putData("Field Position", m_field);
   }
 
   public FieldRelativeVelocity getFieldRelativeVelocity() {
@@ -159,22 +138,10 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   /**
-   * Resets the odometry to the specified pose.
+   * Resets the pose to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
    */
-  public void resetOdometry(Pose2d pose) {
-    m_odometry.resetPosition(
-        Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
-        new SwerveModulePosition[] {
-            m_frontLeft.getPosition(),
-            m_frontRight.getPosition(),
-            m_rearLeft.getPosition(),
-            m_rearRight.getPosition()
-        },
-        pose);
-  }
-
   public void resetPoseEstimator(Pose2d pose) {
     m_pose.resetPosition(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
