@@ -33,8 +33,8 @@ public final class Constants {
       new Pose3d(
         new Translation3d(15.75, 9.14, 0.0), //inches
         new Rotation3d(0.0, Units.degreesToRadians(35.0), 0.0));//degrees
-    public static final String kLimelightName = "limelight-back";
-
+    public static final String kLimelightBackName = "limelight-back";
+    public static final String kLimelightFrontName = "limelight-front";
     public static final double kSpeakerGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
   }
 
@@ -44,8 +44,8 @@ public final class Constants {
   }
   
   public static final class ShooterConstants {
-    public static final int kTopFlywheelCanId = 0; // TBD
-    public static final int kBottomFlywheelCanId = 0; // TBD
+    public static final int kTopFlywheelCanId = 10; 
+    public static final int kBottomFlywheelCanId = 9;
     public static final int kPivotCanId = 0; // TBD
     public static final int kFollowingPivotCanId = 0; // TBD
 
@@ -106,7 +106,7 @@ public final class Constants {
     public static final double kBackLeftChassisAngularOffset = Math.PI;
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
-    // SPARK MAX CAN IDs
+    // CAN IDs
     public static final int kFrontLeftDrivingCanId = 4;
     public static final int kRearLeftDrivingCanId = 3;
     public static final int kFrontRightDrivingCanId = 1;

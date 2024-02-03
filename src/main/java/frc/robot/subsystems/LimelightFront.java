@@ -11,14 +11,14 @@ import frc.robot.Constants.LimelightConstants;
 import frc.robot.utils.LimelightHelpers;
 
 
-public class Limelight extends SubsystemBase {
+public class LimelightFront extends SubsystemBase {
 
-	private String limelightName = LimelightConstants.kLimelightName;
+	private String limelightName = LimelightConstants.kLimelightFrontName;
 	private double kCameraHeight = LimelightConstants.kBackLimelightPose.getY();
 	private double kMountingAngle = Units.radiansToDegrees(LimelightConstants.kBackLimelightPose.getRotation().getY());
 	private double GoalHeight = LimelightConstants.kSpeakerGoalHeight;
 
-	public Limelight() {
+	public LimelightFront() {
 		setPosePipeline();
 	}
 

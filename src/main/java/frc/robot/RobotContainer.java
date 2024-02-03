@@ -19,7 +19,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.LimelightBack;
+import frc.robot.subsystems.LimelightFront;
 //import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -39,8 +40,9 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final Limelight m_limelight = new Limelight();
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelight);
+  private final LimelightBack m_limelightBack = new LimelightBack();
+  private final LimelightFront m_limelightFront = new LimelightFront();
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelightBack, m_limelightFront);
   //private final Shooter m_shooter = new Shooter(m_limelight);
   private double kPThetaController = .7;
 
@@ -56,7 +58,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_limelight.setPosePipeline();
+    m_limelightFront.setPosePipeline();
+    m_limelightBack.setPosePipeline();
     // Configure the button bindings
     configureButtonBindings();
 
@@ -70,7 +73,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
+                true, false),
             m_robotDrive));
     }
 
@@ -134,7 +137,7 @@ public class RobotContainer {
         m_robotDrive);
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetPoseEstimator(exampleTrajectory.getInitialPose());
+    m_robotDrive.resetPoseEstimator();
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));

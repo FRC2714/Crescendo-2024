@@ -22,7 +22,8 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.LimelightBack;
+import frc.robot.subsystems.LimelightFront;
 import frc.robot.utils.FieldRelativeAcceleration;
 import frc.robot.utils.FieldRelativeVelocity;
 import frc.robot.utils.SwerveUtils;
@@ -66,7 +67,8 @@ public class DriveSubsystem extends SubsystemBase {
   private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
 
-  private Limelight m_limelight;
+  private LimelightBack m_limelightBack;
+  private LimelightFront m_limelightFront;
 
   private Field2d m_field = new Field2d();
   
@@ -86,8 +88,9 @@ public class DriveSubsystem extends SubsystemBase {
   
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem(Limelight m_limelight) {
-    this.m_limelight = m_limelight;
+  public DriveSubsystem(LimelightBack m_limelightBack, LimelightFront m_limelightFront) {
+    this.m_limelightBack = m_limelightBack;
+    this.m_limelightFront = m_limelightFront;
     m_gyro.calibrate();
   }
 
@@ -103,9 +106,13 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    if(m_limelight.isTargetVisible()) 
+    if(m_limelightFront.isTargetVisible()) 
     {
-      m_pose.addVisionMeasurement(m_limelight.getBotPose2d_wpiBlue(), m_limelight.getTimestampSeconds());
+      m_pose.addVisionMeasurement(m_limelightFront.getBotPose2d_wpiBlue(), m_limelightFront.getTimestampSeconds());
+    }
+    if(m_limelightBack.isTargetVisible()) 
+    {
+      m_pose.addVisionMeasurement(m_limelightBack.getBotPose2d_wpiBlue(), m_limelightBack.getTimestampSeconds());
     }
     
     m_fieldRelativeVelocity = new FieldRelativeVelocity(getChassisSpeed(), new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)));
@@ -142,7 +149,7 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @param pose The pose to which to set the odometry.
    */
-  public void resetPoseEstimator(Pose2d pose) {
+  public void resetPoseEstimator() {
     m_pose.resetPosition(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
         new SwerveModulePosition[] {
@@ -151,7 +158,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         },
-        pose);
+        new Pose2d());
   }
 
   /**
@@ -281,7 +288,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
-    resetPoseEstimator(getPose());
+    resetPoseEstimator();
   }
 
   /**
