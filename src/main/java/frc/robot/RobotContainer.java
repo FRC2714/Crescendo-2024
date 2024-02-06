@@ -19,8 +19,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.LimelightBack;
-import frc.robot.subsystems.LimelightFront;
 //import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,9 +38,7 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final LimelightBack m_limelightBack = new LimelightBack();
-  private final LimelightFront m_limelightFront = new LimelightFront();
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelightBack, m_limelightFront);
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   //private final Shooter m_shooter = new Shooter(m_limelight);
   private double kPThetaController = .7;
 
@@ -58,8 +54,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_limelightFront.setPosePipeline();
-    m_limelightBack.setPosePipeline();
     // Configure the button bindings
     configureButtonBindings();
 

@@ -4,6 +4,10 @@
 
 package frc.robot.subsystems.drive;
 
+import java.util.Optional;
+
+import org.photonvision.EstimatedRobotPose;
+
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -22,8 +26,7 @@ import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.subsystems.LimelightBack;
-import frc.robot.subsystems.LimelightFront;
+import frc.robot.subsystems.Vision;
 import frc.robot.utils.FieldRelativeAcceleration;
 import frc.robot.utils.FieldRelativeVelocity;
 import frc.robot.utils.SwerveUtils;
@@ -67,14 +70,13 @@ public class DriveSubsystem extends SubsystemBase {
   private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
 
-  private LimelightBack m_limelightBack;
-  private LimelightFront m_limelightFront;
+  private Vision m_photonCamera = new Vision();
 
   private Field2d m_field = new Field2d();
   
   // Pose class for tracking robot pose
-  Vector<N3> stateStdDevs = VecBuilder.fill(0.02, 0.02, Units.degreesToRadians(.01)); // Increase for less state trust
-  Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(3, 3, Units.degreesToRadians(3)); // Increase for less vision trust
+  Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(.01)); // Increase for less state trust
+  Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(0.1)); // Increase for less vision trust
 
   SwerveDrivePoseEstimator m_pose = new SwerveDrivePoseEstimator(
       DriveConstants.kDriveKinematics,
@@ -88,9 +90,7 @@ public class DriveSubsystem extends SubsystemBase {
   
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem(LimelightBack m_limelightBack, LimelightFront m_limelightFront) {
-    this.m_limelightBack = m_limelightBack;
-    this.m_limelightFront = m_limelightFront;
+  public DriveSubsystem() {
     m_gyro.calibrate();
   }
 
@@ -106,14 +106,12 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    if(m_limelightFront.isTargetVisible()) 
-    {
-      m_pose.addVisionMeasurement(m_limelightFront.getBotPose2d_wpiBlue(), m_limelightFront.getTimestampSeconds());
-    }
-    if(m_limelightBack.isTargetVisible()) 
-    {
-      m_pose.addVisionMeasurement(m_limelightBack.getBotPose2d_wpiBlue(), m_limelightBack.getTimestampSeconds());
-    }
+    Optional<EstimatedRobotPose> photonPoseEstimation = m_photonCamera.getEstimatedGlobalPose();
+    photonPoseEstimation.ifPresent(poseEstimation -> {
+      Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
+      m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_photonCamera.getEstimationStdDevs(estPose));
+    });
+
     
     m_fieldRelativeVelocity = new FieldRelativeVelocity(getChassisSpeed(), new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)));
     m_fieldRelativeAcceleration = new FieldRelativeAcceleration(m_fieldRelativeVelocity, m_lastFieldRelativeVelocity, 0.02);
