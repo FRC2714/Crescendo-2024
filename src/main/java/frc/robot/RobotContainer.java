@@ -69,22 +69,13 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-        // autoAiming ?
-            new RunCommand(
-            () -> m_robotDrive.drive(
-                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                thetaController.calculate(m_limelight.getXOffsetRadians()), 
-                true, true),
-            m_robotDrive));
-        // :
-            // new RunCommand(
-            // () -> m_robotDrive.drive(
-            //     -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-            //     -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-            //     -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-            //     true, true),
-            // m_robotDrive));
+        new RunCommand(
+        () -> m_robotDrive.drive(
+            -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+            -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+            true, true),
+        m_robotDrive));
     }
 
   /**
