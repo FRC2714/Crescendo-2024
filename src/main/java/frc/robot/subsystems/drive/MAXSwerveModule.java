@@ -19,7 +19,7 @@ import frc.robot.Constants.ModuleConstants;
 
 public class MAXSwerveModule {
   private final CANSparkFlex m_drivingSparkFlex;
-  private final CANSparkFlex m_turningSparkFlex;
+  private final CANSparkMax m_turningSparkMax;
 
   private final RelativeEncoder m_drivingEncoder;
   private final AbsoluteEncoder m_turningEncoder;
@@ -38,18 +38,18 @@ public class MAXSwerveModule {
    */
   public MAXSwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset) {
     m_drivingSparkFlex = new CANSparkFlex(drivingCANId, MotorType.kBrushless);
-    m_turningSparkFlex = new CANSparkFlex(turningCANId, MotorType.kBrushless);
+    m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
 
     // Factory reset, so we get the SPARKS MAX to a known state before configuring
     // them. This is useful in case a SPARK MAX is swapped out.
     m_drivingSparkFlex.restoreFactoryDefaults();
-    m_turningSparkFlex.restoreFactoryDefaults();
+    m_turningSparkMax.restoreFactoryDefaults();
 
     // Setup encoders and PID controllers for the driving and turning SPARKS MAX.
     m_drivingEncoder = m_drivingSparkFlex.getEncoder();
-    m_turningEncoder = m_turningSparkFlex.getAbsoluteEncoder(Type.kDutyCycle);
+    m_turningEncoder = m_turningSparkMax.getAbsoluteEncoder(Type.kDutyCycle);
     m_drivingPIDController = m_drivingSparkFlex.getPIDController();
-    m_turningPIDController = m_turningSparkFlex.getPIDController();
+    m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
     m_turningPIDController.setFeedbackDevice(m_turningEncoder);
 
@@ -96,14 +96,14 @@ public class MAXSwerveModule {
         ModuleConstants.kTurningMaxOutput);
 
     m_drivingSparkFlex.setIdleMode(ModuleConstants.kDrivingMotorIdleMode);
-    m_turningSparkFlex.setIdleMode(ModuleConstants.kTurningMotorIdleMode);
+    m_turningSparkMax.setIdleMode(ModuleConstants.kTurningMotorIdleMode);
     m_drivingSparkFlex.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
-    m_turningSparkFlex.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
+    m_turningSparkMax.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
 
     // Save the SPARK MAX configurations. If a SPARK MAX browns out during
     // operation, it will maintain the above configurations.
     m_drivingSparkFlex.burnFlash();
-    m_turningSparkFlex.burnFlash();
+    m_turningSparkMax.burnFlash();
 
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
