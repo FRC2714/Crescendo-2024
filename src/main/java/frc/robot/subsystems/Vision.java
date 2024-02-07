@@ -17,6 +17,8 @@ import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.Constants.FieldConstants;
@@ -29,6 +31,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     photonCamera = new PhotonCamera(PhotonConstants.kCameraName);
+    photonCamera.setPipelineIndex(0);
     photonPoseEstimator = new PhotonPoseEstimator(FieldConstants.kAprilTagFieldLayout,
                                                   PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                                                   photonCamera,
@@ -71,5 +74,6 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putBoolean("photon pose", getEstimatedGlobalPose().isPresent());
   }
 }
