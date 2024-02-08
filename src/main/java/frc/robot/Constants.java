@@ -36,6 +36,10 @@ public final class Constants {
 
     public static final double kPivotEncoderConversionFactor = kPivotGearRatio * 360; // TBD
 
+    public static final double kPivotStowAngle = 0; // TBD
+    public static final double kPivotScoreAngle = 0; // TBD
+    public static final double kRollerScoreVelocity = 0; // TBD
+
     public static final class PivotPIDConstants {
       public static final double kP = 0; // TBD
       public static final double kI = 0; // TBD

@@ -14,6 +14,9 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.AmpConstants.PivotPIDConstants;
@@ -84,6 +87,24 @@ public class Amp extends SubsystemBase {
 
   public void setCalculatedRollerVoltage() {
     rollerMotor.setVoltage(rollerController.calculate(getRollerVelocity()) + rollerFeedforward.calculate(getTargetRollerVelocity()));
+  }
+
+  public Command setRollerVelocityCommand(double targetVelocity) {
+    return new InstantCommand(() -> setRollerVelocity(targetVelocity));
+  }
+
+  public Command setPivotAngleCommand(double targetVelocity) {
+    return new InstantCommand(() -> setPivotAngle(targetVelocity));
+  }
+
+  public ParallelCommandGroup setStowPosition() {
+    return new ParallelCommandGroup(setPivotAngleCommand(AmpConstants.kPivotStowAngle),
+                                    setRollerVelocityCommand(0));
+  }
+
+  public ParallelCommandGroup setScorePosition() {
+    return new ParallelCommandGroup(setPivotAngleCommand(AmpConstants.kPivotScoreAngle),
+                                    setRollerVelocityCommand(AmpConstants.kRollerScoreVelocity));
   }
 
   @Override
