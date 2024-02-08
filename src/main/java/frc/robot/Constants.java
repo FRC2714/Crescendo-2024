@@ -27,8 +27,62 @@ public final class Constants {
 
   public static final class IntakeConstants {
     public static final int kFrontRollerCanId = 0; //TBD
-    public static final int kBackRollerCanId = 0; //TBD
-    public static final double kRollerVoltage = 0; //TBD
+    public static final int kBackBottomRollerCanId = 0; //TBD
+    public static final int kBackDirectionRollerCanId = 0; //TBD
+    public static final int kConveyorCanId = 0; //TBD
+
+    public static final int kFrontRollerSmartCurrentLimit = 0; // TBD
+    public static final int kBackBottomRollerSmartCurrentLimit = 0; // TBD
+    public static final int kBackDirectionRollerSmartCurrentLimit = 0; // TBD
+    public static final int kConveyorSmartCurrentLimit = 0; // TBD
+
+    public static final double kFrontRollerVelocity = 0; // TBD
+    public static final double kBackBottomRollerVelocity = 0; // TBD
+    public static final double kBackDirectionRollerVelocityFrontSide = 0; // TBD
+    public static final double kFrontDirectionRollerVelocityFrontSide = 0; // TBD
+    public static final double kBackDirectionRollerVelocityBackSide = 0; // TBD
+    public static final double kFrontDirectionRollerVelocityBackSide = 0; // TBD
+    public static final double kConveyorVelocity = 0; // TBD
+
+    public static final class BackBottomRollerPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+
+      public static final double kS = 0; // TBD
+      public static final double kV = 0; // TBD
+      public static final double kA = 0; // TBD
+    }
+
+    public static final class BackDirectionRollerPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+
+      public static final double kS = 0; // TBD
+      public static final double kV = 0; // TBD
+      public static final double kA = 0; // TBD
+    }
+
+    public static final class FrontRollerPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+
+      public static final double kS = 0; // TBD
+      public static final double kV = 0; // TBD
+      public static final double kA = 0; // TBD
+    }
+
+    public static final class ConveyorPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+
+      public static final double kS = 0; // TBD
+      public static final double kV = 0; // TBD
+      public static final double kA = 0; // TBD
+    }
   }
 
   public static final class DriveConstants {
