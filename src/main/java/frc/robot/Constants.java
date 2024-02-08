@@ -9,6 +9,8 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -24,6 +26,48 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final class ClimberConstants {
+    public static final int kLeftClimberCanId = 0; // TBD
+    public static final int kRightClimberCanId = 0; // TBD
+    
+    public static final int kLeftClimberSmartCurrentLimit = 0; // TBD
+    public static final int kRightClimberSmartCurrentLimit = 0; // TBD
+
+    public static final double kMaxExtension = 0; // TBD
+    public static final double kMinExtension = 0; // TBD
+
+    public static final Constraints kLeftClimberConstraints = new Constraints(0, 0); // TBD
+    public static final Constraints kRightClimberConstraints = new Constraints(0, 0); // TBD
+
+    public static final State kGroundExtension = new State(0, 0); // TBD
+    public static final State kGroundRetraction = new State(0, 0); // TBD
+
+    public static final double kSetpointTolerance = 0; // TBD
+
+    public static final class LeftClimberPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+
+      public static final double kS = 0; // TBD
+      public static final double kG = 0; // TBD
+      public static final double kV = 0; // TBD
+      public static final double kA = 0; // TBD
+    }
+
+    public static final class RightClimberPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+
+      public static final double kS = 0; // TBD
+      public static final double kG = 0; // TBD
+      public static final double kV = 0; // TBD
+      public static final double kA = 0; // TBD
+    }
+  }
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
@@ -70,6 +114,12 @@ public final class Constants {
       public static final double kP = 0.8;
       public static final double kI = 0;
       public static final double kD = 0;
+    }
+
+    public static final class RollPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
     }
   }
 
