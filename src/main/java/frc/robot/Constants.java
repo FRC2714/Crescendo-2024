@@ -26,10 +26,10 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final class IntakeConstants {
-    public static final int kFrontRollerCanId = 0; //TBD
-    public static final int kBackBottomRollerCanId = 0; //TBD
-    public static final int kBackDirectionRollerCanId = 0; //TBD
-    public static final int kConveyorCanId = 0; //TBD
+    public static final int kFrontRollerCanId = 9;
+    public static final int kBackBottomRollerCanId = 10;
+    public static final int kBackDirectionRollerCanId = 11;
+    public static final int kConveyorCanId = 12;
 
     public static final int kFrontRollerSmartCurrentLimit = 0; // TBD
     public static final int kBackBottomRollerSmartCurrentLimit = 0; // TBD
