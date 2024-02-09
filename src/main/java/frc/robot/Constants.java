@@ -44,10 +44,10 @@ public final class Constants {
   }
   
   public static final class ShooterConstants {
-    public static final int kTopFlywheelCanId = 0; // TBD
-    public static final int kBottomFlywheelCanId = 0; // TBD
-    public static final int kPivotCanId = 0; // TBD
-    public static final int kFollowingPivotCanId = 0; // TBD
+    public static final int kTopFlywheelCanId = 14;
+    public static final int kBottomFlywheelCanId = 15;
+    public static final int kPivotCanId = 13;
+    public static final int kFeederCanId = 16;
 
     public static final double kPivotGearRatio = 70;
 
