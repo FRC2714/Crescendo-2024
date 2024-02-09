@@ -27,9 +27,11 @@ public class Shooter extends SubsystemBase {
   private CANSparkFlex topFlywheelMotor;
   private CANSparkFlex bottomFlywheelMotor;
   private CANSparkFlex pivotMotor;
+  private CANSparkFlex feederMotor;
 
   private AbsoluteEncoder pivotEncoder;
   private RelativeEncoder flywheelEncoder;
+  private RelativeEncoder feederEncoder;
 
   private PIDController pivotController;
   private PIDController flywheelController;
@@ -49,14 +51,17 @@ public class Shooter extends SubsystemBase {
 
   public Shooter(Limelight m_limelight) {
     pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
+    feederMotor = new CANSparkFlex(ShooterConstants.kFeederCanId, MotorType.kBrushless);
     topFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
     bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
 
     pivotMotor.setIdleMode(IdleMode.kBrake);
-    topFlywheelMotor.setIdleMode(IdleMode.kBrake);
-    bottomFlywheelMotor.setIdleMode(IdleMode.kBrake);
+    feederMotor.setIdleMode(IdleMode.kCoast);
+    topFlywheelMotor.setIdleMode(IdleMode.kCoast);
+    bottomFlywheelMotor.setIdleMode(IdleMode.kCoast);
 
     pivotMotor.setSmartCurrentLimit(ShooterConstants.kPivotSmartCurrentLimit);
+    feederMotor.setSmartCurrentLimit(ShooterConstants.kPivotSmartCurrentLimit);
     topFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kTopFlywheelSmartCurrentLimit);
     bottomFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kBottomFlywheelSmartCurrentLimit);
 
@@ -66,17 +71,20 @@ public class Shooter extends SubsystemBase {
     pivotEncoder.setPositionConversionFactor(ShooterConstants.kPivotEncoderConversionFactor);
 
     flywheelEncoder = topFlywheelMotor.getEncoder();
+    feederEncoder = feederMotor.getEncoder();
 
     topFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
     bottomFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
 
     pivotController = new PIDController(PivotPIDConstants.kP, PivotPIDConstants.kI, PivotPIDConstants.kD);
+    feederController = new PIDController(FeederPIDConstants.kP, FeederPIDConstants.kI, FeederPIDConstants.kD);
     flywheelController = new PIDController(FlywheelPIDConstants.kP, FlywheelPIDConstants.kI, FlywheelPIDConstants.kD);
     flywheelFeedforward = new SimpleMotorFeedforward(FlywheelPIDConstants.kS, FlywheelPIDConstants.kV, FlywheelPIDConstants.kA);
 
     topFlywheelMotor.burnFlash();
     bottomFlywheelMotor.burnFlash();
     pivotMotor.burnFlash();
+    feederMotor.burnFlash();
 
     pivotAngleMap = new InterpolatingTreeMap();
     flywheelVelocityMap = new InterpolatingTreeMap();
@@ -134,6 +142,18 @@ public class Shooter extends SubsystemBase {
     return flywheelController.getSetpoint();
   }
 
+  public double getFeederVelocity() {
+    return feederEncoder.getVelocity();
+  }
+
+  public double getTargetFeederVelocity() {
+    return feederController.getSetpoint();
+  }
+
+  public void setFeederVelocity(double targetVelocity) {
+    feederController.setSetpoint(targetVelocity);
+  }
+
   public void setFlywheelVelocity(double targetVelocity) {
     if (!dynamicEnabled) flywheelController.setSetpoint(targetVelocity);
   }
@@ -188,6 +208,22 @@ public class Shooter extends SubsystemBase {
     topFlywheelMotor.setVoltage(flywheelController.calculate(getFlywheelVelocity()) + flywheelFeedforward.calculate(getTargetFlywheelVelocity()));
   }
 
+  public void setCalculatedFeederVoltage() {
+    feederMotor.setVoltage(feederController.calculate(getFeederVelocity()));
+  }
+
+  public Command setPivotAngleCommand() {
+    return new InstantCommand(() -> setPivotAngle());
+  }
+
+  public Command setFlywheelVelocityCommand() {
+    return new InstantCommand(() -> setFlywheelVelocity());
+  }
+
+  public Command setFeederVelocityCommand() {
+    return new InstantCommand(() -> setFeederVelocity());
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -202,5 +238,6 @@ public class Shooter extends SubsystemBase {
 
     setCalculatedPivotVoltage();
     setCalculatedFlywheelVoltage();
+    setCalculatedFeederVoltage();
   }
 }
