@@ -49,9 +49,9 @@ public final class Constants {
     public static final int kPivotCanId = 0; // TBD
     public static final int kFollowingPivotCanId = 0; // TBD
 
-    public static final double kPivotGearRatio = 9;
+    public static final double kPivotGearRatio = 70;
 
-    public static final double kPivotEncoderConversionFactor = kPivotGearRatio * (360);
+    public static final double kPivotEncoderConversionFactor = kPivotGearRatio * 360;
 
     public static final int kPivotSmartCurrentLimit = 0; // TBD
     public static final int kFollowingPivotSmartCurrentLimit = 0; // TBD
