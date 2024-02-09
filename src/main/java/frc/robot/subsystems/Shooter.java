@@ -14,8 +14,11 @@ import com.revrobotics.SparkAbsoluteEncoder.Type;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.ShooterConstants.FeederPIDConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
 import frc.robot.Constants.ShooterConstants.PivotPIDConstants;
 import frc.robot.utils.InterpolatingTreeMap;
@@ -35,6 +38,7 @@ public class Shooter extends SubsystemBase {
 
   private PIDController pivotController;
   private PIDController flywheelController;
+  private PIDController feederController;
   private SimpleMotorFeedforward flywheelFeedforward;
 
   private Limelight m_limelight;
@@ -212,16 +216,16 @@ public class Shooter extends SubsystemBase {
     feederMotor.setVoltage(feederController.calculate(getFeederVelocity()));
   }
 
-  public Command setPivotAngleCommand() {
-    return new InstantCommand(() -> setPivotAngle());
+  public Command setPivotAngleCommand(double targetAngle) {
+    return new InstantCommand(() -> setPivotAngle(targetAngle));
   }
 
-  public Command setFlywheelVelocityCommand() {
-    return new InstantCommand(() -> setFlywheelVelocity());
+  public Command setFlywheelVelocityCommand(double targetVelocity) {
+    return new InstantCommand(() -> setFlywheelVelocity(targetVelocity));
   }
 
-  public Command setFeederVelocityCommand() {
-    return new InstantCommand(() -> setFeederVelocity());
+  public Command setFeederVelocityCommand(double targetVelocity) {
+    return new InstantCommand(() -> setFeederVelocity(targetVelocity));
   }
 
   @Override
