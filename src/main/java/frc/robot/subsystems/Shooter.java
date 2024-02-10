@@ -45,6 +45,7 @@ public class Shooter extends SubsystemBase {
 
   private TunableNumber pivotAngleTunableNumber;
   private TunableNumber flywheelVelocityTunableNumber;
+  private TunableNumber pivotP;
 
   private boolean dynamicEnabled;
 
@@ -66,6 +67,8 @@ public class Shooter extends SubsystemBase {
 
     pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
     pivotEncoder.setPositionConversionFactor(ShooterConstants.kPivotEncoderConversionFactor);
+    pivotEncoder.setInverted(true);
+    pivotEncoder.setZeroOffset(ShooterConstants.kPivotEncoderZeroOffset * ShooterConstants.kPivotGearRatio);
 
     flywheelEncoder = topFlywheelMotor.getEncoder();
 
@@ -92,7 +95,11 @@ public class Shooter extends SubsystemBase {
 
     pivotAngleTunableNumber = new TunableNumber("Tunable Pivot Angle");
     flywheelVelocityTunableNumber = new TunableNumber("Tunable Flywheel Velocity");
+    pivotP = new TunableNumber("Pivot P");
 
+
+    pivotAngleTunableNumber.setDefault(0);
+    pivotP.setDefault(0);
     this.m_limelight = m_limelight;
   }
 
@@ -117,7 +124,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getPivotAngle() {
-    return pivotEncoder.getPosition() / ShooterConstants.kPivotGearRatio;
+    return (pivotEncoder.getPosition() - ShooterConstants.kPivotEncoderKinematicOffset) / ShooterConstants.kPivotGearRatio;
   }
 
   public double getTargetPivotAngle() {
@@ -125,7 +132,14 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setPivotAngle(double targetAngle) {
-    if (!dynamicEnabled) pivotController.setSetpoint(targetAngle);
+    if (!dynamicEnabled) {
+      if (targetAngle > ShooterConstants.kMaxPivotAngle)
+        pivotController.setSetpoint(ShooterConstants.kMaxPivotAngle);
+      else if (targetAngle < ShooterConstants.kMinPivotAngle)
+        pivotController.setSetpoint(ShooterConstants.kMinPivotAngle);
+      else
+        pivotController.setSetpoint(targetAngle);
+    }
   }
 
   public double getFlywheelVelocity() {
@@ -172,6 +186,10 @@ public class Shooter extends SubsystemBase {
     pivotController.setSetpoint(flywheelVelocityTunableNumber.get());
   }
 
+  public void tunePivotP() {
+    pivotController.setP(pivotP.get());
+  }
+
   public void setDynamic() {
     setPivotAngle(getDynamicPivotAngle());
     setFlywheelVelocity(getDynamicFlywheelVelocity());
@@ -202,11 +220,18 @@ public class Shooter extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Current Pivot Angle", getPivotAngle());
-    SmartDashboard.putNumber("Current Pivot Angle pos", pivotEncoder.getPosition());
     SmartDashboard.putNumber("Target Pivot Angle", getTargetPivotAngle());
     SmartDashboard.putNumber("Current Flywheel Velocity", getFlywheelVelocity());
     SmartDashboard.putNumber("Target Flywheel Velocity", getTargetFlywheelVelocity());
     SmartDashboard.putBoolean("Dynamic Enabled?", dynamicEnabled);
+
+    if (pivotAngleTunableNumber.hasChanged()) {
+      tunePivotAngle();
+    }
+
+    if (pivotP.hasChanged()) {
+      tunePivotP();
+    }
 
     if (dynamicEnabled) setDynamic();
 

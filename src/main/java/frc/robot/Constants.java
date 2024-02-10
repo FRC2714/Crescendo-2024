@@ -50,6 +50,12 @@ public final class Constants {
 
     public static final double kPivotGearRatio = 350;
 
+    public static final double kMinPivotAngle = 0;
+    public static final double kMaxPivotAngle = 92;
+
+    public static final double kPivotEncoderZeroOffset = 165;
+    public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
+
     public static final double kPivotEncoderConversionFactor = kPivotGearRatio * 360;
 
     public static final int kPivotSmartCurrentLimit = 0; // TBD
@@ -62,7 +68,7 @@ public final class Constants {
     public static final double kNominalVoltage = 11; // TBD
 
     public static final class PivotPIDConstants {
-      public static final double kP = 0; // TBD
+      public static final double kP = 0.001; // TBD
       public static final double kI = 0; // TBD
       public static final double kD = 0; // TBD
     }
