@@ -35,9 +35,9 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final class PhotonConstants {
-    public static final String kCameraName = "Integrated_Camera"; // TBD
-    public static final Transform3d kCameraLocation = new Transform3d(new Translation3d(0, 0, 0),
-                                                                      new Rotation3d(0, 0, 0));
+    public static final String kCameraName = "Logitech,_Inc._Webcam_C270"; // TBD
+    public static final Transform3d kCameraLocation = new Transform3d(new Translation3d(4, 27.5, 0),
+                                                                      new Rotation3d(0, 20, 0));
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }

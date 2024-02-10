@@ -75,5 +75,10 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putBoolean("photon pose", getEstimatedGlobalPose().isPresent());
+    // SmartDashboard.putNumber("Number of targets", photonCamera.getLatestResult().getTargets().size());
+    // SmartDashboard.putNumber("Best Target ID", photonCamera.getLatestResult().getBestTarget().getFiducialId());
+    // SmartDashboard.putNumber("Best Target Distance", photonCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getX());
+    // System.out.println("Targets: "+ photonCamera.getLatestResult().getTargets());
+    // System.out.println("Best target: "+ photonCamera.getLatestResult().getBestTarget());
   }
 }
