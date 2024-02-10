@@ -42,7 +42,9 @@ public final class Constants {
     public static final double kBackBottomRollerVoltage = 6; // TBD
     public static final double kBackDirectionRollerVoltageFrontSide = 6; // TBD
     public static final double kFrontDirectionRollerVoltageFrontSide = 6; // TBD
+    public static final double kBackBottomRollerVoltageFrontSide = 6;
     public static final double kBackDirectionRollerVoltageBackSide = 6; // TBD
+    public static final double kBackBottomRollerVoltageBackSide = 6;
     public static final double kFrontDirectionRollerVoltageBackSide = 6; // TBD
     public static final double kConveyorVoltage = 6; // TBD
   }
