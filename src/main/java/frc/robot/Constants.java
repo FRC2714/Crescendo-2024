@@ -47,9 +47,8 @@ public final class Constants {
     public static final int kTopFlywheelCanId = 14;
     public static final int kBottomFlywheelCanId = 15;
     public static final int kPivotCanId = 13;
-    public static final int kFeederCanId = 16;
 
-    public static final double kPivotGearRatio = 70;
+    public static final double kPivotGearRatio = 350;
 
     public static final double kPivotEncoderConversionFactor = kPivotGearRatio * 360;
 
@@ -63,12 +62,6 @@ public final class Constants {
     public static final double kNominalVoltage = 11; // TBD
 
     public static final class PivotPIDConstants {
-      public static final double kP = 0; // TBD
-      public static final double kI = 0; // TBD
-      public static final double kD = 0; // TBD
-    }
-
-    public static final class FeederPIDConstants {
       public static final double kP = 0; // TBD
       public static final double kI = 0; // TBD
       public static final double kD = 0; // TBD

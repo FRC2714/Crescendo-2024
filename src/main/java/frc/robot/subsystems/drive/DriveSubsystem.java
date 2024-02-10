@@ -86,7 +86,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      }, getPose());
+      }, new Pose2d());
   
 
   /** Creates a new DriveSubsystem. */
