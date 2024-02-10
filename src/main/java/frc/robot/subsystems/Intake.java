@@ -17,10 +17,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
-import frc.robot.Constants.IntakeConstants.BackBottomRollerPIDConstants;
-import frc.robot.Constants.IntakeConstants.BackDirectionRollerPIDConstants;
-import frc.robot.Constants.IntakeConstants.ConveyorPIDConstants;
-import frc.robot.Constants.IntakeConstants.FrontRollerPIDConstants;
 
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
@@ -35,15 +31,7 @@ public class Intake extends SubsystemBase {
   private RelativeEncoder backDirectionRollerEncoder;
   private RelativeEncoder conveyorEncoder;
 
-  private PIDController frontRollerController;
-  private PIDController backBottomRollerController;
-  private PIDController backDirectionRollerController;
-  private PIDController conveyorController;
-
-  private SimpleMotorFeedforward frontRollerFeedforward;
-  private SimpleMotorFeedforward backBottomRollerFeedforward;
-  private SimpleMotorFeedforward backDirectionRollerFeedforward;
-  private SimpleMotorFeedforward conveyorFeedforward;
+  private boolean backRunning, frontRunning;
   
   public Intake() {
     frontRollerMotor = new CANSparkFlex(IntakeConstants.kFrontRollerCanId, MotorType.kBrushless);
@@ -56,6 +44,11 @@ public class Intake extends SubsystemBase {
     backDirectionRollerMotor.setIdleMode(IdleMode.kBrake);
     conveyorMotor.setIdleMode(IdleMode.kBrake);
 
+    frontRollerMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
+    backBottomRollerMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
+    backDirectionRollerMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
+    conveyorMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
+
     frontRollerMotor.setSmartCurrentLimit(IntakeConstants.kFrontRollerSmartCurrentLimit);
     backBottomRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackBottomRollerSmartCurrentLimit);
     backDirectionRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackDirectionRollerSmartCurrentLimit);
@@ -66,39 +59,13 @@ public class Intake extends SubsystemBase {
     backDirectionRollerEncoder = backDirectionRollerMotor.getEncoder();
     conveyorEncoder = conveyorMotor.getEncoder();
 
-    frontRollerController = new PIDController(FrontRollerPIDConstants.kP,
-                                              FrontRollerPIDConstants.kI,
-                                              FrontRollerPIDConstants.kD);
-    backBottomRollerController = new PIDController(BackBottomRollerPIDConstants.kP,
-                                                   BackBottomRollerPIDConstants.kI,
-                                                   BackBottomRollerPIDConstants.kD);
-    backDirectionRollerController = new PIDController(BackDirectionRollerPIDConstants.kS,
-                                                      BackDirectionRollerPIDConstants.kV,
-                                                      BackDirectionRollerPIDConstants.kA);
-    conveyorController = new PIDController(ConveyorPIDConstants.kP,
-                                           ConveyorPIDConstants.kI,
-                                           ConveyorPIDConstants.kD);
-
-    frontRollerFeedforward = new SimpleMotorFeedforward(FrontRollerPIDConstants.kS,
-                                                        FrontRollerPIDConstants.kV,
-                                                        FrontRollerPIDConstants.kA);
-
-    backBottomRollerFeedforward = new SimpleMotorFeedforward(BackBottomRollerPIDConstants.kS,
-                                                             BackBottomRollerPIDConstants.kV,
-                                                             BackBottomRollerPIDConstants.kA);
-    
-    backDirectionRollerFeedforward = new SimpleMotorFeedforward(BackDirectionRollerPIDConstants.kS,
-                                                                BackDirectionRollerPIDConstants.kV,
-                                                                BackDirectionRollerPIDConstants.kA);
-    conveyorFeedforward = new SimpleMotorFeedforward(ConveyorPIDConstants.kS,
-                                                     ConveyorPIDConstants.kV,
-                                                     ConveyorPIDConstants.kA);
-
-
     frontRollerMotor.burnFlash();
     backBottomRollerMotor.burnFlash();
     backDirectionRollerMotor.burnFlash();
     conveyorMotor.burnFlash();
+
+    backRunning = false;
+    frontRunning = true;
     
   }
 
@@ -118,108 +85,82 @@ public class Intake extends SubsystemBase {
     return conveyorEncoder.getVelocity();
   }
 
-  public double getTargetFrontRollerVelocity() {
-    return frontRollerController.getSetpoint();
+  public void setFrontRollerVoltage(double targetVoltage) {
+    frontRollerMotor.setVoltage(targetVoltage);
   }
 
-  public double getTargetBackBottomRollerVelocity() {
-    return backBottomRollerController.getSetpoint();
+  public void setBackBottomRollerVoltage(double targetVoltage) {
+    frontRollerMotor.setVoltage(targetVoltage);
   }
 
-  public double getTargetBackDirectionRollerVelocity() {
-    return backDirectionRollerController.getSetpoint();
+  public void setBackDirectionRollerVoltage(double targetVoltage) {
+    frontRollerMotor.setVoltage(targetVoltage);
   }
 
-  public double getTargetConveyorVelocity() {
-    return conveyorController.getSetpoint();
+  public void setConveyorVoltage(double targetVoltage) {
+    frontRollerMotor.setVoltage(targetVoltage);
   }
 
-  public void setFrontRollerVelocity(double targetVelocity) {
-    frontRollerController.setSetpoint(targetVelocity);
+  public Command setFrontRollerVoltageCommand(double targetVoltage) {
+    return new InstantCommand(() -> setFrontRollerVoltage(targetVoltage));
   }
 
-  public void setBackBottomRollerVelocity(double targetVelocity) {
-    backBottomRollerController.setSetpoint(targetVelocity);
+  public Command setBackBottomRollerVoltageCommand(double targetVoltage) {
+    return new InstantCommand(() -> setBackBottomRollerVoltage(targetVoltage));
   }
 
-  public void setBackDirectionRollerVelocity(double targetVelocity) {
-    backDirectionRollerController.setSetpoint(targetVelocity);
+  public Command setBackDirectionRollerVoltageCommand(double targetVoltage) {
+    return new InstantCommand(() -> setBackDirectionRollerVoltage(targetVoltage));
   }
 
-  public void setConveyorVelocity(double targetVelocity) {
-    conveyorController.setSetpoint(targetVelocity);
-  }
-
-  public Command setFrontRollerVelocityCommand(double targetVelocity) {
-    return new InstantCommand(() -> setFrontRollerVelocity(targetVelocity));
-  }
-
-  public Command setBackBottomRollerVelocityCommand(double targetVelocity) {
-    return new InstantCommand(() -> setBackBottomRollerVelocity(targetVelocity));
-  }
-
-  public Command setBackDirectionRollerVelocityCommand(double targetVelocity) {
-    return new InstantCommand(() -> setBackDirectionRollerVelocity(targetVelocity));
-  }
-
-  public Command setConveyorVelocityCommand(double targetVelocity) {
-    return new InstantCommand(() -> setConveyorVelocity(targetVelocity));
-  }
-
-  public void setCalculatedFrontRollerVoltage() {
-    frontRollerMotor.setVoltage(frontRollerController.calculate(getFrontRollerVelocity()) +
-                                frontRollerFeedforward.calculate(getTargetFrontRollerVelocity()));
-  }
-
-  public void setCalculatedBackBottomRollerVoltage() {
-    backBottomRollerMotor.setVoltage(backBottomRollerController.calculate(getBackBottomRollerVelocity()) +
-                                     backBottomRollerFeedforward.calculate(getTargetBackBottomRollerVelocity()));
-  }
-
-  public void setCalculatedBackDirectionRollerVoltage() {
-    backDirectionRollerMotor.setVoltage(backDirectionRollerController.calculate(getBackDirectionRollerVelocity()) +
-                                        backDirectionRollerFeedforward.calculate(getTargetBackDirectionRollerVelocity()));
-  }
-
-  public void setCalculatedConveyorVoltage() {
-    conveyorMotor.setVoltage(conveyorController.calculate(getConveyorVelocity()) +
-                             conveyorFeedforward.calculate(getTargetConveyorVelocity()));
+  public Command setConveyorVoltageCommand(double targetVoltage) {
+    return new InstantCommand(() -> setConveyorVoltage(targetVoltage));
   }
 
   public ParallelCommandGroup intakeFront() {
-    return new ParallelCommandGroup(setFrontRollerVelocityCommand(IntakeConstants.kFrontRollerVelocity),
-                                    setBackBottomRollerVelocityCommand(IntakeConstants.kBackDirectionRollerVelocityFrontSide),
-                                    setBackDirectionRollerVelocityCommand(IntakeConstants.kBackDirectionRollerVelocityFrontSide),
-                                    setConveyorVelocityCommand(IntakeConstants.kConveyorVelocity));
+    if (backRunning) return new ParallelCommandGroup();
+    else frontRunning = true;
+    return new ParallelCommandGroup(setFrontRollerVoltageCommand(IntakeConstants.kFrontRollerVoltage),
+                                    setBackBottomRollerVoltageCommand(IntakeConstants.kBackDirectionRollerVoltageFrontSide),
+                                    setBackDirectionRollerVoltageCommand(IntakeConstants.kBackDirectionRollerVoltageFrontSide),
+                                    setConveyorVoltageCommand(IntakeConstants.kConveyorVoltage));
   }
 
   public ParallelCommandGroup outtakeFront() {
-    return new ParallelCommandGroup(setFrontRollerVelocityCommand(-IntakeConstants.kFrontRollerVelocity),
-                                    setBackBottomRollerVelocityCommand(-IntakeConstants.kBackDirectionRollerVelocityFrontSide),
-                                    setBackDirectionRollerVelocityCommand(-IntakeConstants.kBackDirectionRollerVelocityFrontSide),
-                                    setConveyorVelocityCommand(-IntakeConstants.kConveyorVelocity));
+    if (backRunning) return new ParallelCommandGroup();
+    else frontRunning = true;
+    return new ParallelCommandGroup(setFrontRollerVoltageCommand(-IntakeConstants.kFrontRollerVoltage),
+                                    setBackBottomRollerVoltageCommand(-IntakeConstants.kBackDirectionRollerVoltageFrontSide),
+                                    setBackDirectionRollerVoltageCommand(-IntakeConstants.kBackDirectionRollerVoltageFrontSide),
+                                    setConveyorVoltageCommand(-IntakeConstants.kConveyorVoltage));
   }
 
   public ParallelCommandGroup stopFront() {
-    return new ParallelCommandGroup(setFrontRollerVelocityCommand(0),
-                                    setBackBottomRollerVelocityCommand(0),
-                                    setBackDirectionRollerVelocityCommand(0),
-                                    setConveyorVelocityCommand(0));
+    frontRunning = false;
+    return new ParallelCommandGroup(setFrontRollerVoltageCommand(0),
+                                    setBackBottomRollerVoltageCommand(0),
+                                    setBackDirectionRollerVoltageCommand(0),
+                                    setConveyorVoltageCommand(0));
   }
 
   public ParallelCommandGroup intakeBack() {
-    return new ParallelCommandGroup(setBackBottomRollerVelocityCommand(IntakeConstants.kBackDirectionRollerVelocityBackSide),
-                                    setBackDirectionRollerVelocityCommand(IntakeConstants.kBackDirectionRollerVelocityBackSide));
+    if (frontRunning) return new ParallelCommandGroup();
+    else backRunning = true;
+    return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(IntakeConstants.kBackDirectionRollerVoltageBackSide),
+                                    setBackDirectionRollerVoltageCommand(IntakeConstants.kBackDirectionRollerVoltageBackSide));
   }
 
   public ParallelCommandGroup outtakeBack() {
-    return new ParallelCommandGroup(setBackBottomRollerVelocityCommand(-IntakeConstants.kBackDirectionRollerVelocityBackSide),
-                                    setBackDirectionRollerVelocityCommand(-IntakeConstants.kBackDirectionRollerVelocityBackSide));
+    if (frontRunning) return new ParallelCommandGroup();
+    else backRunning = true;
+    return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(-IntakeConstants.kBackDirectionRollerVoltageBackSide),
+                                    setBackDirectionRollerVoltageCommand(-IntakeConstants.kBackDirectionRollerVoltageBackSide));
   }
 
   public ParallelCommandGroup stopBack() {
-    return new ParallelCommandGroup(setBackBottomRollerVelocityCommand(0),
-                                    setBackDirectionRollerVelocityCommand(0));
+    backRunning = false;
+    return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(0),
+                                    setBackDirectionRollerVoltageCommand(0));
   }
 
   @Override
@@ -230,10 +171,5 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Back Bottom Roller Velocity", getBackBottomRollerVelocity());
     SmartDashboard.putNumber("Back Direction Roller Velocity", getBackDirectionRollerVelocity());
     SmartDashboard.putNumber("Conveyor Velocity", getConveyorVelocity());
-
-    setCalculatedFrontRollerVoltage();
-    setCalculatedBackBottomRollerVoltage();
-    setCalculatedBackDirectionRollerVoltage();
-    setCalculatedConveyorVoltage();
   }
 }
