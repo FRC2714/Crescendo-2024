@@ -30,6 +30,7 @@ public final class Constants {
     public static final int kBackBottomRollerCanId = 10;
     public static final int kBackDirectionRollerCanId = 11;
     public static final int kConveyorCanId = 12;
+    public static final int kFeederCanId = 16;
 
     public static final double kRollerNominalVoltage = 11;
 
@@ -47,6 +48,7 @@ public final class Constants {
     public static final double kBackBottomRollerVoltageBackSide = 6;
     public static final double kFrontDirectionRollerVoltageBackSide = 6; // TBD
     public static final double kConveyorVoltage = 6; // TBD
+    public static final double kFeederVoltage = 6; // TBD
   }
 
   public static final class DriveConstants {

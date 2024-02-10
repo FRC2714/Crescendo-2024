@@ -58,7 +58,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, true),
+                true, false),
             m_robotDrive));
   }
 
@@ -78,7 +78,8 @@ public class RobotContainer {
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
 
 
-    m_driverController.x().whileTrue(m_intake.setBackDirectionRollerVoltageCommand(6));
+    m_driverController.b().whileTrue(m_intake.outtakeBack()).onFalse(m_intake.stopBack());
+    m_driverController.a().whileTrue(m_intake.outtakeFront()).onFalse(m_intake.stopFront());
   }
 
   /**
