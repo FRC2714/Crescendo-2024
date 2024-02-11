@@ -16,7 +16,6 @@ import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -96,6 +95,7 @@ public class RobotContainer {
     m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
+    // m_driverController.a().onTrue(m_shooter.setFlywheelVelocityCommand(1000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
   }
 
   /**
