@@ -94,7 +94,7 @@ public class RobotContainer {
 
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
 
-
+    m_driverController.x().onTrue(m_shooter.setFlywheelVelocityCommand(3000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
     m_driverController.b().whileTrue(m_intake.outtakeBack()).onFalse(m_intake.stopBack());
     m_driverController.a().whileTrue(m_intake.outtakeFront()).onFalse(m_intake.stopFront());
     m_driverController.y()
@@ -102,9 +102,9 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
-    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
+    // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
+    // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    // m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.a().onTrue(m_shooter.setFlywheelVelocityCommand(1000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
   }
 

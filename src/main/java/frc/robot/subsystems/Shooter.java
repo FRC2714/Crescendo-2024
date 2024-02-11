@@ -7,7 +7,6 @@ package frc.robot.subsystems;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -37,8 +36,7 @@ public class Shooter extends SubsystemBase {
   private RelativeEncoder flywheelEncoder;
 
   private PIDController pivotController;
-  private PIDController flywheelController;
-  private SparkPIDController flywheelController2; 
+  private SparkPIDController flywheelController;
   private SimpleMotorFeedforward flywheelFeedforward;
 
   private Limelight m_limelight;
@@ -49,7 +47,7 @@ public class Shooter extends SubsystemBase {
 
   private TunableNumber pivotAngleTunableNumber;
   private TunableNumber flywheelVelocityTunableNumber;
-  private TunableNumber pivotP, flywheelP, flywheelV;
+  private TunableNumber pivotP, flywheelP, flywheelV, flywheelD;
 
   private boolean dynamicEnabled;
 
@@ -82,11 +80,11 @@ public class Shooter extends SubsystemBase {
     bottomFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
 
     pivotController = new PIDController(PivotPIDConstants.kP, PivotPIDConstants.kI, PivotPIDConstants.kD);
-    flywheelController = new PIDController(FlywheelPIDConstants.kP, FlywheelPIDConstants.kI, FlywheelPIDConstants.kD);
+    flywheelController = topFlywheelMotor.getPIDController();
     flywheelFeedforward = new SimpleMotorFeedforward(FlywheelPIDConstants.kS, FlywheelPIDConstants.kV, FlywheelPIDConstants.kA);
 
-    flywheelController2 = topFlywheelMotor.getPIDController();
-
+    flywheelController.setP(0.0001);
+    flywheelController.setFF(0.0003);
     topFlywheelMotor.burnFlash();
     bottomFlywheelMotor.burnFlash();
     pivotMotor.burnFlash();
@@ -106,10 +104,12 @@ public class Shooter extends SubsystemBase {
     pivotP = new TunableNumber("Pivot P");
     flywheelP = new TunableNumber("Flywheel P");
     flywheelV = new TunableNumber("Flywheel V");
+    flywheelD = new TunableNumber("Flywheel D");
 
 
     pivotAngleTunableNumber.setDefault(0);
     flywheelVelocityTunableNumber.setDefault(0);
+    flywheelD.setDefault(0);
     pivotP.setDefault(0);
     flywheelP.setDefault(0);
     flywheelV.setDefault(0);
@@ -159,12 +159,12 @@ public class Shooter extends SubsystemBase {
     return flywheelEncoder.getVelocity();
   }
 
-  public double getTargetFlywheelVelocity() {
-    return flywheelController.getSetpoint();
-  }
+  // public double getTargetFlywheelVelocity() {
+  //   return flywheelController.getSetpoint();
+  // }
 
   public void setFlywheelVelocity(double targetVelocity) {
-    if (!dynamicEnabled) flywheelController.setSetpoint(targetVelocity);
+    if (!dynamicEnabled) flywheelController.setReference(targetVelocity, ControlType.kVelocity);
   }
 
   public double getDynamicPivotAngle() {
@@ -195,13 +195,9 @@ public class Shooter extends SubsystemBase {
     pivotController.setSetpoint(pivotAngleTunableNumber.get());
   }
 
-  public void tuneFlywheelVelocity() {
-    flywheelController.setSetpoint(flywheelVelocityTunableNumber.get());
-  }
-
-  public Command tuneFlywheel2Velocity() {
-    return new InstantCommand(() -> flywheelController2.setReference(flywheelVelocityTunableNumber.get(), ControlType.kVelocity));
-  }
+  // public void tuneFlywheelVelocity() {
+  //   flywheelController.setSetpoint(flywheelVelocityTunableNumber.get());
+  // }
 
   public void tunePivotP() {
     pivotController.setP(pivotP.get());
@@ -211,18 +207,12 @@ public class Shooter extends SubsystemBase {
     flywheelController.setP(flywheelP.get());
   }
 
-  public void tuneFlywheel2P() {
-    flywheelController2.setP(flywheelP.get());
-    topFlywheelMotor.burnFlash();
+  public void tuneFlywheelD() {
+    flywheelController.setD(flywheelD.get());
   }
 
   public void tuneFlywheelV() {
     flywheelFeedforward = new SimpleMotorFeedforward(0, flywheelV.get(), 0);
-  }
-
-  public void tuneFlywheel2V() {
-    flywheelController2.setFF(flywheelV.get());
-    topFlywheelMotor.burnFlash();
   }
 
   public void setDynamic() {
@@ -239,9 +229,9 @@ public class Shooter extends SubsystemBase {
     pivotMotor.setVoltage(pivotController.calculate(getPivotAngle()));
   }
 
-  public void setCalculatedFlywheelVoltage() {
-    topFlywheelMotor.setVoltage(flywheelController.calculate(getFlywheelVelocity()) + flywheelFeedforward.calculate(getTargetFlywheelVelocity()));
-  }
+  // public void setCalculatedFlywheelVoltage() {
+  //   topFlywheelMotor.setVoltage(flywheelController.calculate(getFlywheelVelocity()) + flywheelFeedforward.calculate(getTargetFlywheelVelocity()));
+  // }
 
   public Command setPivotAngleCommand(double targetAngle) {
     return new InstantCommand(() -> setPivotAngle(targetAngle));
@@ -257,9 +247,10 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Current Pivot Angle", getPivotAngle());
     SmartDashboard.putNumber("Target Pivot Angle", getTargetPivotAngle());
     SmartDashboard.putNumber("Current Flywheel Velocity", getFlywheelVelocity());
-    SmartDashboard.putNumber("Target Flywheel Velocity", getTargetFlywheelVelocity());
+    // SmartDashboard.putNumber("Target Flywheel Velocity", getTargetFlywheelVelocity());
     SmartDashboard.putBoolean("Dynamic Enabled?", dynamicEnabled);
     SmartDashboard.putNumber("Pivot Current", pivotMotor.getOutputCurrent());
+    SmartDashboard.putNumber("Flywheel Current", topFlywheelMotor.getOutputCurrent());
 
     if (pivotAngleTunableNumber.hasChanged()) {
       tunePivotAngle();
@@ -269,9 +260,9 @@ public class Shooter extends SubsystemBase {
       tunePivotP();
     }
 
-    if (flywheelVelocityTunableNumber.hasChanged()) {
-      tuneFlywheelVelocity();
-    }
+    // if (flywheelVelocityTunableNumber.hasChanged()) {
+    //   tuneFlywheelVelocity();
+    // }
 
     if (flywheelP.hasChanged()) {
       tuneFlywheelP();
@@ -281,10 +272,14 @@ public class Shooter extends SubsystemBase {
       tuneFlywheelV();
     }
 
+    if (flywheelD.hasChanged()) {
+      tuneFlywheelD();
+    }
+
     if (dynamicEnabled) setDynamic();
 
 
     // setCalculatedPivotVoltage();
-    setCalculatedFlywheelVoltage();
+    // setCalculatedFlywheelVoltage();
   }
 }

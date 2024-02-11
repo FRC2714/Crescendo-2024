@@ -42,16 +42,16 @@ public final class Constants {
     public static final int kBackDirectionRollerSmartCurrentLimit = 0; // TBD
     public static final int kConveyorSmartCurrentLimit = 0; // TBD
 
-    public static final double kFrontRollerVoltage = 6; // TBD
-    public static final double kBackBottomRollerVoltage = 6; // TBD
-    public static final double kBackDirectionRollerVoltageFrontSide = 6; // TBD
-    public static final double kFrontDirectionRollerVoltageFrontSide = 6; // TBD
-    public static final double kBackBottomRollerVoltageFrontSide = 6;
-    public static final double kBackDirectionRollerVoltageBackSide = 6; // TBD
-    public static final double kBackBottomRollerVoltageBackSide = 6;
-    public static final double kFrontDirectionRollerVoltageBackSide = 6; // TBD
-    public static final double kConveyorVoltage = 6; // TBD
-    public static final double kFeederVoltage = 6; // TBD
+    public static final double kFrontRollerVoltage = 3; // TBD
+    public static final double kBackBottomRollerVoltage = 3; // TBD
+    public static final double kBackDirectionRollerVoltageFrontSide = 3; // TBD
+    public static final double kFrontDirectionRollerVoltageFrontSide = 3; // TBD
+    public static final double kBackBottomRollerVoltageFrontSide = 3;
+    public static final double kBackDirectionRollerVoltageBackSide = 3; // TBD
+    public static final double kBackBottomRollerVoltageBackSide = 3;
+    public static final double kFrontDirectionRollerVoltageBackSide = 3; // TBD
+    public static final double kConveyorVoltage = 3; // TBD
+    public static final double kFeederVoltage = 3; // TBD
   }
 
 
@@ -101,12 +101,12 @@ public final class Constants {
     }
     
     public static final class FlywheelPIDConstants {
-      public static final double kP = .001; // TBD
+      public static final double kP = 0; // TBD
       public static final double kI = 0; // TBD
       public static final double kD = 0; // TBD
 
       public static final double kS = 0; // TBD
-      public static final double kV = 0.003; // TBD
+      public static final double kV = 0; // TBD
       public static final double kA = 0; // TBD
     }
   }

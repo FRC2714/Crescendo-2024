@@ -149,11 +149,11 @@ public class Intake extends SubsystemBase {
   public ParallelCommandGroup outtakeFront() {
     if (backRunning) return new ParallelCommandGroup();
     else frontRunning = true;
-    return new ParallelCommandGroup(setFrontRollerVoltageCommand(-IntakeConstants.kFrontRollerVoltage),
-                                    setBackBottomRollerVoltageCommand(-IntakeConstants.kBackBottomRollerVoltageFrontSide),
-                                    setBackDirectionRollerVoltageCommand(-IntakeConstants.kBackDirectionRollerVoltageFrontSide),
-                                    setConveyorVoltageCommand(IntakeConstants.kConveyorVoltage),
-                                    setFeederVoltageCommand(-IntakeConstants.kFeederVoltage));
+    return new ParallelCommandGroup(setFrontRollerVoltageCommand(-(IntakeConstants.kFrontRollerVoltage + 1)),
+                                    setBackBottomRollerVoltageCommand(-(IntakeConstants.kBackBottomRollerVoltageFrontSide + 1)),
+                                    setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageFrontSide + 1)),
+                                    setConveyorVoltageCommand(IntakeConstants.kConveyorVoltage + 1),
+                                    setFeederVoltageCommand(-(IntakeConstants.kFeederVoltage + 1)));
   }
 
   public ParallelCommandGroup stopFront() {
@@ -176,9 +176,9 @@ public class Intake extends SubsystemBase {
   public ParallelCommandGroup outtakeBack() {
     if (frontRunning) return new ParallelCommandGroup();
     else backRunning = true;
-    return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageBackSide),
-                                    setBackDirectionRollerVoltageCommand(-IntakeConstants.kBackDirectionRollerVoltageBackSide),
-                                    setFeederVoltageCommand(IntakeConstants.kFeederVoltage));
+    return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageBackSide + 1),
+                                    setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageBackSide + 1)),
+                                    setFeederVoltageCommand(-(IntakeConstants.kFeederVoltage + 1)));
   }
 
   public ParallelCommandGroup stopBack() {
