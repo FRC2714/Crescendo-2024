@@ -6,7 +6,10 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -49,6 +52,63 @@ public final class Constants {
     public static final double kFrontDirectionRollerVoltageBackSide = 6; // TBD
     public static final double kConveyorVoltage = 6; // TBD
     public static final double kFeederVoltage = 6; // TBD
+  }
+
+
+  public static final class LimelightConstants {
+    public static final Pose3d kBackLimelightPose = 
+      new Pose3d(
+        new Translation3d(15.75, 9.14, 0.0), //inches
+        new Rotation3d(0.0, Units.degreesToRadians(35.0), 0.0));//degrees
+    public static final String kLimelightName = "limelight-back";
+
+    public static final double kSpeakerGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
+  }
+
+  public static final class FieldConstants {
+    public static final Translation3d kBlueSpeakerAprilTagLocation = new Translation3d(-8.308975, 1.442593, 1.451102);
+    public static final Translation3d kRedSpeakerAprilTagLocation = new Translation3d(8.308467, 1.442593, 1.451102);
+  }
+  
+  public static final class ShooterConstants {
+    public static final int kTopFlywheelCanId = 14;
+    public static final int kBottomFlywheelCanId = 15;
+    public static final int kPivotCanId = 13;
+
+    public static final double kPivotGearRatio = 14;
+
+    public static final double kPivotEncoderZeroOffset = 0;
+    public static final double kPivotEncoderKinematicOffset = 10;
+
+    public static final double kMinPivotAngle = 0;
+    public static final double kMaxPivotAngle = 92;
+
+    public static final double kPivotEncoderConversionFactor = 360 / kPivotGearRatio;
+
+    public static final int kPivotSmartCurrentLimit = 0; // TBD
+    public static final int kFollowingPivotSmartCurrentLimit = 0; // TBD
+    public static final int kTopFlywheelSmartCurrentLimit = 0; // TBD
+    public static final int kBottomFlywheelSmartCurrentLimit = 0; // TBD
+
+    public static final double kAccelerationCompensationFactor = 0.1;
+
+    public static final double kNominalVoltage = 11; // TBD
+
+    public static final class PivotPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+    }
+    
+    public static final class FlywheelPIDConstants {
+      public static final double kP = .001; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+
+      public static final double kS = 0; // TBD
+      public static final double kV = 0.003; // TBD
+      public static final double kA = 0; // TBD
+    }
   }
 
   public static final class DriveConstants {
