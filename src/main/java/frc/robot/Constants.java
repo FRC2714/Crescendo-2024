@@ -28,6 +28,33 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+  public static final class IntakeConstants {
+    public static final int kFrontRollerCanId = 9;
+    public static final int kBackBottomRollerCanId = 10;
+    public static final int kBackDirectionRollerCanId = 11;
+    public static final int kConveyorCanId = 12;
+    public static final int kFeederCanId = 16;
+
+    public static final double kRollerNominalVoltage = 11;
+
+    public static final int kFrontRollerSmartCurrentLimit = 0; // TBD
+    public static final int kBackBottomRollerSmartCurrentLimit = 0; // TBD
+    public static final int kBackDirectionRollerSmartCurrentLimit = 0; // TBD
+    public static final int kConveyorSmartCurrentLimit = 0; // TBD
+
+    public static final double kFrontRollerVoltage = 6; // TBD
+    public static final double kBackBottomRollerVoltage = 6; // TBD
+    public static final double kBackDirectionRollerVoltageFrontSide = 6; // TBD
+    public static final double kFrontDirectionRollerVoltageFrontSide = 6; // TBD
+    public static final double kBackBottomRollerVoltageFrontSide = 6;
+    public static final double kBackDirectionRollerVoltageBackSide = 6; // TBD
+    public static final double kBackBottomRollerVoltageBackSide = 6;
+    public static final double kFrontDirectionRollerVoltageBackSide = 6; // TBD
+    public static final double kConveyorVoltage = 6; // TBD
+    public static final double kFeederVoltage = 6; // TBD
+  }
+
+
   public static final class LimelightConstants {
     public static final Pose3d kBackLimelightPose = 
       new Pose3d(

@@ -19,7 +19,8 @@ import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.drive.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -43,10 +44,11 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelight);
   private final Shooter m_shooter = new Shooter(m_limelight);
+  private final Intake m_intake = new Intake();
   private double kPThetaController = .7;
 
   // The driver's controller
-  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandCommandXboxController m_driverController = new CommandCommandXboxController(OIConstants.kDriverControllerPort);
 
 
   ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
@@ -69,13 +71,13 @@ public class RobotContainer {
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
         new RunCommand(
-        () -> m_robotDrive.drive(
-            -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-            -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-            -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-            true, true),
-        m_robotDrive));
-    }
+            () -> m_robotDrive.drive(
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true, false),
+            m_robotDrive));
+  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -87,6 +89,14 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_driverController.rightBumper().whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
+    m_driverController.leftBumper().whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
+
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+
+
+    m_driverController.b().whileTrue(m_intake.outtakeBack()).onFalse(m_intake.stopBack());
+    m_driverController.a().whileTrue(m_intake.outtakeFront()).onFalse(m_intake.stopFront());
     m_driverController.y()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
