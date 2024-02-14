@@ -16,12 +16,6 @@
           "data": {
             "pathName": "1+B3, B2,B1 + end C1"
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 15.0
-          }
         }
       ]
     }
