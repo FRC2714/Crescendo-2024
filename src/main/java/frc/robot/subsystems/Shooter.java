@@ -83,8 +83,8 @@ public class Shooter extends SubsystemBase {
     flywheelController = topFlywheelMotor.getPIDController();
     flywheelFeedforward = new SimpleMotorFeedforward(FlywheelPIDConstants.kS, FlywheelPIDConstants.kV, FlywheelPIDConstants.kA);
 
-    flywheelController.setP(0.0001);
-    flywheelController.setFF(0.0003);
+    flywheelController.setP(0.0005);
+    flywheelController.setFF(0.000175);
     topFlywheelMotor.burnFlash();
     bottomFlywheelMotor.burnFlash();
     pivotMotor.burnFlash();
