@@ -35,8 +35,8 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final class PhotonConstants {
-    public static final String kCameraName = "Logitech,_Inc._Webcam_C270"; // TBD
-    public static final Transform3d kCameraLocation = new Transform3d(new Translation3d(4, 27.5, 0),
+    public static final String kCameraName = "backCamera"; // TBD
+    public static final Transform3d kCameraLocation = new Transform3d(new Translation3d(0, 0, 0),
                                                                       new Rotation3d(0, 20, 0));
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -112,16 +112,16 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // CAN IDs
-    public static final int kFrontLeftDrivingCanId = 4;
-    public static final int kRearLeftDrivingCanId = 3;
-    public static final int kFrontRightDrivingCanId = 1;
-    public static final int kRearRightDrivingCanId = 2;
+    public static final int kFrontLeftDrivingCanId = 11;
+    public static final int kRearLeftDrivingCanId = 13;
+    public static final int kFrontRightDrivingCanId = 15;
+    public static final int kRearRightDrivingCanId = 17;
 
 
-    public static final int kFrontLeftTurningCanId = 8;
-    public static final int kRearLeftTurningCanId = 7;
-    public static final int kFrontRightTurningCanId = 5;
-    public static final int kRearRightTurningCanId = 6;
+    public static final int kFrontLeftTurningCanId = 10;
+    public static final int kRearLeftTurningCanId = 12;
+    public static final int kFrontRightTurningCanId = 14;
+    public static final int kRearRightTurningCanId = 16;
 
     public static final boolean kGyroReversed = false;
 

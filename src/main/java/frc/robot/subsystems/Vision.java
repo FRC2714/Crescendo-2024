@@ -10,7 +10,9 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -31,7 +33,7 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
     photonCamera = new PhotonCamera(PhotonConstants.kCameraName);
-    photonCamera.setPipelineIndex(0);
+    // photonCamera.setPipelineIndex(0);
     photonPoseEstimator = new PhotonPoseEstimator(FieldConstants.kAprilTagFieldLayout,
                                                   PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                                                   photonCamera,
@@ -45,6 +47,14 @@ public class Vision extends SubsystemBase {
 
   public PhotonPipelineResult getLatestResult() {
     return photonCamera.getLatestResult();
+  }
+
+  public MultiTargetPNPResult getMultiTagLatestResult() {
+    return getLatestResult().getMultiTagResult();
+  }
+
+  public PhotonTrackedTarget getBestTarget() {
+    return getLatestResult().getBestTarget();
   }
 
   public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose) {
@@ -74,7 +84,14 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putBoolean("photon pose", getEstimatedGlobalPose().isPresent());
+    Optional<EstimatedRobotPose> photonPoseEstimation = getEstimatedGlobalPose();
+    photonPoseEstimation.ifPresent(poseEstimation -> {
+      SmartDashboard.putNumber("pv X", poseEstimation.estimatedPose.getX());
+      SmartDashboard.putNumber("pv Y", poseEstimation.estimatedPose.getY());
+    });
+    SmartDashboard.putNumber("Best target x distance", getMultiTagLatestResult().estimatedPose.best.getX());
+    SmartDashboard.putNumber("Best target y distance", getMultiTagLatestResult().estimatedPose.best.getY());
+    SmartDashboard.putBoolean("photon pose", photonPoseEstimation.isPresent());
     // SmartDashboard.putNumber("Number of targets", photonCamera.getLatestResult().getTargets().size());
     // SmartDashboard.putNumber("Best Target ID", photonCamera.getLatestResult().getBestTarget().getFiducialId());
     // SmartDashboard.putNumber("Best Target Distance", photonCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getX());
