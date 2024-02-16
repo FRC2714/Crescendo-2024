@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.Vision;
 import frc.robot.utils.FieldRelativeAcceleration;
 import frc.robot.utils.FieldRelativeVelocity;
@@ -71,7 +72,8 @@ public class DriveSubsystem extends SubsystemBase {
   private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
 
-  private Vision m_photonCamera = new Vision();
+  private Vision m_backPhotonCamera = new Vision(PhotonConstants.kBackCameraName, PhotonConstants.kBackCameraLocation);
+  private Vision m_frontPhotonCamera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
 
   private Field2d m_field = new Field2d();
   
@@ -106,10 +108,23 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    Optional<EstimatedRobotPose> photonPoseEstimation = m_photonCamera.getEstimatedGlobalPose();
-    photonPoseEstimation.ifPresent(poseEstimation -> {
+    Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
+    Optional<EstimatedRobotPose> frontPhotonPoseEstimation = m_frontPhotonCamera.getEstimatedGlobalPose();
+    backPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
       Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
-      m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_photonCamera.getEstimationStdDevs(estPose));
+      SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
+      SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
+      m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_backPhotonCamera.getEstimationStdDevs(estPose));
+    }, new Runnable() {
+        @Override
+        public void run() {
+          frontPhotonPoseEstimation.ifPresent(poseEstimation -> {
+            Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
+            SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
+            SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
+            m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_frontPhotonCamera.getEstimationStdDevs(estPose));
+          });
+        }
     });
 
     

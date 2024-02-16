@@ -35,9 +35,12 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final class PhotonConstants {
-    public static final String kCameraName = "backCamera"; // TBD
-    public static final Transform3d kCameraLocation = new Transform3d(new Translation3d(0, 0, 0),
-                                                                      new Rotation3d(0, 20, 0));
+    public static final String kBackCameraName = "backCamera";
+    public static final String kFrontCameraName = "frontCamera";
+    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-27), Units.inchesToMeters(8.5), Units.inchesToMeters(23.5)),
+                                                                          new Rotation3d(0, 0, 0));
+    public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(6), Units.inchesToMeters(-8.5), Units.inchesToMeters(23.5)),
+                                                                          new Rotation3d(0, 0, 0));
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
@@ -95,9 +98,9 @@ public final class Constants {
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(28.5);
+    public static final double kTrackWidth = Units.inchesToMeters(27);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(16.5);
+    public static final double kWheelBase = Units.inchesToMeters(27);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -137,7 +140,7 @@ public final class Constants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 16;
+    public static final int kDrivingMotorPinionTeeth = 14;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
@@ -148,7 +151,7 @@ public final class Constants {
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 19 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-    public static final double kDrivingMotorReduction = (45.0 * 19) / (kDrivingMotorPinionTeeth * 15);
+    public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 14);
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
 

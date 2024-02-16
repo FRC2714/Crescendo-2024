@@ -10,16 +10,15 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
-import org.photonvision.targeting.MultiTargetPNPResult;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PhotonConstants;
@@ -31,13 +30,13 @@ public class Vision extends SubsystemBase {
   private PhotonCamera photonCamera;
   private PhotonPoseEstimator photonPoseEstimator;
 
-  public Vision() {
-    photonCamera = new PhotonCamera(PhotonConstants.kCameraName);
+  public Vision(String cameraName, Transform3d cameraLocation) {
+    photonCamera = new PhotonCamera(cameraName);
     // photonCamera.setPipelineIndex(0);
     photonPoseEstimator = new PhotonPoseEstimator(FieldConstants.kAprilTagFieldLayout,
                                                   PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                                                   photonCamera,
-                                                  PhotonConstants.kCameraLocation);
+                                                  cameraLocation);
     photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
   }
 
@@ -49,9 +48,15 @@ public class Vision extends SubsystemBase {
     return photonCamera.getLatestResult();
   }
 
-  public MultiTargetPNPResult getMultiTagLatestResult() {
-    return getLatestResult().getMultiTagResult();
-  }
+  // public PNPResult getEstimatedPose() {
+  //   PhotonPipelineResult res = getLatestResult();
+  //   MultiTargetPNPResult multiRes = res.getMultiTagResult();
+    
+  //   if (multiRes.estimatedPose.isPresent)
+  //     return multiRes.estimatedPose;
+  //   else
+  //     return res.getBestTarget()
+  // }
 
   public PhotonTrackedTarget getBestTarget() {
     return getLatestResult().getBestTarget();
@@ -89,8 +94,8 @@ public class Vision extends SubsystemBase {
       SmartDashboard.putNumber("pv X", poseEstimation.estimatedPose.getX());
       SmartDashboard.putNumber("pv Y", poseEstimation.estimatedPose.getY());
     });
-    SmartDashboard.putNumber("Best target x distance", getMultiTagLatestResult().estimatedPose.best.getX());
-    SmartDashboard.putNumber("Best target y distance", getMultiTagLatestResult().estimatedPose.best.getY());
+    // SmartDashboard.putNumber("Best target x distance", getMultiTagLatestResult().estimatedPose.best.getX());
+    // SmartDashboard.putNumber("Best target y distance", getMultiTagLatestResult().estimatedPose.best.getY());
     SmartDashboard.putBoolean("photon pose", photonPoseEstimation.isPresent());
     // SmartDashboard.putNumber("Number of targets", photonCamera.getLatestResult().getTargets().size());
     // SmartDashboard.putNumber("Best Target ID", photonCamera.getLatestResult().getBestTarget().getFiducialId());
