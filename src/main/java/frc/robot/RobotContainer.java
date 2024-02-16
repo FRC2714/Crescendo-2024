@@ -94,7 +94,8 @@ public class RobotContainer {
 
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
 
-    m_driverController.x().onTrue(m_shooter.setFlywheelVelocityCommand(3000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
+    m_driverController.povUp().onTrue(m_shooter.setFlywheelVelocityCommand(3000));
+    m_driverController.povDown().onTrue(m_shooter.setFlywheelVelocityCommand(0));
     m_driverController.b().whileTrue(m_intake.outtakeBack()).onFalse(m_intake.stopBack());
     m_driverController.a().whileTrue(m_intake.outtakeFront()).onFalse(m_intake.stopFront());
     m_driverController.y()
