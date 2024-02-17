@@ -17,7 +17,7 @@ public class SeekNote extends Command {
 
   private ProfiledPIDController thetaController;
 
-  private double kPThetaController = 0.4;
+  private double kPThetaController = 1;
 
   /** Creates a new RotateToGoal. */
   public SeekNote(DriveSubsystem m_drivetrain, Limelight m_limelight) {
@@ -37,7 +37,7 @@ public class SeekNote extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_limelight.setAprilTagPipeline();
+    m_limelight.setNoteSeekerPipeline();
     m_limelight.setLED(false);
   }
 
@@ -46,11 +46,21 @@ public class SeekNote extends Command {
   public void execute() {
     if(m_limelight.isTargetVisible()) {
       m_drivetrain.drive(
-        5, 
+        0, 
         0, 
         thetaController.calculate(m_limelight.getXOffsetRadians()), 
         true,
         false);
+      if(Math.abs(m_limelight.getXAngleOffsetDegrees())< 7){
+         double speed = Math.abs(m_limelight.getDistanceToGoalInches()) / 10;
+        m_drivetrain.drive(
+        speed, 
+        0, 
+        thetaController.calculate(m_limelight.getXOffsetRadians()), 
+        false,
+        false);
+        //call intake
+      }
     }
   }
 

@@ -12,9 +12,9 @@ import frc.utils.LimelightHelpers;
 
 public class Limelight extends SubsystemBase {
 
-	private String limelightName = "limelight-back";
+	private String limelightName = "limelight-front";
 	private double kCameraHeight = 9.14;
-	private double kMountingAngle = 35.0;
+	private double kMountingAngle = -4;
 	private double GoalHeight = 24.5; //inches, deg NEEDS TO BE UPDATED
 
 	public Limelight() {}
@@ -25,10 +25,6 @@ public class Limelight extends SubsystemBase {
 
 	public void setGoalHeight(double GoalHeight) {
 		this.GoalHeight = GoalHeight;
-	}
-
-	public double getGoalHeight() {
-		return GoalHeight;
 	}
 
 	public double getDistanceToGoalMeters() {
@@ -61,7 +57,7 @@ public class Limelight extends SubsystemBase {
 	}
 
 	public void setNoteSeekerPipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 6); // tune later
+		LimelightHelpers.setPipelineIndex(limelightName, 3); // tune later
 	}
 
 	public Command setLEDCommand(boolean lightOn) {
@@ -76,5 +72,6 @@ public class Limelight extends SubsystemBase {
 	public void periodic() {
 		SmartDashboard.putNumber("ll distance to goal", getDistanceToGoalMeters());
 		SmartDashboard.putNumber("ll rotation from apriltag", isTargetVisible() ? getXAngleOffsetDegrees() : 30);
+		SmartDashboard.putBoolean("ll is target visibe", isTargetVisible());
 	}
 }
