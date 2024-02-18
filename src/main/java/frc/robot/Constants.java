@@ -37,10 +37,10 @@ public final class Constants {
   public static final class PhotonConstants {
     public static final String kBackCameraName = "backCamera";
     public static final String kFrontCameraName = "frontCamera";
-    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-27), Units.inchesToMeters(8.5), Units.inchesToMeters(23.5)),
-                                                                          new Rotation3d(0, 0, 0));
-    public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(6), Units.inchesToMeters(-8.5), Units.inchesToMeters(23.5)),
-                                                                          new Rotation3d(0, 0, 0));
+    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-15.66105), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
+                                                                          new Rotation3d(0, 20, 0));
+    public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(1.458215), Units.inchesToMeters(12.249889), Units.inchesToMeters(14.018624)),
+                                                                          new Rotation3d(0, -20, 0));
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
@@ -49,42 +49,6 @@ public final class Constants {
     public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     public static final Translation3d kBlueSpeakerAprilTagLocation = new Translation3d(-8.308975, 1.442593, 1.451102);
     public static final Translation3d kRedSpeakerAprilTagLocation = new Translation3d(8.308467, 1.442593, 1.451102);
-  }
-  
-  public static final class ShooterConstants {
-    public static final int kTopFlywheelCanId = 10; 
-    public static final int kBottomFlywheelCanId = 9;
-    public static final int kPivotCanId = 0; // TBD
-    public static final int kFollowingPivotCanId = 0; // TBD
-
-    public static final double kPivotGearRatio = 9;
-
-    public static final double kPivotEncoderConversionFactor = kPivotGearRatio * (360);
-
-    public static final int kPivotSmartCurrentLimit = 0; // TBD
-    public static final int kFollowingPivotSmartCurrentLimit = 0; // TBD
-    public static final int kTopFlywheelSmartCurrentLimit = 0; // TBD
-    public static final int kBottomFlywheelSmartCurrentLimit = 0; // TBD
-
-    public static final double kAccelerationCompensationFactor = 0.1;
-
-    public static final double kNominalVoltage = 11; // TBD
-
-    public static final class PivotPIDConstants {
-      public static final double kP = 0; // TBD
-      public static final double kI = 0; // TBD
-      public static final double kD = 0; // TBD
-    }
-    
-    public static final class FlywheelPIDConstants {
-      public static final double kP = 0; // TBD
-      public static final double kI = 0; // TBD
-      public static final double kD = 0; // TBD
-
-      public static final double kS = 0; // TBD
-      public static final double kV = 0; // TBD
-      public static final double kA = 0; // TBD
-    }
   }
 
   public static final class DriveConstants {
@@ -98,9 +62,9 @@ public final class Constants {
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(27);
+    public static final double kTrackWidth = Units.inchesToMeters(28.5);
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(27);
+    public static final double kWheelBase = Units.inchesToMeters(16.5);
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -115,16 +79,16 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // CAN IDs
-    public static final int kFrontLeftDrivingCanId = 11;
-    public static final int kRearLeftDrivingCanId = 13;
-    public static final int kFrontRightDrivingCanId = 15;
-    public static final int kRearRightDrivingCanId = 17;
+    public static final int kFrontLeftDrivingCanId = 4;
+    public static final int kRearLeftDrivingCanId = 3;
+    public static final int kFrontRightDrivingCanId = 1;
+    public static final int kRearRightDrivingCanId = 2;
 
 
-    public static final int kFrontLeftTurningCanId = 10;
-    public static final int kRearLeftTurningCanId = 12;
-    public static final int kFrontRightTurningCanId = 14;
-    public static final int kRearRightTurningCanId = 16;
+    public static final int kFrontLeftTurningCanId = 8;
+    public static final int kRearLeftTurningCanId = 7;
+    public static final int kFrontRightTurningCanId = 5;
+    public static final int kRearRightTurningCanId = 6;
 
     public static final boolean kGyroReversed = false;
 
@@ -140,7 +104,7 @@ public final class Constants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 14;
+    public static final int kDrivingMotorPinionTeeth = 16;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
@@ -151,7 +115,7 @@ public final class Constants {
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
     // 45 teeth on the wheel's bevel gear, 19 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-    public static final double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 14);
+    public static final double kDrivingMotorReduction = (45.0 * 19) / (kDrivingMotorPinionTeeth * 15);
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
 
