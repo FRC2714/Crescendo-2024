@@ -6,11 +6,18 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.Matrix;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N1;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -65,11 +72,6 @@ public final class Constants {
     public static final double kSpeakerGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
   }
 
-  public static final class FieldConstants {
-    public static final Translation3d kBlueSpeakerAprilTagLocation = new Translation3d(-8.308975, 1.442593, 1.451102);
-    public static final Translation3d kRedSpeakerAprilTagLocation = new Translation3d(8.308467, 1.442593, 1.451102);
-  }
-  
   public static final class ShooterConstants {
     public static final int kTopFlywheelCanId = 14;
     public static final int kBottomFlywheelCanId = 15;
@@ -113,6 +115,23 @@ public final class Constants {
 
       public static final double kFF = 0.000175;
     }
+  }
+
+  public static final class PhotonConstants {
+    public static final String kBackCameraName = "backCamera";
+    public static final String kFrontCameraName = "frontCamera";
+    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(15.66105), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
+                                                                          new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)));
+    public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-15), Units.inchesToMeters(12.249889), Units.inchesToMeters(14.018624)),
+                                                                          new Rotation3d(0, Units.degreesToRadians(-20), 0));
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.6, 0.6, 2);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.3, 0.3, 1);
+  }
+
+  public static final class FieldConstants {
+    public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    public static final Translation3d kBlueSpeakerAprilTagLocation = new Translation3d(-8.308975, 1.442593, 1.451102);
+    public static final Translation3d kRedSpeakerAprilTagLocation = new Translation3d(8.308467, 1.442593, 1.451102);
   }
 
   public static final class DriveConstants {
