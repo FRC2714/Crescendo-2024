@@ -15,7 +15,6 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -30,8 +29,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.commands.MoveAndShoot;
-import frc.robot.commands.RotateToGoal;
+// import frc.robot.commands.RotateToGoal;
 import java.util.List;
 
 /*
@@ -59,10 +57,6 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    
-    thetaController.setGoal(0);
-    thetaController.setTolerance(Units.degreesToRadians(0),0);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
     // Configure the button bindings
     configureButtonBindings();
 
@@ -77,6 +71,7 @@ public class RobotContainer {
                 -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, false),
             m_robotDrive));
+    }
   }
 
   /**
@@ -104,6 +99,8 @@ public class RobotContainer {
             m_robotDrive));
 
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.a().onTrue(m_shooter.setFlywheelVelocityCommand(1000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
@@ -149,8 +146,7 @@ public class RobotContainer {
         m_robotDrive);
 
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
-    m_robotDrive.resetPoseEstimator(exampleTrajectory.getInitialPose());
+    m_robotDrive.resetPoseEstimator();
 
     // Run path following command, then stop at the end.
     return swerveControllerCommand.andThen(() -> m_robotDrive.drive(0, 0, 0, false, false));
