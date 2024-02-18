@@ -16,8 +16,11 @@ public class SeekNote extends Command {
   private Limelight m_limelight;
 
   private ProfiledPIDController thetaController;
+  private ProfiledPIDController xController;
 
   private double kPThetaController = 1;
+  private double kPXController = 0.8;
+
 
   /** Creates a new RotateToGoal. */
   public SeekNote(DriveSubsystem m_drivetrain, Limelight m_limelight) {
@@ -26,11 +29,15 @@ public class SeekNote extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(4, 4));
+    xController = new ProfiledPIDController(kPXController,0,0,new Constraints(4, 4));
+
     
     addRequirements(m_drivetrain);
 
     thetaController.setGoal(0);
     thetaController.setTolerance(Units.degreesToRadians(0),0);
+    xController.setGoal(0);
+    xController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
   }
 
@@ -45,24 +52,27 @@ public class SeekNote extends Command {
   @Override
   public void execute() {
     if(m_limelight.isTargetVisible()) {
+
+      double distance = -Math.abs(m_limelight.getDistanceToGoalMeters());
       m_drivetrain.drive(
-        0, 
-        0, 
-        thetaController.calculate(m_limelight.getXOffsetRadians()), 
-        true,
-        false);
-      if(Math.abs(m_limelight.getXAngleOffsetDegrees())< 7){
-         double speed = Math.abs(m_limelight.getDistanceToGoalInches()) / 10;
-        m_drivetrain.drive(
-        speed, 
+        xController.calculate(distance),
         0, 
         thetaController.calculate(m_limelight.getXOffsetRadians()), 
         false,
         false);
+      // if(Math.abs(m_limelight.getXAngleOffsetDegrees())< 7){
+      //    double speed = Math.abs(m_limelight.getDistanceToGoalInches()) / 10;
+      //   m_drivetrain.drive(
+      //   speed, 
+      //   0, 
+      //   thetaController.calculate(m_limelight.getXOffsetRadians()), 
+      //   false,
+      //   false);
         //call intake
-      }
+      //}
     }
-  }
+  }  
+  
 
   // Called once the command ends or is interrupted.
   @Override

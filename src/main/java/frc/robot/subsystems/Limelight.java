@@ -15,7 +15,7 @@ public class Limelight extends SubsystemBase {
 	private String limelightName = "limelight-front";
 	private double kCameraHeight = 9.14;
 	private double kMountingAngle = -4;
-	private double GoalHeight = 24.5; //inches, deg NEEDS TO BE UPDATED
+	private double GoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
 
 	public Limelight() {}
 
