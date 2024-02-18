@@ -19,7 +19,9 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-//import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -38,8 +40,10 @@ import java.util.List;
  */
 public class RobotContainer {
   // The robot's subsystems
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  //private final Shooter m_shooter = new Shooter(m_limelight);
+  private final Limelight m_limelight = new Limelight();
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelight);
+  private final Shooter m_shooter = new Shooter(m_limelight);
+  private final Intake m_intake = new Intake();
   private double kPThetaController = .7;
 
   // The driver's controller
@@ -48,7 +52,6 @@ public class RobotContainer {
 
   ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
   SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(2, 1);
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -61,8 +64,7 @@ public class RobotContainer {
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
         // Turning is controlled by the X axis of the right stick.
-        // autoAiming ?
-            new RunCommand(
+        new RunCommand(
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
@@ -70,6 +72,7 @@ public class RobotContainer {
                 true, false),
             m_robotDrive));
     }
+  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
@@ -81,6 +84,15 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_driverController.rightBumper().whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
+    m_driverController.leftBumper().whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
+
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+
+    m_driverController.povUp().onTrue(m_shooter.setFlywheelVelocityCommand(3000));
+    m_driverController.povDown().onTrue(m_shooter.setFlywheelVelocityCommand(0));
+    m_driverController.b().whileTrue(m_intake.outtakeBack()).onFalse(m_intake.stopBack());
+    m_driverController.a().whileTrue(m_intake.outtakeFront()).onFalse(m_intake.stopFront());
     m_driverController.y()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -89,6 +101,9 @@ public class RobotContainer {
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
+    // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    // m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
+    // m_driverController.a().onTrue(m_shooter.setFlywheelVelocityCommand(1000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
   }
 
   /**
