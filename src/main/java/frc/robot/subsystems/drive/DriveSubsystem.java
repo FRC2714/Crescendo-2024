@@ -118,12 +118,12 @@ public class DriveSubsystem extends SubsystemBase {
     }, new Runnable() {
         @Override
         public void run() {
-          frontPhotonPoseEstimation.ifPresent(poseEstimation -> {
-            Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
-            SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
-            SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
-            m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_frontPhotonCamera.getEstimationStdDevs(estPose));
-          });
+          // frontPhotonPoseEstimation.ifPresent(poseEstimation -> {
+          //   Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
+          //   SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
+          //   SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
+            // m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_frontPhotonCamera.getEstimationStdDevs(estPose));
+          // });
         }
     });
 
