@@ -6,7 +6,10 @@ package frc.robot;
 
 import com.revrobotics.CANSparkBase.IdleMode;
 
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
@@ -24,6 +27,94 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final class IntakeConstants {
+    public static final int kFrontRollerCanId = 9;
+    public static final int kBackBottomRollerCanId = 10;
+    public static final int kBackDirectionRollerCanId = 11;
+    public static final int kConveyorCanId = 12;
+    public static final int kFeederCanId = 16;
+
+    public static final double kRollerNominalVoltage = 11;
+
+    public static final int kFrontRollerSmartCurrentLimit = 0; // TBD
+    public static final int kBackBottomRollerSmartCurrentLimit = 0; // TBD
+    public static final int kBackDirectionRollerSmartCurrentLimit = 0; // TBD
+    public static final int kConveyorSmartCurrentLimit = 0; // TBD
+
+    public static final double kFrontRollerVoltage = 3; // TBD
+    public static final double kBackBottomRollerVoltage = 3; // TBD
+    public static final double kBackDirectionRollerVoltageFrontSide = 3; // TBD
+    public static final double kFrontDirectionRollerVoltageFrontSide = 3; // TBD
+    public static final double kBackBottomRollerVoltageFrontSide = 3;
+    public static final double kBackDirectionRollerVoltageBackSide = 3; // TBD
+    public static final double kBackBottomRollerVoltageBackSide = 3;
+    public static final double kFrontDirectionRollerVoltageBackSide = 3; // TBD
+    public static final double kConveyorVoltage = 3; // TBD
+    public static final double kFeederVoltage = 3; // TBD
+  }
+
+
+  public static final class LimelightConstants {
+    public static final Pose3d kBackLimelightPose = 
+      new Pose3d(
+        new Translation3d(15.75, 9.14, 0.0), //inches
+        new Rotation3d(0.0, Units.degreesToRadians(35.0), 0.0));//degrees
+    public static final String kLimelightName = "limelight-back";
+
+    public static final double kSpeakerGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
+  }
+
+  public static final class FieldConstants {
+    public static final Translation3d kBlueSpeakerAprilTagLocation = new Translation3d(-8.308975, 1.442593, 1.451102);
+    public static final Translation3d kRedSpeakerAprilTagLocation = new Translation3d(8.308467, 1.442593, 1.451102);
+  }
+  
+  public static final class ShooterConstants {
+    public static final int kTopFlywheelCanId = 14;
+    public static final int kBottomFlywheelCanId = 15;
+    public static final int kPivotCanId = 13;
+
+    public static final double kPivotGearRatio = 25;
+
+    public static final double kPivotEncoderZeroOffset = 300 * kPivotGearRatio;
+    public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
+
+    public static final double kMinPivotAngle = 0;
+    public static final double kMaxPivotAngle = 83;
+
+    public static final double kPivotEncoderConversionFactor = 360 * kPivotGearRatio;
+
+    public static final int kPivotSmartCurrentLimit = 0; // TBD
+    public static final int kFollowingPivotSmartCurrentLimit = 0; // TBD
+    public static final int kTopFlywheelSmartCurrentLimit = 0; // TBD
+    public static final int kBottomFlywheelSmartCurrentLimit = 0; // TBD
+
+    public static final double kAccelerationCompensationFactor = 0.1;
+
+    public static final double kNominalVoltage = 11; // TBD
+
+    public static final double kAmpAngle = 46;
+
+    public static final class PivotPIDConstants {
+      public static final double kP = 0.45; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+    }
+    
+    public static final class FlywheelPIDConstants {
+      public static final double kP = 0.0005; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
+
+      public static final double kS = 0; // TBD
+      public static final double kV = 0; // TBD
+      public static final double kA = 0; // TBD
+
+      public static final double kFF = 0.000175;
+    }
+  }
+
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
