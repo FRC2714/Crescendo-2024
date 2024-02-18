@@ -110,15 +110,16 @@ public class DriveSubsystem extends SubsystemBase {
         });
     Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
     Optional<EstimatedRobotPose> frontPhotonPoseEstimation = m_frontPhotonCamera.getEstimatedGlobalPose();
-    backPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
+    frontPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
       Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
       SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
       SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
+      SmartDashboard.putNumber("drive photon est theta", poseEstimation.estimatedPose.getRotation().toRotation2d().getDegrees());
       m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_backPhotonCamera.getEstimationStdDevs(estPose));
     }, new Runnable() {
         @Override
         public void run() {
-          frontPhotonPoseEstimation.ifPresent(poseEstimation -> {
+          backPhotonPoseEstimation.ifPresent(poseEstimation -> {
             Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
             SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
             SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
