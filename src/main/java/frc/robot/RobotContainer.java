@@ -23,10 +23,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+<<<<<<< Updated upstream
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
+=======
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Intake;
+>>>>>>> Stashed changes
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -48,11 +53,16 @@ import com.pathplanner.lib.auto.NamedCommands;
  */
 public class RobotContainer {
   // The robot's subsystems
+<<<<<<< Updated upstream
   private final Limelight m_limelight = new Limelight();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelight);
   private final Shooter m_shooter = new Shooter(m_limelight);
   private final Intake m_intake = new Intake();
   private double kPThetaController = .7;
+=======
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Intake m_intake = new Intake();
+>>>>>>> Stashed changes
   private final SendableChooser<Command> autoChooser;
 
   // The driver's controller
@@ -77,11 +87,14 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
     NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
+<<<<<<< Updated upstream
 
     NamedCommands.registerCommand("shoot", m_shooter.setFlywheelVelocityCommand(3000));
 
 
 
+=======
+>>>>>>> Stashed changes
     // Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -104,6 +117,7 @@ public class RobotContainer {
    * passing it to a
    * {@link JoystickButton}.
    */
+<<<<<<< Updated upstream
   private void configureButtonBindings() {
     m_driverController.rightBumper().whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
     m_driverController.leftBumper().whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
@@ -114,6 +128,14 @@ public class RobotContainer {
     m_driverController.povDown().onTrue(m_shooter.setFlywheelVelocityCommand(0));
     m_driverController.b().whileTrue(m_intake.outtakeBack()).onFalse(m_intake.stopBack());
     m_driverController.a().whileTrue(m_intake.outtakeFront()).onFalse(m_intake.stopFront());
+=======
+    private void configureButtonBindings() {
+    m_driverController.rightBumper().whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
+    m_driverController.leftBumper().whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
+    m_driverController.b().whileTrue(m_intake.outtakeBack()).onFalse(m_intake.stopBack());
+    m_driverController.a().whileTrue(m_intake.outtakeFront()).onFalse(m_intake.stopFront());
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+>>>>>>> Stashed changes
     m_driverController.y()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),

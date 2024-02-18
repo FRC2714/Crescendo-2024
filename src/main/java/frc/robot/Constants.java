@@ -163,7 +163,31 @@ public final class Constants {
       public static final double kD = 0;
     }
   }
+  public static final class IntakeConstants {
+    public static final int kFrontRollerCanId = 9;
+    public static final int kBackBottomRollerCanId = 10;
+    public static final int kBackDirectionRollerCanId = 11;
+    public static final int kConveyorCanId = 12;
+    public static final int kFeederCanId = 16;
 
+    public static final double kRollerNominalVoltage = 11;
+
+    public static final int kFrontRollerSmartCurrentLimit = 0; // TBD
+    public static final int kBackBottomRollerSmartCurrentLimit = 0; // TBD
+    public static final int kBackDirectionRollerSmartCurrentLimit = 0; // TBD
+    public static final int kConveyorSmartCurrentLimit = 0; // TBD
+
+    public static final double kFrontRollerVoltage = 3; // TBD
+    public static final double kBackBottomRollerVoltage = 3; // TBD
+    public static final double kBackDirectionRollerVoltageFrontSide = 3; // TBD
+    public static final double kFrontDirectionRollerVoltageFrontSide = 3; // TBD
+    public static final double kBackBottomRollerVoltageFrontSide = 3;
+    public static final double kBackDirectionRollerVoltageBackSide = 3; // TBD
+    public static final double kBackBottomRollerVoltageBackSide = 3;
+    public static final double kFrontDirectionRollerVoltageBackSide = 3; // TBD
+    public static final double kConveyorVoltage = 3; // TBD
+    public static final double kFeederVoltage = 3; // TBD
+  }
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a

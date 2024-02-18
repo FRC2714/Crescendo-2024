@@ -197,4 +197,8 @@ public class Intake extends SubsystemBase {
     SmartDashboard.putNumber("Back Direction Roller Velocity", getBackDirectionRollerVelocity());
     SmartDashboard.putNumber("Conveyor Velocity", getConveyorVelocity());
   }
+<<<<<<< Updated upstream
 }
+=======
+}
+>>>>>>> Stashed changes

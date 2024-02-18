@@ -22,6 +22,12 @@
           "data": {
             "waitTime": 15.0
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeFront"
+          }
         }
       ]
     }

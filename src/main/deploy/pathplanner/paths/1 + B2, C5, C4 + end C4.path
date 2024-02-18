@@ -8,14 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
+<<<<<<< Updated upstream
         "x": 2.4565555180932432,
         "y": 5.472864279061892
+=======
+        "x": 2.5247228667698884,
+        "y": 5.492340664396815
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 3.5667094821734135,
         "y": 5.813701022419839
       },
@@ -26,6 +32,18 @@
       "nextControl": {
         "x": 4.538038447732108,
         "y": 6.158366139230989
+=======
+        "x": 3.6738296015195377,
+        "y": 5.803962829752653
+      },
+      "prevControl": {
+        "x": 2.890762456842556,
+        "y": 5.526100294544691
+      },
+      "nextControl": {
+        "x": 4.645158567078232,
+        "y": 6.148627946563803
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": null
@@ -106,6 +124,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
+<<<<<<< Updated upstream
       "name": "shoot",
       "waypointRelativePos": 0.0,
       "command": {
@@ -119,10 +138,19 @@
               }
             }
           ]
+=======
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
         }
       }
     },
     {
+<<<<<<< Updated upstream
       "name": "intakeBack",
       "waypointRelativePos": 0.2,
       "command": {
@@ -136,11 +164,20 @@
               }
             }
           ]
+=======
+      "name": "intake",
+      "waypointRelativePos": 0.2,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
         }
       }
     },
     {
       "name": "shoot",
+<<<<<<< Updated upstream
       "waypointRelativePos": 1.0,
       "command": {
         "type": "sequential",
@@ -153,6 +190,13 @@
               }
             }
           ]
+=======
+      "waypointRelativePos": 0.9,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
         }
       }
     },
@@ -160,6 +204,7 @@
       "name": "intake",
       "waypointRelativePos": 1.65,
       "command": {
+<<<<<<< Updated upstream
         "type": "sequential",
         "data": {
           "commands": [
@@ -170,11 +215,17 @@
               }
             }
           ]
+=======
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
         }
       }
     },
     {
       "name": "shoot",
+<<<<<<< Updated upstream
       "waypointRelativePos": 3.15,
       "command": {
         "type": "sequential",
@@ -187,11 +238,19 @@
               }
             }
           ]
+=======
+      "waypointRelativePos": 3.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
         }
       }
     },
     {
       "name": "intake",
+<<<<<<< Updated upstream
       "waypointRelativePos": 3.6,
       "command": {
         "type": "sequential",
@@ -204,6 +263,13 @@
               }
             }
           ]
+=======
+      "waypointRelativePos": 3.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
         }
       }
     }
