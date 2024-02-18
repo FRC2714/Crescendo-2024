@@ -41,7 +41,7 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final Limelight m_limelight = new Limelight();
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_limelight);
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(m_limelight);
   private final Intake m_intake = new Intake();
   private double kPThetaController = .7;
@@ -72,7 +72,6 @@ public class RobotContainer {
                 true, false),
             m_robotDrive));
     }
-  }
 
   /**
    * Use this method to define your button->command mappings. Buttons can be
