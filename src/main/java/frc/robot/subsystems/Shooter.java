@@ -137,7 +137,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getPivotAngle() {
-    return (pivotEncoder.getPosition() / ShooterConstants.kPivotGearRatio) ;
+    return ((pivotEncoder.getPosition() - ShooterConstants.kPivotEncoderKinematicOffset) / ShooterConstants.kPivotGearRatio) ;
   }
 
   public double getTargetPivotAngle() {
@@ -192,7 +192,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void tunePivotAngle() {
-    pivotController.setSetpoint(pivotAngleTunableNumber.get());
+    setPivotAngle(pivotAngleTunableNumber.get());
   }
 
   // public void tuneFlywheelVelocity() {
@@ -279,7 +279,7 @@ public class Shooter extends SubsystemBase {
     if (dynamicEnabled) setDynamic();
 
 
-    // setCalculatedPivotVoltage();
+    setCalculatedPivotVoltage();
     // setCalculatedFlywheelVoltage();
   }
 }
