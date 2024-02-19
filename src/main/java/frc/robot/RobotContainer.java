@@ -19,9 +19,13 @@ import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PhotonConstants;
+import frc.robot.commands.RotateToGoal;
+import frc.robot.commands.RotateToGoalPose;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -44,6 +48,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(m_limelight);
   private final Intake m_intake = new Intake();
+  private final Vision m_frontCamera = new Vision("frontCamera", PhotonConstants.kFrontCameraLocation);
   private double kPThetaController = .7;
 
   // The driver's controller
@@ -96,6 +101,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+    m_driverController.povRight().whileTrue(new RotateToGoal(m_robotDrive, m_frontCamera));
 
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));

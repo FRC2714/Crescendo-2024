@@ -19,6 +19,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.PhotonConstants;
@@ -40,23 +42,37 @@ public class Vision extends SubsystemBase {
     photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
   }
 
-  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
-      return photonPoseEstimator.update();
-  }
-
   public PhotonPipelineResult getLatestResult() {
     return photonCamera.getLatestResult();
   }
 
-  // public PNPResult getEstimatedPose() {
-  //   PhotonPipelineResult res = getLatestResult();
-  //   MultiTargetPNPResult multiRes = res.getMultiTagResult();
-    
-  //   if (multiRes.estimatedPose.isPresent)
-  //     return multiRes.estimatedPose;
-  //   else
-  //     return res.getBestTarget()
-  // }
+  public double getXOffsetDegrees() {
+    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+      if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        return i.getYaw();
+      }
+      else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+        return i.getYaw();
+      }
+    }
+    return 0;
+  }
+
+  public boolean speakerVisible() {
+    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+      if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        return true;
+      }
+      else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+      return photonPoseEstimator.update();
+  }
 
   public PhotonTrackedTarget getBestTarget() {
     return getLatestResult().getBestTarget();
@@ -94,6 +110,10 @@ public class Vision extends SubsystemBase {
       SmartDashboard.putNumber("pv X", poseEstimation.estimatedPose.getX());
       SmartDashboard.putNumber("pv Y", poseEstimation.estimatedPose.getY());
     });
+
+    SmartDashboard.putBoolean("Speaker?", speakerVisible());
+
+    SmartDashboard.putNumber("offset deg", getXOffsetDegrees());
     // SmartDashboard.putNumber("Best target x distance", getMultiTagLatestResult().estimatedPose.best.getX());
     // SmartDashboard.putNumber("Best target y distance", getMultiTagLatestResult().estimatedPose.best.getY());
     SmartDashboard.putBoolean("photon pose", photonPoseEstimation.isPresent());

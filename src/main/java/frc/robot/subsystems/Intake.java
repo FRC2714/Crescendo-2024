@@ -54,10 +54,11 @@ public class Intake extends SubsystemBase {
     conveyorMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
     feederMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
 
-    // frontRollerMotor.setSmartCurrentLimit(IntakeConstants.kFrontRollerSmartCurrentLimit);
-    // backBottomRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackBottomRollerSmartCurrentLimit);
-    // backDirectionRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackDirectionRollerSmartCurrentLimit);
-    // conveyorMotor.setSmartCurrentLimit(IntakeConstants.kConveyorSmartCurrentLimit);
+    frontRollerMotor.setSmartCurrentLimit(IntakeConstants.kFrontRollerSmartCurrentLimit);
+    backBottomRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackBottomRollerSmartCurrentLimit);
+    backDirectionRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackDirectionRollerSmartCurrentLimit);
+    conveyorMotor.setSmartCurrentLimit(IntakeConstants.kConveyorSmartCurrentLimit);
+    feederMotor.setSmartCurrentLimit(IntakeConstants.kFeederSmartCurrentLimit);
 
     frontRollerEncoder = frontRollerMotor.getEncoder();
     backBottomRollerEncoder = backBottomRollerMotor.getEncoder();

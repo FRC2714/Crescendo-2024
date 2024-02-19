@@ -63,9 +63,9 @@ public class Shooter extends SubsystemBase {
 
     topFlywheelMotor.setInverted(true);
 
-    // pivotMotor.setSmartCurrentLimit(ShooterConstants.kPivotSmartCurrentLimit);
-    // topFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kTopFlywheelSmartCurrentLimit);
-    // bottomFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kBottomFlywheelSmartCurrentLimit);
+    pivotMotor.setSmartCurrentLimit(ShooterConstants.kPivotSmartCurrentLimit);
+    topFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kTopFlywheelSmartCurrentLimit);
+    bottomFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kBottomFlywheelSmartCurrentLimit);
 
     bottomFlywheelMotor.follow(topFlywheelMotor, false);
 
@@ -83,8 +83,8 @@ public class Shooter extends SubsystemBase {
     flywheelController = topFlywheelMotor.getPIDController();
     flywheelFeedforward = new SimpleMotorFeedforward(FlywheelPIDConstants.kS, FlywheelPIDConstants.kV, FlywheelPIDConstants.kA);
 
-    flywheelController.setP(0.0005);
-    flywheelController.setFF(0.000175);
+    flywheelController.setP(FlywheelPIDConstants.kP);
+    flywheelController.setFF(FlywheelPIDConstants.kFF);
     topFlywheelMotor.burnFlash();
     bottomFlywheelMotor.burnFlash();
     pivotMotor.burnFlash();
@@ -103,7 +103,7 @@ public class Shooter extends SubsystemBase {
     flywheelVelocityTunableNumber = new TunableNumber("Tunable Flywheel Velocity");
     pivotP = new TunableNumber("Pivot P");
     flywheelP = new TunableNumber("Flywheel P");
-    flywheelV = new TunableNumber("Flywheel V");
+    flywheelV = new TunableNumber("Flywheel FF");
     flywheelD = new TunableNumber("Flywheel D");
 
 
@@ -121,15 +121,24 @@ public class Shooter extends SubsystemBase {
   }
 
   public void populatePivotAngleMap() {
-    pivotAngleMap.put(0.0, 0.0); // TBD
+    pivotAngleMap.put(0.889661835916184, 37.0);
+    pivotAngleMap.put(2.082, 25.0);
+    pivotAngleMap.put(3.13, 18.0);
+    pivotAngleMap.put(4.436, 12.0);
   }
 
   public void populateFlywheelVelocityMap() {
-    flywheelVelocityMap.put(0.0, 0.0); // TBD
+    flywheelVelocityMap.put(0.889661835916184, 2000.0);
+    flywheelVelocityMap.put(2.082, 2000.0);
+    flywheelVelocityMap.put(3.13, 3000.0);
+    flywheelVelocityMap.put(4.436, 3500.0);
   }
 
   public void populateShootTimeMap() {
-    shootTimeMap.put(0.0, 0.0); // TBD
+    shootTimeMap.put(0.889661835916184, 0.35);
+    shootTimeMap.put(2.082, 0.44);
+    shootTimeMap.put(3.13, 0.74);
+    shootTimeMap.put(4.436, 12.0);
   }
 
   public double getInterpolatedShootTime(double distance) {
@@ -195,9 +204,9 @@ public class Shooter extends SubsystemBase {
     setPivotAngle(pivotAngleTunableNumber.get());
   }
 
-  // public void tuneFlywheelVelocity() {
-  //   flywheelController.setSetpoint(flywheelVelocityTunableNumber.get());
-  // }
+  public void tuneFlywheelVelocity() {
+    setFlywheelVelocity(flywheelVelocityTunableNumber.get());
+  }
 
   public void tunePivotP() {
     pivotController.setP(pivotP.get());
@@ -212,7 +221,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void tuneFlywheelV() {
-    flywheelFeedforward = new SimpleMotorFeedforward(0, flywheelV.get(), 0);
+    flywheelController.setFF(flywheelV.get());
   }
 
   public void setDynamic() {
@@ -260,9 +269,9 @@ public class Shooter extends SubsystemBase {
       tunePivotP();
     }
 
-    // if (flywheelVelocityTunableNumber.hasChanged()) {
-    //   tuneFlywheelVelocity();
-    // }
+    if (flywheelVelocityTunableNumber.hasChanged()) {
+      tuneFlywheelVelocity();
+    }
 
     if (flywheelP.hasChanged()) {
       tuneFlywheelP();

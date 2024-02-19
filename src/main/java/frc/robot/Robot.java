@@ -20,7 +20,6 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  private SendableChooser<String> m_allianceChooser;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -31,12 +30,6 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
-
-    m_allianceChooser = new SendableChooser<>();
-    m_allianceChooser.addOption("Red", "Red");
-    m_allianceChooser.addOption("Blue", "Blue");
-
-    SmartDashboard.putData("Alliance Selection", m_allianceChooser);
   }
 
   /**
