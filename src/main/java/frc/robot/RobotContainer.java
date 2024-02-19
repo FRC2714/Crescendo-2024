@@ -28,12 +28,11 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 // import frc.robot.commands.RotateToGoal;
-import java.util.List;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -51,7 +50,7 @@ public class RobotContainer {
   private final Shooter m_shooter = new Shooter(m_limelight);
   private final Intake m_intake = new Intake();
   private double kPThetaController = .7;
-  private final SendableChooser<Command> autoChooser;
+  private SendableChooser<Command> autoChooser;
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -66,18 +65,14 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-    autoChooser = AutoBuilder.buildAutoChooser();
+    NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
+    NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
+
+    NamedCommands.registerCommand("shoot", m_shooter.setFlywheelVelocityCommand(1000));
+    NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(50));
+    
+    autoChooser = AutoBuilder.buildAutoChooser("4 Note Auto");
     SmartDashboard.putData("Auto Chooser", autoChooser);
-
-    NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
-    NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
-
-    NamedCommands.registerCommand("shoot", m_shooter.setFlywheelVelocityCommand(3000));
-
-
-
-    NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
-    NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
     // Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -114,6 +109,11 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+  }
+
+  public void setTeleopDefaultStates() {
+    m_shooter.setPivotAngleCommand(0);
+    m_shooter.setFlywheelVelocityCommand(0);
   }
 
   /**

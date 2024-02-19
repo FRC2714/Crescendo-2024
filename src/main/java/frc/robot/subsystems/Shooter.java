@@ -83,7 +83,7 @@ public class Shooter extends SubsystemBase {
     flywheelController = topFlywheelMotor.getPIDController();
     flywheelFeedforward = new SimpleMotorFeedforward(FlywheelPIDConstants.kS, FlywheelPIDConstants.kV, FlywheelPIDConstants.kA);
 
-    flywheelController.setP(0.0005);
+    flywheelController.setP(0);
     flywheelController.setFF(0.000175);
     topFlywheelMotor.burnFlash();
     bottomFlywheelMotor.burnFlash();
@@ -252,29 +252,29 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Pivot Current", pivotMotor.getOutputCurrent());
     SmartDashboard.putNumber("Flywheel Current", topFlywheelMotor.getOutputCurrent());
 
-    if (pivotAngleTunableNumber.hasChanged()) {
-      tunePivotAngle();
-    }
+    // if (pivotAngleTunableNumber.hasChanged()) {
+    //   tunePivotAngle();
+    // }
 
-    if (pivotP.hasChanged()) {
-      tunePivotP();
-    }
+    // if (pivotP.hasChanged()) {
+    //   tunePivotP();
+    // }
 
     // if (flywheelVelocityTunableNumber.hasChanged()) {
     //   tuneFlywheelVelocity();
     // }
 
-    if (flywheelP.hasChanged()) {
-      tuneFlywheelP();
-    }
+    // if (flywheelP.hasChanged()) {
+    //   tuneFlywheelP();
+    // }
 
-    if (flywheelV.hasChanged()) {
-      tuneFlywheelV();
-    }
+    // if (flywheelV.hasChanged()) {
+    //   tuneFlywheelV();
+    // }
 
-    if (flywheelD.hasChanged()) {
-      tuneFlywheelD();
-    }
+    // if (flywheelD.hasChanged()) {
+    //   tuneFlywheelD();
+    // }
 
     if (dynamicEnabled) setDynamic();
 
