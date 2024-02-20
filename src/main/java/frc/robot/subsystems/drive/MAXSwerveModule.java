@@ -7,6 +7,7 @@ package frc.robot.subsystems.drive;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -158,6 +159,13 @@ public class MAXSwerveModule {
     m_desiredState = desiredState;
   }
 
+  public double getDesiredStateSpeed() {
+    return m_desiredState.speedMetersPerSecond;
+  }
+
+  public double getDesiredStateAngleDeg() {
+    return m_desiredState.angle.getDegrees();
+  }
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);

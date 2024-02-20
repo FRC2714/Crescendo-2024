@@ -68,8 +68,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
     NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
 
-    NamedCommands.registerCommand("shoot", m_shooter.setFlywheelVelocityCommand(1000));
-    NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(50));
+    NamedCommands.registerCommand("shoot", m_shooter.setFlywheelVelocityCommand(2000));
+    NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
     
     autoChooser = AutoBuilder.buildAutoChooser("4 Note Auto");
     SmartDashboard.putData("Auto Chooser", autoChooser);

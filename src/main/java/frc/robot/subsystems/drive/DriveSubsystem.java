@@ -108,8 +108,8 @@ public class DriveSubsystem extends SubsystemBase {
             this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(1.25, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(1.25, 0.0, 0.0), // Rotation PID constants
+                    new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(2.8, 0.05, 0.15), // Rotation PID constants
                     4.5, // Max module speed, in m/s
                     0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -132,6 +132,17 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
+
+    SmartDashboard.putNumber("front left velocity", Math.abs(m_frontLeft.getState().speedMetersPerSecond));
+    SmartDashboard.putNumber("front right velocity", Math.abs(m_frontRight.getState().speedMetersPerSecond));
+    SmartDashboard.putNumber("back left velocity", Math.abs(m_rearLeft.getState().speedMetersPerSecond));
+    SmartDashboard.putNumber("back right velocity", Math.abs(m_rearRight.getState().speedMetersPerSecond));
+
+    SmartDashboard.putNumber("front left setpoint", Math.abs(m_frontLeft.getDesiredStateSpeed()));
+    SmartDashboard.putNumber("front right setpoint", Math.abs(m_frontRight.getDesiredStateSpeed()));
+    SmartDashboard.putNumber("back left setpoint", Math.abs(m_rearLeft.getDesiredStateSpeed()));
+    SmartDashboard.putNumber("back right setpoint", Math.abs(m_rearRight.getDesiredStateSpeed()));
+
     
     m_pose.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
