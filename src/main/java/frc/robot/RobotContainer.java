@@ -70,7 +70,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
     NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
 
+    NamedCommands.registerCommand("setupShort", m_autosCommands.setupShot(50));
+    NamedCommands.registerCommand("setupMid", m_autosCommands.setupShot(35));
     NamedCommands.registerCommand("shoot", m_autosCommands.shoot());
+
+
     NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
 
 

@@ -20,17 +20,13 @@ public class AutosCommands {
   private Limelight m_limelight = new Limelight();
   private Shooter m_shooter = new Shooter(m_limelight);
   private Intake m_intake = new Intake();
-
+  public Command setupShot(double shootingDistance) {
+    return new InstantCommand(() -> {
+    m_shooter.setPivotAngle(shootingDistance);
+    m_shooter.setFlywheelVelocity(2500);});
+  }
   public Command shoot() {
     return new InstantCommand(() -> {
-      m_shooter.setPivotAngle(35);
-    m_shooter.setFlywheelVelocity(1000);
-    try {
-      TimeUnit.SECONDS.sleep(1);
-    } catch (InterruptedException e) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
     m_intake.setFeederVoltage(3);});
 
   }

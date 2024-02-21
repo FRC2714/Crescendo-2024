@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "setupshort"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 1.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
@@ -33,6 +39,18 @@
           "type": "named",
           "data": {
             "name": "intakeBack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setupShot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.5
           }
         },
         {
