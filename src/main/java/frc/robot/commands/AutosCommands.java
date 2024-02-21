@@ -27,6 +27,11 @@ public class AutosCommands extends Command{
     this.m_intake = m_intake;
     addRequirements(m_drivetrain, m_limelight, m_shooter, m_intake);
   }
+  public Command setupShot(double shootingDistance) {
+    return new InstantCommand(() -> {
+    m_shooter.setPivotAngle(shootingDistance);
+    m_shooter.setFlywheelVelocity(2500);});
+  }
   public Command shoot() {
     return new InstantCommand(() -> {
     m_intake.setFeederVoltage(3);});
