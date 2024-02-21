@@ -14,13 +14,19 @@ import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
-public class AutosCommands {
+public class AutosCommands extends Command{
   /** Creates a new AutosCommand. */
-  private DriveSubsystem m_drivetrain = new DriveSubsystem();
-  private Limelight m_limelight = new Limelight();
-  private Shooter m_shooter = new Shooter(m_limelight);
-  private Intake m_intake = new Intake();
-
+  private DriveSubsystem m_drivetrain;
+  private Limelight m_limelight;
+  private Shooter m_shooter;
+  private Intake m_intake;
+  public AutosCommands(DriveSubsystem m_drivetrain, Limelight m_limelight, Shooter m_shooter, Intake m_intake){
+    this.m_drivetrain = m_drivetrain;
+    this.m_limelight = m_limelight;
+    this.m_shooter = m_shooter;
+    this.m_intake = m_intake;
+    addRequirements(m_drivetrain, m_limelight, m_shooter, m_intake);
+  }
   public Command shoot() {
     return new InstantCommand(() -> {
       m_shooter.setPivotAngle(35);
