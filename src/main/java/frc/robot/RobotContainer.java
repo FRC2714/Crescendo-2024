@@ -50,7 +50,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(m_limelight);
   private final Intake m_intake = new Intake();
-  private final AutosCommands m_autosCommands = new AutosCommands();
+  private final AutosCommands m_autosCommands = new AutosCommands(m_robotDrive, m_limelight, m_shooter, m_intake);
   private double kPThetaController = .7;
   private SendableChooser<Command> autoChooser;
 
