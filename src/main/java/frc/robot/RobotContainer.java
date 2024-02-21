@@ -32,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AutosCommands;
 // import frc.robot.commands.RotateToGoal;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -49,6 +50,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(m_limelight);
   private final Intake m_intake = new Intake();
+  private final AutosCommands m_autosCommands = new AutosCommands();
   private double kPThetaController = .7;
   private SendableChooser<Command> autoChooser;
 
@@ -68,8 +70,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
     NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
 
-    NamedCommands.registerCommand("shoot", m_shooter.setFlywheelVelocityCommand(2000));
+    NamedCommands.registerCommand("shoot", m_autosCommands.shoot());
     NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
+
+
     
     autoChooser = AutoBuilder.buildAutoChooser("4 Note Auto");
     SmartDashboard.putData("Auto Chooser", autoChooser);
