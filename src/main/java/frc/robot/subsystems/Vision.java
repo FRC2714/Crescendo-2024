@@ -39,7 +39,7 @@ public class Vision extends SubsystemBase {
                                                   PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
                                                   photonCamera,
                                                   cameraLocation);
-    photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    // photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
   }
 
   public PhotonPipelineResult getLatestResult() {

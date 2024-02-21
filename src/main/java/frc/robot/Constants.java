@@ -81,6 +81,7 @@ public final class Constants {
     public static final int kPivotCanId = 13;
 
     public static final double kPivotGearRatio = 25;
+    public static final double kFlywheelGearRatio = 2;
 
     public static final double kPivotEncoderZeroOffset = 300 * kPivotGearRatio;
     public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
@@ -108,7 +109,7 @@ public final class Constants {
     }
     
     public static final class FlywheelPIDConstants {
-      public static final double kP = 0; // TBD
+      public static final double kP = 0.0000061; // TBD
       public static final double kI = 0; // TBD
       public static final double kD = 0; // TBD
 
@@ -116,19 +117,19 @@ public final class Constants {
       public static final double kV = 0; // TBD
       public static final double kA = 0; // TBD
 
-      public static final double kFF = 0.000175;
+      public static final double kFF = 0.00008;
     }
   }
 
   public static final class PhotonConstants {
     public static final String kBackCameraName = "backCamera";
     public static final String kFrontCameraName = "frontCamera";
-    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(15.66105), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
+    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)));
     public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-15), Units.inchesToMeters(12.249889), Units.inchesToMeters(14.018624)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-20), 0));
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.6, 0.6, 2);
-    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.3, 0.3, 1);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
 
   public static final class FieldConstants {
@@ -138,6 +139,8 @@ public final class Constants {
   }
 
   public static final class DriveConstants {
+
+    public static final Pose2d kInitialRedPose = new Pose2d(14.07, 6.35, new Rotation2d(0));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
@@ -180,7 +183,7 @@ public final class Constants {
 
     // Swerve PID values
     public static final class ThetaPIDConstants {
-      public static final double kP = 0.1;
+      public static final double kP = 0.8;
       public static final double kI = 0;
       public static final double kD = 0;
     }

@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonUtils;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -15,6 +16,8 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -81,7 +84,7 @@ public class DriveSubsystem extends SubsystemBase {
   private Field2d m_field = new Field2d();
   
   // Pose class for tracking robot pose
-  Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(.01)); // Increase for less state trust
+  Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(0.01)); // Increase for less state trust
   Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.1, 0.1, Units.degreesToRadians(0.1)); // Increase for less vision trust
 
   SwerveDrivePoseEstimator m_pose = new SwerveDrivePoseEstimator(
@@ -92,7 +95,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      }, new Pose2d(), stateStdDevs, visionMeasurementStdDevs);
+      }, DriveConstants.kInitialRedPose, stateStdDevs, visionMeasurementStdDevs);
   
 
   /** Creates a new DriveSubsystem. */
@@ -102,6 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
+    SmartDashboard.putNumber("Angle to goal", Units.radiansToDegrees(getSpeakerTargetYaw()));
     
     m_pose.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
@@ -118,7 +122,7 @@ public class DriveSubsystem extends SubsystemBase {
       SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
       SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
       SmartDashboard.putNumber("drive photon est theta", poseEstimation.estimatedPose.getRotation().toRotation2d().getDegrees());
-      m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_frontPhotonCamera.getEstimationStdDevs(estPose));
+      m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds);
     }, new Runnable() {
         @Override
         public void run() {
@@ -137,15 +141,33 @@ public class DriveSubsystem extends SubsystemBase {
     m_lastFieldRelativeVelocity = m_fieldRelativeVelocity;
 
     m_field.setRobotPose(getPose());
-    SmartDashboard.putNumber("Pose X", getPose().getX());
-    SmartDashboard.putNumber("Pose Y", getPose().getY());
-    SmartDashboard.putNumber("Pose Rotation", getPose().getRotation().getDegrees());
-    SmartDashboard.putNumber("Gyro Rotation", m_gyro.getAngle(IMUAxis.kZ));
+
     SmartDashboard.putData("Field Position", m_field);
     SmartDashboard.putNumber("Distance to goal meters", getDistanceToGoalMeters(getPose()));
-    SmartDashboard.putNumber("Rotation from goal degrees", Units.radiansToDegrees(getRotationFromGoalRadians(getPose())));
-    SmartDashboard.putNumber("yyyyyy", getPose().getY() - FieldConstants.kRedSpeakerAprilTagLocation.getY());
-    SmartDashboard.putNumber("xxxxx", getPose().getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX());
+    SmartDashboard.putNumber("Pose rotation", getPose().getRotation().getDegrees());
+    SmartDashboard.putNumber("Pose rotation to goal", Units.radiansToDegrees(getRotationFromGoalRadians(getPose())));
+  }
+
+  public double getSpeakerTargetYaw() {
+    if (DriverStation.getAlliance().isPresent()) {
+      if (DriverStation.getAlliance().get().toString().equals("Red")) {
+        for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
+          if (i.getFiducialId() == 4) {
+            return i.getBestCameraToTarget().plus(
+              new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
+          }
+        }
+      }
+      else {
+        for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
+            if (i.getFiducialId() == 7) {
+              return i.getBestCameraToTarget().plus(
+                new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
+            }
+        }
+      }
+    }
+    return 0;
   }
 
   public double getDistanceToGoalMeters(Pose2d pose) {
@@ -215,7 +237,7 @@ public class DriveSubsystem extends SubsystemBase {
    *
    * @param pose The pose to which to set the odometry.
    */
-  public void resetPoseEstimator() {
+  public void resetPoseEstimator(Pose2d pose) {
     m_pose.resetPosition(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
         new SwerveModulePosition[] {
@@ -224,7 +246,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         },
-        new Pose2d());
+        pose);
   }
 
   /**
@@ -354,7 +376,7 @@ public class DriveSubsystem extends SubsystemBase {
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
     m_gyro.reset();
-    resetPoseEstimator();
+    resetPoseEstimator(new Pose2d());
   }
 
   /**

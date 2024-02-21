@@ -15,6 +15,7 @@ public class RotateToGoalPose extends Command {
   private DriveSubsystem m_drivetrain;
 
   private PIDController thetaController;
+  private double rotationToGoal;
 
   /** Creates a new RotateToGoal. */
   public RotateToGoalPose(DriveSubsystem m_drivetrain) {
@@ -24,8 +25,6 @@ public class RotateToGoalPose extends Command {
     addRequirements(m_drivetrain);
 
     thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
-
-    thetaController.setSetpoint(0);
     thetaController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
   }
@@ -33,19 +32,25 @@ public class RotateToGoalPose extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+    rotationToGoal = m_drivetrain.getRotationFromGoalRadians(m_drivetrain.getPose());
+    if (rotationToGoal > 0) 
+      thetaController.setSetpoint(m_drivetrain.getPose().getRotation().getRadians() -
+                                  rotationToGoal);
+    else
+      thetaController.setSetpoint(m_drivetrain.getPose().getRotation().getRadians() +
+                                  rotationToGoal);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // thetaController.setSetpoint(m_drivetrain.getRotationFromGoalRadians(m_drivetrain.getPose()));
     m_drivetrain.drive(
         0, 
         0, 
-        thetaController.calculate(m_drivetrain.getYawToPose().getRadians()), 
+        thetaController.calculate(m_drivetrain.getPose().getRotation().getRadians()), 
         true,
         true);
+    rotationToGoal -= m_drivetrain.getRotationFromGoalRadians(m_drivetrain.getPose());
   }
 
   // Called once the command ends or is interrupted.

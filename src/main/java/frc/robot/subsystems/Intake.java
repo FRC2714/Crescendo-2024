@@ -193,9 +193,9 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Front Roller Velocity", getFrontRollerVelocity());
-    SmartDashboard.putNumber("Back Bottom Roller Velocity", getBackBottomRollerVelocity());
-    SmartDashboard.putNumber("Back Direction Roller Velocity", getBackDirectionRollerVelocity());
-    SmartDashboard.putNumber("Conveyor Velocity", getConveyorVelocity());
+    // SmartDashboard.putNumber("Front Roller Velocity", getFrontRollerVelocity());
+    // SmartDashboard.putNumber("Back Bottom Roller Velocity", getBackBottomRollerVelocity());
+    // SmartDashboard.putNumber("Back Direction Roller Velocity", getBackDirectionRollerVelocity());
+    // SmartDashboard.putNumber("Conveyor Velocity", getConveyorVelocity());
   }
 }
