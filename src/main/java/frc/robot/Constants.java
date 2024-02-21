@@ -26,36 +26,9 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final class AmpConstants {
-    public static final int kPivotCanId = 0; // TBD
-    public static final int kRollerCanId = 0; // TBD
-
-    public static final int kPivotSmartCurrentLimit = 0; // TBD
-    public static final int kRollerSmartCurrentLimit = 0; // TBD
-
-    public static final double kPivotGearRatio = 0; // TBD
-
-    public static final double kPivotEncoderConversionFactor = kPivotGearRatio * 360; // TBD
-
-    public static final double kPivotStowAngle = 0; // TBD
-    public static final double kPivotScoreAngle = 0; // TBD
-    public static final double kRollerScoreVelocity = 0; // TBD
-
-    public static final class PivotPIDConstants {
-      public static final double kP = 0; // TBD
-      public static final double kI = 0; // TBD
-      public static final double kD = 0; // TBD
+      public static final int kLeftAmpPivotChannel = 0; //tbd
+      public static final int kRightAmpPivotChannel = 1; //tbd
     }
-
-    public static final class RollerPIDConstants {
-      public static final double kP = 0; // TBD
-      public static final double kI = 0; // TBD
-      public static final double kD = 0; // TBD
-
-      public static final double kS = 0; // TBD
-      public static final double kV = 0; // TBD
-      public static final double kA = 0; // TBD
-    }
-  }
 
   public static final class DriveConstants {
     // Driving Parameters - Note that these are not the maximum capable speeds of

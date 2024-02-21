@@ -4,118 +4,44 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AmpConstants;
-import frc.robot.Constants.AmpConstants.PivotPIDConstants;
-import frc.robot.Constants.AmpConstants.RollerPIDConstants;
 
 public class Amp extends SubsystemBase {
   /** Creates a new Amp. */
 
-  private CANSparkFlex pivotMotor, rollerMotor;
-  private AbsoluteEncoder pivotEncoder;
-  private RelativeEncoder rollerEncoder;
-
-  private PIDController pivotController, rollerController;
-  private SimpleMotorFeedforward rollerFeedforward;
+  private Servo leftPivotServo;
+  private Servo rightPivotServo;
 
   public Amp() {
 
-    pivotMotor = new CANSparkFlex(AmpConstants.kPivotCanId, MotorType.kBrushless);
-    rollerMotor = new CANSparkFlex(AmpConstants.kRollerCanId, MotorType.kBrushless);
-
-    pivotMotor.setIdleMode(IdleMode.kBrake);
-    rollerMotor.setIdleMode(IdleMode.kCoast);
-
-    pivotMotor.setSmartCurrentLimit(AmpConstants.kPivotSmartCurrentLimit);
-    rollerMotor.setSmartCurrentLimit(AmpConstants.kRollerSmartCurrentLimit);
-
-    pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    pivotEncoder.setPositionConversionFactor(AmpConstants.kPivotEncoderConversionFactor);
-
-    rollerEncoder = rollerMotor.getEncoder();
-
-    pivotController = new PIDController(PivotPIDConstants.kP, PivotPIDConstants.kI, PivotPIDConstants.kD);
-    rollerController = new PIDController(RollerPIDConstants.kP, RollerPIDConstants.kI, RollerPIDConstants.kD);
-    rollerFeedforward = new SimpleMotorFeedforward(RollerPIDConstants.kS, RollerPIDConstants.kV, RollerPIDConstants.kA);
-
-    pivotMotor.burnFlash();
-    rollerMotor.burnFlash();
-
+    leftPivotServo = new Servo(AmpConstants.kLeftAmpPivotChannel);
+    rightPivotServo = new Servo(AmpConstants.kRightAmpPivotChannel);
   }
 
-  public double getPivotAngle() {
-    return pivotEncoder.getPosition() / AmpConstants.kPivotGearRatio;
-  }
+    public double getPivotAngle() {
+      return Math.abs(leftPivotServo.get());
+    }
 
-  public double getTargetPivotAngle() {
-    return pivotController.getSetpoint();
-  }
+    public void setPivotAngle(double targetAngle) {
+      leftPivotServo.set(targetAngle);
+      rightPivotServo.set(-targetAngle);
+    }
+    public Command stow(){
+      return new InstantCommand(() -> setPivotAngle(1)); // tbd 
+    }
 
-  public void setPivotAngle(double targetAngle) {
-    pivotController.setSetpoint(targetAngle);
-  }
-
-  public double getRollerVelocity() {
-    return rollerEncoder.getVelocity();
-  }
-
-  public double getTargetRollerVelocity() {
-    return rollerController.getSetpoint();
-  }
-
-  public void setRollerVelocity(double targetVelocity) {
-    rollerController.setSetpoint(targetVelocity);
-  }
-
-  public void setCalculatedPivotVoltage() {
-    pivotMotor.setVoltage(pivotController.calculate(getPivotAngle()));
-  }
-
-  public void setCalculatedRollerVoltage() {
-    rollerMotor.setVoltage(rollerController.calculate(getRollerVelocity()) + rollerFeedforward.calculate(getTargetRollerVelocity()));
-  }
-
-  public Command setRollerVelocityCommand(double targetVelocity) {
-    return new InstantCommand(() -> setRollerVelocity(targetVelocity));
-  }
-
-  public Command setPivotAngleCommand(double targetVelocity) {
-    return new InstantCommand(() -> setPivotAngle(targetVelocity));
-  }
-
-  public ParallelCommandGroup setStowPosition() {
-    return new ParallelCommandGroup(setPivotAngleCommand(AmpConstants.kPivotStowAngle),
-                                    setRollerVelocityCommand(0));
-  }
-
-  public ParallelCommandGroup setScorePosition() {
-    return new ParallelCommandGroup(setPivotAngleCommand(AmpConstants.kPivotScoreAngle),
-                                    setRollerVelocityCommand(AmpConstants.kRollerScoreVelocity));
-  }
+    public Command extend(){
+      return new InstantCommand(() -> setPivotAngle(50)); //tbd
+    }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Current Pivot Angle", getPivotAngle());
-    SmartDashboard.putNumber("Target Pivot Angle", getTargetPivotAngle());
-    SmartDashboard.putNumber("Current Roller Velocity", getRollerVelocity());
-    SmartDashboard.putNumber("Target Roller Velocity", getTargetRollerVelocity());
-
-    setCalculatedPivotVoltage();
-    setCalculatedRollerVoltage();
   }
 }
