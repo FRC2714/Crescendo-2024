@@ -14,25 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "setupshort"
+            "name": "setupDynamic"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "2 Note Auto"
+            "waitTime": 5.0
           }
         },
         {
@@ -42,21 +30,9 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "setupShot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "pathName": "2 Note Auto"
           }
         }
       ]

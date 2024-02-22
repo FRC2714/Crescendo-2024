@@ -75,8 +75,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
     NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
 
-    NamedCommands.registerCommand("setupShort", m_autosCommands.setupShot(50));
-    NamedCommands.registerCommand("setupMid", m_autosCommands.setupShot(35));
+    NamedCommands.registerCommand("setupShort", m_shooter.setupShot(37));
+    NamedCommands.registerCommand("setupDynamic", new InstantCommand(() -> m_shooter.toggleDynamic()));
     NamedCommands.registerCommand("shoot", m_autosCommands.shoot());
 
 
@@ -127,6 +127,7 @@ public class RobotContainer {
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     m_driverController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
+    m_driverController.povDown().onTrue(m_shooter.stow());
     //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));

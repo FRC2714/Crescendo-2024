@@ -20,6 +20,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
@@ -237,6 +238,13 @@ public class Shooter extends SubsystemBase {
     pivotMotor.setVoltage(pivotController.calculate(getPivotAngle()));
   }
 
+  public ParallelCommandGroup stow() {
+    return new ParallelCommandGroup(
+      setPivotAngleCommand(0),
+      setFlywheelVelocityCommand(0)
+    );
+  }
+
   public void setShoot() {
     setPivotAngle(35);
     setFlywheelVelocity(1000);
@@ -247,6 +255,13 @@ public class Shooter extends SubsystemBase {
       e.printStackTrace();
     }
     
+  }
+
+  public ParallelCommandGroup setupShot(double shootingDistance) {
+    return new ParallelCommandGroup(
+    new InstantCommand(() -> setPivotAngle(shootingDistance)),
+    new InstantCommand(() -> setFlywheelVelocity(8000))
+    );
   }
 
   // public void setCalculatedFlywheelVoltage() {

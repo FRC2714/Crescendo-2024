@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -27,10 +28,11 @@ public class AutosCommands extends Command{
     this.m_intake = m_intake;
     addRequirements(m_drivetrain, m_limelight, m_shooter, m_intake);
   }
-  public Command setupShot(double shootingDistance) {
-    return new InstantCommand(() -> {
-    m_shooter.setPivotAngle(shootingDistance);
-    m_shooter.setFlywheelVelocity(2500);});
+  public ParallelCommandGroup setupShot(double shootingDistance) {
+    return new ParallelCommandGroup(
+    new InstantCommand(() -> m_shooter.setPivotAngle(shootingDistance)),
+    new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000))
+    );
   }
   public Command shoot() {
     return new InstantCommand(() -> {
