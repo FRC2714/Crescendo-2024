@@ -33,12 +33,7 @@ public class RotateToGoalPose extends Command {
   @Override
   public void initialize() {
     rotationToGoal = m_drivetrain.getRotationFromGoalRadians(m_drivetrain.getPose());
-    if (rotationToGoal > 0) 
-      thetaController.setSetpoint(m_drivetrain.getPose().getRotation().getRadians() -
-                                  rotationToGoal);
-    else
-      thetaController.setSetpoint(m_drivetrain.getPose().getRotation().getRadians() +
-                                  rotationToGoal);
+    thetaController.setSetpoint(-rotationToGoal);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -50,7 +45,6 @@ public class RotateToGoalPose extends Command {
         thetaController.calculate(m_drivetrain.getPose().getRotation().getRadians()), 
         true,
         true);
-    rotationToGoal -= m_drivetrain.getRotationFromGoalRadians(m_drivetrain.getPose());
   }
 
   // Called once the command ends or is interrupted.

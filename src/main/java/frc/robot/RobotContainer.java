@@ -101,7 +101,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    m_driverController.povRight().whileTrue(new RotateToGoal(m_robotDrive, m_frontCamera));
+    m_driverController.povRight().whileTrue(new RotateToGoalPose(m_robotDrive));
 
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));

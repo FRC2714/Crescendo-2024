@@ -130,6 +130,7 @@ public class Shooter extends SubsystemBase {
     pivotAngleMap.put(2.082, 25.0);
     pivotAngleMap.put(3.13, 14.0);
     pivotAngleMap.put(4.436, 10.0);
+    pivotAngleMap.put(5.662, 6.5);
   }
 
   public void populateFlywheelVelocityMap() {
@@ -137,6 +138,7 @@ public class Shooter extends SubsystemBase {
     flywheelVelocityMap.put(2.082, 8000.0);
     flywheelVelocityMap.put(3.13, 8000.0);
     flywheelVelocityMap.put(4.436, 8000.0);
+    flywheelVelocityMap.put(5.662, 8000.0);
   }
 
   public void populateShootTimeMap() {
