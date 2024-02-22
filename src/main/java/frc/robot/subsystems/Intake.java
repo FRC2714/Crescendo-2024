@@ -54,10 +54,11 @@ public class Intake extends SubsystemBase {
     conveyorMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
     feederMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
 
-    // frontRollerMotor.setSmartCurrentLimit(IntakeConstants.kFrontRollerSmartCurrentLimit);
-    // backBottomRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackBottomRollerSmartCurrentLimit);
-    // backDirectionRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackDirectionRollerSmartCurrentLimit);
-    // conveyorMotor.setSmartCurrentLimit(IntakeConstants.kConveyorSmartCurrentLimit);
+    frontRollerMotor.setSmartCurrentLimit(IntakeConstants.kFrontRollerSmartCurrentLimit);
+    backBottomRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackBottomRollerSmartCurrentLimit);
+    backDirectionRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackDirectionRollerSmartCurrentLimit);
+    conveyorMotor.setSmartCurrentLimit(IntakeConstants.kConveyorSmartCurrentLimit);
+    feederMotor.setSmartCurrentLimit(IntakeConstants.kFeederSmartCurrentLimit);
 
     frontRollerEncoder = frontRollerMotor.getEncoder();
     backBottomRollerEncoder = backBottomRollerMotor.getEncoder();
@@ -192,9 +193,9 @@ public class Intake extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
 
-    SmartDashboard.putNumber("Front Roller Velocity", getFrontRollerVelocity());
-    SmartDashboard.putNumber("Back Bottom Roller Velocity", getBackBottomRollerVelocity());
-    SmartDashboard.putNumber("Back Direction Roller Velocity", getBackDirectionRollerVelocity());
-    SmartDashboard.putNumber("Conveyor Velocity", getConveyorVelocity());
+    // SmartDashboard.putNumber("Front Roller Velocity", getFrontRollerVelocity());
+    // SmartDashboard.putNumber("Back Bottom Roller Velocity", getBackBottomRollerVelocity());
+    // SmartDashboard.putNumber("Back Direction Roller Velocity", getBackDirectionRollerVelocity());
+    // SmartDashboard.putNumber("Conveyor Velocity", getConveyorVelocity());
   }
 }

@@ -10,7 +10,9 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -44,10 +46,11 @@ public final class Constants {
 
     public static final double kRollerNominalVoltage = 11;
 
-    public static final int kFrontRollerSmartCurrentLimit = 0; // TBD
-    public static final int kBackBottomRollerSmartCurrentLimit = 0; // TBD
-    public static final int kBackDirectionRollerSmartCurrentLimit = 0; // TBD
-    public static final int kConveyorSmartCurrentLimit = 0; // TBD
+    public static final int kFrontRollerSmartCurrentLimit = 40; // TBD
+    public static final int kBackBottomRollerSmartCurrentLimit = 40; // TBD
+    public static final int kBackDirectionRollerSmartCurrentLimit = 40; // TBD
+    public static final int kConveyorSmartCurrentLimit = 40; // TBD
+    public static final int kFeederSmartCurrentLimit = 40;
 
     public static final double kFrontRollerVoltage = 3; // TBD
     public static final double kBackBottomRollerVoltage = 3; // TBD
@@ -78,19 +81,20 @@ public final class Constants {
     public static final int kPivotCanId = 13;
 
     public static final double kPivotGearRatio = 25;
+    public static final double kFlywheelGearRatio = 2;
 
-    public static final double kPivotEncoderZeroOffset = 300 * kPivotGearRatio;
-    public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
+    public static final double kPivotEncoderZeroOffset = 354 * kPivotGearRatio;
+    public static final double kPivotEncoderKinematicOffset = 13 * kPivotGearRatio;
 
     public static final double kMinPivotAngle = 0;
     public static final double kMaxPivotAngle = 83;
 
     public static final double kPivotEncoderConversionFactor = 360 * kPivotGearRatio;
 
-    public static final int kPivotSmartCurrentLimit = 0; // TBD
-    public static final int kFollowingPivotSmartCurrentLimit = 0; // TBD
-    public static final int kTopFlywheelSmartCurrentLimit = 0; // TBD
-    public static final int kBottomFlywheelSmartCurrentLimit = 0; // TBD
+    public static final int kPivotSmartCurrentLimit = 40; // TBD
+    public static final int kFollowingPivotSmartCurrentLimit = 40; // TBD
+    public static final int kTopFlywheelSmartCurrentLimit = 40; // TBD
+    public static final int kBottomFlywheelSmartCurrentLimit = 40; // TBD
 
     public static final double kAccelerationCompensationFactor = 0.1;
 
@@ -105,7 +109,7 @@ public final class Constants {
     }
     
     public static final class FlywheelPIDConstants {
-      public static final double kP = 0.0005; // TBD
+      public static final double kP = 0.0000061; // TBD
       public static final double kI = 0; // TBD
       public static final double kD = 0; // TBD
 
@@ -113,28 +117,30 @@ public final class Constants {
       public static final double kV = 0; // TBD
       public static final double kA = 0; // TBD
 
-      public static final double kFF = 0.000175;
+      public static final double kFF = 0.00008;
     }
   }
 
   public static final class PhotonConstants {
     public static final String kBackCameraName = "backCamera";
     public static final String kFrontCameraName = "frontCamera";
-    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(15.66105), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
+    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)));
     public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-15), Units.inchesToMeters(12.249889), Units.inchesToMeters(14.018624)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-20), 0));
-    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(0.6, 0.6, 2);
-    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.3, 0.3, 1);
+    public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+    public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
   }
 
   public static final class FieldConstants {
     public static final AprilTagFieldLayout kAprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    public static final Translation3d kBlueSpeakerAprilTagLocation = new Translation3d(-8.308975, 1.442593, 1.451102);
-    public static final Translation3d kRedSpeakerAprilTagLocation = new Translation3d(8.308467, 1.442593, 1.451102);
+    public static final Pose2d kBlueSpeakerAprilTagLocation = new Pose2d(0.0381, 5.547, new Rotation2d(0));
+    public static final Pose2d kRedSpeakerAprilTagLocation = new Pose2d(16.57, 5.547, new Rotation2d(0));
   }
 
   public static final class DriveConstants {
+
+    public static final Pose2d kInitialRedPose = new Pose2d(14.07, 6.35, new Rotation2d(0));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
