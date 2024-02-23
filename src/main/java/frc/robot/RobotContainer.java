@@ -32,6 +32,7 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -81,6 +82,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("setupShort", m_shooter.setupShot(37));
     NamedCommands.registerCommand("setupDynamic", new InstantCommand(() -> m_shooter.toggleDynamic()));
     NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(750)));
+    NamedCommands.registerCommand("setupClose", new ParallelCommandGroup(
+                                                                          new InstantCommand(() -> m_shooter.setPivotAngle(40)),//tbd
+                                                                          new InstantCommand(() -> m_shooter.setFlywheelVelocity(3000)))); //tbd
 
     NamedCommands.registerCommand("shoot", m_autosCommands.shoot());
 

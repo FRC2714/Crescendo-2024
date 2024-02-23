@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
-            "name": "setupDynamic"
+            "name": "setupClose"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setupDynamic"
           }
         },
         {

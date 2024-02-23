@@ -244,7 +244,7 @@ public class Shooter extends SubsystemBase {
       setFlywheelVelocityCommand(0)
     );
   }
-
+  
   public void setShoot() {
     setPivotAngle(35);
     setFlywheelVelocity(1000);
