@@ -18,6 +18,7 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.RotateToGoal;
@@ -48,11 +49,11 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(m_limelight, m_robotDrive);
   private final Intake m_intake = new Intake();
-  private final Vision m_frontCamera = new Vision("frontCamera", PhotonConstants.kFrontCameraLocation);
   private double kPThetaController = .7;
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
 
   ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
@@ -73,7 +74,7 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                m_robotDrive.getRotatingToGoal()
+                m_robotDrive.getRotatingToGoal(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband))
                         ? m_robotDrive.getDriveRotationToGoal()
                         : -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, false),
@@ -90,24 +91,28 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_driverController.rightBumper().whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
-    m_driverController.leftBumper().whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
+    m_operatorController.rightTrigger(0.1).whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
+    m_operatorController.leftTrigger(0.1).whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
 
+    m_driverController.rightTrigger(0.1).whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
+    m_driverController.leftTrigger(0.1).whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
+
+    m_operatorController.rightBumper().whileTrue(m_intake.outtakeBack()).whileFalse(m_intake.stopBack());
+    m_operatorController.leftBumper().whileTrue(m_intake.outtakeFront()).whileFalse(m_intake.stopFront());
+
+    m_driverController.rightBumper().onTrue(m_robotDrive.toggleRotatingToGoalCommand());
+    
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    m_driverController.a().whileTrue(m_intake.setFeederVoltageCommand(IntakeConstants.kFeederVoltage)).onFalse(m_intake.setFeederVoltageCommand(0));;
 
-    m_driverController.povUp().onTrue(m_shooter.setFlywheelVelocityCommand(3000));
-    m_driverController.povDown().onTrue(m_shooter.setFlywheelVelocityCommand(0));
-    m_driverController.b().whileTrue(m_intake.outtakeBack()).onFalse(m_intake.stopBack());
-    m_driverController.a().whileTrue(m_intake.outtakeFront()).onFalse(m_intake.stopFront());
     m_driverController.y()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    m_driverController.povRight().onTrue(m_robotDrive.toggleRotatingToGoalCommand());
+    m_operatorController.povDown().onTrue(m_shooter.stow());
 
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
-    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    m_driverController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
+    m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
     //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));

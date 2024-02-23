@@ -199,7 +199,10 @@ public class DriveSubsystem extends SubsystemBase {
     rotatingToGoal = !rotatingToGoal;
   }
 
-  public boolean getRotatingToGoal() {
+  public boolean getRotatingToGoal(double joystickInput) {
+    if (Math.abs(joystickInput) > 0) {
+      rotatingToGoal = false;
+    }
     return rotatingToGoal;
   }
 

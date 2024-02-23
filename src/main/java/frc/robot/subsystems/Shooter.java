@@ -18,6 +18,7 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
@@ -123,6 +124,10 @@ public class Shooter extends SubsystemBase {
 
   public void toggleDynamic() {
     dynamicEnabled = !dynamicEnabled;
+  }
+
+  public void stopDynamic() {
+    dynamicEnabled = false;
   }
 
   public void populatePivotAngleMap() {
@@ -233,6 +238,14 @@ public class Shooter extends SubsystemBase {
 
   public void setCalculatedPivotVoltage() {
     pivotMotor.setVoltage(pivotController.calculate(getPivotAngle()));
+  }
+
+  public Command stow() {
+    return new SequentialCommandGroup(
+      new InstantCommand(() -> stopDynamic()),
+      setPivotAngleCommand(0),
+      setFlywheelVelocityCommand(0)
+    );
   }
 
   // public void setCalculatedFlywheelVoltage() {
