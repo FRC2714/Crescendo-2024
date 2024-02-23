@@ -105,7 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
-    SmartDashboard.putNumber("Angle to goal", Units.radiansToDegrees(getSpeakerTargetYaw()));
+    SmartDashboard.putNumber("Angle to goal", Units.radiansToDegrees(getRotationFromGoalRadians(getPose())));
     
     m_pose.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
@@ -197,7 +197,7 @@ public class DriveSubsystem extends SubsystemBase {
           Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX())
         );
     else
-      return Math.atan(
+      return Math.PI - Math.atan(
           (pose.getY() - FieldConstants.kBlueSpeakerAprilTagLocation.getY()) /
           Math.abs(pose.getX() - FieldConstants.kBlueSpeakerAprilTagLocation.getX())
         );
