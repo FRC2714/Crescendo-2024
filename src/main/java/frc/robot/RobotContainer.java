@@ -73,7 +73,9 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                m_robotDrive.getRotatingToGoal()
+                        ? m_robotDrive.getDriveRotationToGoal()
+                        : -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
                 true, false),
             m_robotDrive));
     }
@@ -101,7 +103,7 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    m_driverController.povRight().whileTrue(new RotateToGoalPose(m_robotDrive));
+    m_driverController.povRight().onTrue(m_robotDrive.toggleRotatingToGoalCommand());
 
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));

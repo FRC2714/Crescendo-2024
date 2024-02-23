@@ -12,6 +12,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -32,12 +33,15 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
 import frc.robot.Constants.FieldConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.Vision;
 import frc.robot.utils.FieldRelativeAcceleration;
 import frc.robot.utils.FieldRelativeVelocity;
 import frc.robot.utils.SwerveUtils;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -73,6 +77,8 @@ public class DriveSubsystem extends SubsystemBase {
   private SlewRateLimiter m_magLimiter = new SlewRateLimiter(DriveConstants.kMagnitudeSlewRate);
   private SlewRateLimiter m_rotLimiter = new SlewRateLimiter(DriveConstants.kRotationalSlewRate);
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
+
+  private boolean rotatingToGoal = false;
 
   private FieldRelativeVelocity m_fieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
@@ -187,6 +193,29 @@ public class DriveSubsystem extends SubsystemBase {
         Math.pow(Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX()), 2) + 
         Math.pow(Math.abs(pose.getY() - FieldConstants.kRedSpeakerAprilTagLocation.getY()), 2)
       );
+  }
+
+  public void toggleRotatingToGoal() {
+    rotatingToGoal = !rotatingToGoal;
+  }
+
+  public boolean getRotatingToGoal() {
+    return rotatingToGoal;
+  }
+
+  public Command toggleRotatingToGoalCommand() {
+    return new InstantCommand(() -> toggleRotatingToGoal());
+  }
+
+  public double getDriveRotationToGoal() {
+    PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
+    thetaController.setTolerance(Units.degreesToRadians(0),0);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    double rotationToGoal = getRotationFromGoalRadians(getPose());
+    thetaController.setSetpoint(-rotationToGoal);
+
+    return thetaController.calculate(getPose().getRotation().getRadians());
   }
 
   public double getRotationFromGoalRadians(Pose2d pose) {
