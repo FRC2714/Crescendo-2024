@@ -74,13 +74,21 @@ public class RobotContainer {
     configureButtonBindings();
     NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
     NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
+    NamedCommands.registerCommand("stopIntakeBack", m_intake.stopBack());
+    NamedCommands.registerCommand("stopIntakeFront", m_intake.stopFront());
+   
 
     NamedCommands.registerCommand("setupShort", m_shooter.setupShot(37));
     NamedCommands.registerCommand("setupDynamic", new InstantCommand(() -> m_shooter.toggleDynamic()));
+    NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(750)));
+
     NamedCommands.registerCommand("shoot", m_autosCommands.shoot());
 
 
+
     NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
+    NamedCommands.registerCommand("stowShooter", m_shooter.setPivotAngleCommand(0)); //tbd
+
 
 
     
