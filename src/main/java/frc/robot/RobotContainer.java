@@ -85,7 +85,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("setupClose", new ParallelCommandGroup(
                                                                           new InstantCommand(() -> m_shooter.setPivotAngle(40)),//tbd
                                                                           new InstantCommand(() -> m_shooter.setFlywheelVelocity(3000)))); //tbd
-
+    NamedCommands.registerCommand("alignToGoal", new RotateToGoal(m_robotDrive, m_frontCamera));
     NamedCommands.registerCommand("shoot", m_autosCommands.shoot());
 
 
@@ -96,7 +96,7 @@ public class RobotContainer {
 
 
     
-    autoChooser = AutoBuilder.buildAutoChooser("4 Note Auto");
+    autoChooser = AutoBuilder.buildAutoChooser("3 Note Auto Top");
     SmartDashboard.putData("Auto Chooser", autoChooser);
     // Configure default commands
     m_robotDrive.setDefaultCommand(

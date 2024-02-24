@@ -129,11 +129,18 @@ public class Shooter extends SubsystemBase {
   }
 
   public void populatePivotAngleMap() {
-    pivotAngleMap.put(0.889661835916184, 37.0);
-    pivotAngleMap.put(2.082, 25.0);
-    pivotAngleMap.put(3.13, 14.0);
-    pivotAngleMap.put(4.436, 10.0);
-    pivotAngleMap.put(5.662, 6.5);
+    pivotAngleMap.put(0.889661835916184, 40.0);
+    pivotAngleMap.put(1.542, 30.0);
+    pivotAngleMap.put(2.017, 25.0);
+    pivotAngleMap.put(2.94, 15.0);
+    pivotAngleMap.put(3.76, 11.0);
+    pivotAngleMap.put(4.363, 8.0);
+    pivotAngleMap.put(5.10, 6.7);
+    pivotAngleMap.put(5.49, 5.7);
+    // pivotAngleMap.put(2.082, 25.0);
+    // pivotAngleMap.put(3.13, 14.0);
+    // pivotAngleMap.put(4.436, 10.0);
+    // pivotAngleMap.put(5.662, 6.5);
   }
 
   public void populateFlywheelVelocityMap() {

@@ -14,19 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "setupClose"
+            "name": "setupDynamic"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 5.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "setupDynamic"
           }
         },
         {
@@ -42,15 +36,9 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Middle To Top Note"
+            "pathName": "middle2topu"
           }
         },
         {
