@@ -37,6 +37,8 @@ public class Shooter extends SubsystemBase {
   private CANSparkFlex bottomFlywheelMotor;
   private CANSparkFlex pivotMotor;
 
+  private LED m_led;
+
   private AbsoluteEncoder pivotEncoder;
   private RelativeEncoder flywheelEncoder;
 
@@ -127,6 +129,11 @@ public class Shooter extends SubsystemBase {
 
   public void toggleDynamic() {
     dynamicEnabled = !dynamicEnabled;
+    if(dynamicEnabled){
+      m_led.setFire();
+    } else {
+      m_led.setRed();
+    }
   }
 
   public void stopDynamic() {

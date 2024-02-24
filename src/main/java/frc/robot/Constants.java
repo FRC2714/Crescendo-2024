@@ -75,6 +75,19 @@ public final class Constants {
     public static final double kSpeakerGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
   }
 
+  public static final class LEDConstants {
+    public static final int kArmBlinkinPort = 0;
+
+    public static final double kFire = -0.57;
+    public static final double kRainbow = -0.99;
+    public static final double kSinelonLava = -0.73;
+
+    public static final double kPurple = 0.91;
+    public static final double kYellow = 0.69;
+    public static final double kGreen = 0.77;
+    public static final double kRed = 0.61;
+  }
+
   public static final class ShooterConstants {
     public static final int kTopFlywheelCanId = 14;
     public static final int kBottomFlywheelCanId = 15;
