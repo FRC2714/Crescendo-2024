@@ -27,6 +27,7 @@ import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.RotateToGoalPose;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
@@ -57,6 +58,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(m_limelight, m_robotDrive);
   private final Intake m_intake = new Intake();
+  private final LED m_led = new LED();
   private final AutosCommands m_autosCommands = new AutosCommands(m_robotDrive, m_limelight, m_shooter, m_intake);
   private final Vision m_frontCamera = new Vision("frontCamera", PhotonConstants.kFrontCameraLocation);
   private double kPThetaController = .7;
@@ -130,6 +132,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
     m_operatorController.rightTrigger(0.1).whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
     m_operatorController.leftTrigger(0.1).whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
+    m_operatorController.x().whileTrue(new InstantCommand(() -> m_led.setPurple()));
+    m_operatorController.y().whileTrue(new InstantCommand(() -> m_led.setGold()));
+
 
     m_driverController.rightTrigger(0.1).whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
     m_driverController.leftTrigger(0.1).whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());

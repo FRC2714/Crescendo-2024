@@ -128,13 +128,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void toggleDynamic() {
-    dynamicEnabled = !dynamicEnabled;
-    if(dynamicEnabled){
-      m_led.setFire();
-    } else {
-      m_led.setRed();
-    }
-  }
+    dynamicEnabled = !dynamicEnabled;  }
 
   public void stopDynamic() {
     dynamicEnabled = false;
@@ -253,6 +247,7 @@ public class Shooter extends SubsystemBase {
   public void setDynamic() {
     setPivotAngle(getDynamicPivotAngle());
     setFlywheelVelocity(getDynamicFlywheelVelocity());
+    m_led.setFire();
   }
 
   public void setMoveAndShoot(double adjustedDistance) {
@@ -313,6 +308,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Pivot Current", pivotMotor.getOutputCurrent());
     SmartDashboard.putNumber("Flywheel Current", topFlywheelMotor.getOutputCurrent());
 
+    if(!dynamicEnabled){
+      m_led.setRed();
+    }
     // if (pivotAngleTunableNumber.hasChanged()) {
     //   tunePivotAngle();
     // }

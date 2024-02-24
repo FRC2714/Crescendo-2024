@@ -48,6 +48,10 @@ public class LED extends SubsystemBase {
     set(LEDConstants.kRed);
   }
 
+  public void setGold() {
+    set(LEDConstants.kGold);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
