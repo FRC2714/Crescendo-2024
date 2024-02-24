@@ -86,17 +86,17 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("setupShort", m_shooter.setupShot(37));
     NamedCommands.registerCommand("setupDynamic", new InstantCommand(() -> m_shooter.toggleDynamic()));
-    NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(750)));
+    NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(1000)));
     NamedCommands.registerCommand("setupClose", new ParallelCommandGroup(
-                                                                          new InstantCommand(() -> m_shooter.setPivotAngle(40)),//tbd
-                                                                          new InstantCommand(() -> m_shooter.setFlywheelVelocity(3000)))); //tbd
-    NamedCommands.registerCommand("alignToGoal", new RotateToGoal(m_robotDrive, m_frontCamera));
+                                                                          new InstantCommand(() -> m_shooter.setPivotAngle(45)),//tbd
+                                                                          new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)))); //tbd
+    NamedCommands.registerCommand("alignToGoal", m_robotDrive.toggleRotatingToGoalCommand());
     NamedCommands.registerCommand("shoot", m_autosCommands.shoot());
 
 
 
     NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
-    NamedCommands.registerCommand("stowShooter", m_shooter.setPivotAngleCommand(0)); //tbd
+    NamedCommands.registerCommand("stowShooter", m_shooter.stow()); //tbd
 
 
 
@@ -147,12 +147,9 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    m_operatorController.povDown().onTrue(m_shooter.stow());
 
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
-    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    m_driverController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
-    m_driverController.povDown().onTrue(m_shooter.stow());
+    m_operatorController.povDown().onTrue(m_shooter.stow());
     m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
     //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));

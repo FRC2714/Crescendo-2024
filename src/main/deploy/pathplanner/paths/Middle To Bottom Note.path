@@ -3,41 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.922373537054768,
-        "y": 5.584689630920507
+        "x": 2.68,
+        "y": 5.562647359246215
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.951974365487194,
-        "y": 5.614290459352934
+        "x": 2.7096008284324262,
+        "y": 5.592248187678642
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.969826478882628,
-        "y": 4.953683858865578
+        "x": 1.6067905459634015,
+        "y": 4.930262185774015
       },
       "prevControl": {
-        "x": 1.9582921565481421,
-        "y": 5.624827003870065
+        "x": 1.5952562236289156,
+        "y": 5.601405330778502
       },
       "nextControl": {
-        "x": 1.9767657125569884,
-        "y": 4.549913357480615
+        "x": 1.6137297796377619,
+        "y": 4.526491684389052
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.695898344721082,
-        "y": 4.19247948338978
+        "x": 2.68,
+        "y": 3.7708893677416455
       },
       "prevControl": {
-        "x": 2.7378328516659116,
-        "y": 4.16287865495829
+        "x": 2.7219345069448297,
+        "y": 3.7412885393101556
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,12 +47,30 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 1.0,
-      "rotationDegrees": 165.35568736284435,
+      "rotationDegrees": 141.6912644325523,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Auto Rotate",
+      "waypointRelativePos": 2.0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "alignToGoal"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 0.5,
@@ -61,7 +79,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 159.62356478616366,
+    "rotation": 138.9898201709522,
     "rotateFast": false
   },
   "reversed": false,

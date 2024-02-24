@@ -193,6 +193,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_field.setRobotPose(getPose());
 
     SmartDashboard.putData("Field Position", m_field);
+    SmartDashboard.putNumber("Pose X", getPose().getX());
     SmartDashboard.putNumber("Distance to goal meters", getDistanceToGoalMeters(getPose()));
     SmartDashboard.putNumber("Pose rotation", getPose().getRotation().getDegrees());
     SmartDashboard.putNumber("Pose rotation to goal", Units.radiansToDegrees(getRotationFromGoalRadians(getPose())));

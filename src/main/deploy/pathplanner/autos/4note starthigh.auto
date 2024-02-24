@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.383130458568611,
-      "y": 7.1239327094038805
+      "x": 1.325730468864645,
+      "y": 6.593200975274989
     },
     "rotation": -125.90394405415955
   },
@@ -21,6 +21,12 @@
           "type": "wait",
           "data": {
             "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "alignToGoal"
           }
         },
         {
@@ -44,12 +50,6 @@
         {
           "type": "named",
           "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "intakeFront"
           }
         },
@@ -57,12 +57,6 @@
           "type": "path",
           "data": {
             "pathName": "toptomiddle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
           }
         },
         {
@@ -81,12 +75,6 @@
           "type": "path",
           "data": {
             "pathName": "Middle To Bottom Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
           }
         },
         {

@@ -134,8 +134,10 @@ public class Shooter extends SubsystemBase {
   }
 
   public void populatePivotAngleMap() {
-    pivotAngleMap.put(0.889661835916184, 40.0);
+    pivotAngleMap.put(0.63, 45.0);
+    pivotAngleMap.put(0.88966183597416184, 42.0);
     pivotAngleMap.put(1.542, 30.0);
+    pivotAngleMap.put(2.35, 20.0);
     pivotAngleMap.put(2.017, 25.0);
     pivotAngleMap.put(2.94, 15.0);
     pivotAngleMap.put(3.76, 11.0);
@@ -146,20 +148,25 @@ public class Shooter extends SubsystemBase {
     // pivotAngleMap.put(3.13, 14.0);
     // pivotAngleMap.put(4.436, 10.0);
     // pivotAngleMap.put(5.662, 6.5);
+
   }
 
   public void populateFlywheelVelocityMap() {
+    flywheelVelocityMap.put(0.74, 8000.0);
     flywheelVelocityMap.put(0.889661835916184, 8000.0);
     flywheelVelocityMap.put(2.082, 8000.0);
+    flywheelVelocityMap.put(2.35, 8000.0);
     flywheelVelocityMap.put(3.13, 8000.0);
     flywheelVelocityMap.put(4.436, 8000.0);
     flywheelVelocityMap.put(5.662, 8000.0);
   }
 
   public void populateShootTimeMap() {
+    shootTimeMap.put(0.74, 0.48);
     shootTimeMap.put(0.889661835916184, 0.22);
     shootTimeMap.put(1.542, 0.36);
     shootTimeMap.put(2.017, 0.32);
+    shootTimeMap.put(2.35, 0.51);
     shootTimeMap.put(2.94, 0.44);
     shootTimeMap.put(3.76, 0.45);
     shootTimeMap.put(4.363, 0.57);
@@ -259,6 +266,7 @@ public class Shooter extends SubsystemBase {
 
   public ParallelCommandGroup stow() {
     return new ParallelCommandGroup(
+      new InstantCommand(() -> stopDynamic()),
       setPivotAngleCommand(0),
       setFlywheelVelocityCommand(0)
     );
@@ -306,29 +314,29 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Pivot Current", pivotMotor.getOutputCurrent());
     SmartDashboard.putNumber("Flywheel Current", topFlywheelMotor.getOutputCurrent());
 
-    // if (pivotAngleTunableNumber.hasChanged()) {
-    //   tunePivotAngle();
-    // }
+    if (pivotAngleTunableNumber.hasChanged()) {
+      tunePivotAngle();
+    }
 
-    // if (pivotP.hasChanged()) {
-    //   tunePivotP();
-    // }
+    if (pivotP.hasChanged()) {
+      tunePivotP();
+    }
 
     if (flywheelVelocityTunableNumber.hasChanged()) {
       tuneFlywheelVelocity();
     }
 
-    // if (flywheelP.hasChanged()) {
-    //   tuneFlywheelP();
-    // }
+    if (flywheelP.hasChanged()) {
+      tuneFlywheelP();
+    }
 
-    // if (flywheelV.hasChanged()) {
-    //   tuneFlywheelV();
-    // }
+    if (flywheelV.hasChanged()) {
+      tuneFlywheelV();
+    }
 
-    // if (flywheelD.hasChanged()) {
-    //   tuneFlywheelD();
-    // }
+    if (flywheelD.hasChanged()) {
+      tuneFlywheelD();
+    }
 
     if (dynamicEnabled) setDynamic();
 
@@ -336,6 +344,5 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("dynamic pivot angle", getDynamicPivotAngle());
 
     setCalculatedPivotVoltage();
-    // setCalculatedFlywheelVoltage();
   }
 }
