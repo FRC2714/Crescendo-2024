@@ -44,6 +44,12 @@
         {
           "type": "named",
           "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "intakeFront"
           }
         },
@@ -51,6 +57,12 @@
           "type": "path",
           "data": {
             "pathName": "toptomiddle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
@@ -69,6 +81,12 @@
           "type": "path",
           "data": {
             "pathName": "Middle To Bottom Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {

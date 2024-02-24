@@ -32,6 +32,12 @@
         {
           "type": "named",
           "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "stowShooter"
           }
         },
@@ -45,6 +51,12 @@
           "type": "path",
           "data": {
             "pathName": "toptocentertop"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
