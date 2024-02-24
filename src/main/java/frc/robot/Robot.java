@@ -58,6 +58,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    CommandScheduler.getInstance().cancelAll();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     /*
@@ -79,6 +80,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    // m_robotContainer.
+    CommandScheduler.getInstance().cancelAll();
+    m_robotContainer.setTeleopDefaultStates();
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove

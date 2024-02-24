@@ -144,7 +144,7 @@ public final class Constants {
 
   public static final class DriveConstants {
 
-    public static final Pose2d kInitialRedPose = new Pose2d(14.07, 6.35, new Rotation2d(0));
+    public static final Pose2d kInitialRedPose = new Pose2d(15.57, 5.547, new Rotation2d(0));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
     public static final double kMaxSpeedMetersPerSecond = 4.8;
@@ -192,7 +192,6 @@ public final class Constants {
       public static final double kD = 0;
     }
   }
-
   public static final class ModuleConstants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a

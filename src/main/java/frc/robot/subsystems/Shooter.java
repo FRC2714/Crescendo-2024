@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.concurrent.TimeUnit;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
@@ -19,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
@@ -254,11 +257,29 @@ public class Shooter extends SubsystemBase {
     pivotMotor.setVoltage(pivotController.calculate(getPivotAngle()));
   }
 
-  public Command stow() {
-    return new SequentialCommandGroup(
-      new InstantCommand(() -> stopDynamic()),
+  public ParallelCommandGroup stow() {
+    return new ParallelCommandGroup(
       setPivotAngleCommand(0),
       setFlywheelVelocityCommand(0)
+    );
+  }
+  
+  public void setShoot() {
+    setPivotAngle(35);
+    setFlywheelVelocity(1000);
+    try {
+      TimeUnit.SECONDS.sleep(1);
+    } catch (InterruptedException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    
+  }
+
+  public ParallelCommandGroup setupShot(double shootingDistance) {
+    return new ParallelCommandGroup(
+    new InstantCommand(() -> setPivotAngle(shootingDistance)),
+    new InstantCommand(() -> setFlywheelVelocity(8000))
     );
   }
 
@@ -285,29 +306,29 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putNumber("Pivot Current", pivotMotor.getOutputCurrent());
     SmartDashboard.putNumber("Flywheel Current", topFlywheelMotor.getOutputCurrent());
 
-    if (pivotAngleTunableNumber.hasChanged()) {
-      tunePivotAngle();
-    }
+    // if (pivotAngleTunableNumber.hasChanged()) {
+    //   tunePivotAngle();
+    // }
 
-    if (pivotP.hasChanged()) {
-      tunePivotP();
-    }
+    // if (pivotP.hasChanged()) {
+    //   tunePivotP();
+    // }
 
     if (flywheelVelocityTunableNumber.hasChanged()) {
       tuneFlywheelVelocity();
     }
 
-    if (flywheelP.hasChanged()) {
-      tuneFlywheelP();
-    }
+    // if (flywheelP.hasChanged()) {
+    //   tuneFlywheelP();
+    // }
 
-    if (flywheelV.hasChanged()) {
-      tuneFlywheelV();
-    }
+    // if (flywheelV.hasChanged()) {
+    //   tuneFlywheelV();
+    // }
 
-    if (flywheelD.hasChanged()) {
-      tuneFlywheelD();
-    }
+    // if (flywheelD.hasChanged()) {
+    //   tuneFlywheelD();
+    // }
 
     if (dynamicEnabled) setDynamic();
 
