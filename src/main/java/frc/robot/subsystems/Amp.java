@@ -42,6 +42,6 @@ public class Amp extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Current Pivot Angle", getPivotAngle());
+    // SmartDashboard.putNumber("Current Pivot Angle", getPivotAngle());
   }
 }
