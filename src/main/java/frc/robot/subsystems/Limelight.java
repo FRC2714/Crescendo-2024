@@ -19,7 +19,7 @@ public class Limelight extends SubsystemBase {
 	private double GoalHeight = LimelightConstants.kSpeakerGoalHeight;
 
 	public Limelight() {
-		setPosePipeline();
+		setNoteSeekerPipeline();
 	}
 
 	public double getDistanceToGoalInches() {
@@ -91,7 +91,7 @@ public class Limelight extends SubsystemBase {
 	}
 
 	public void setNoteSeekerPipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 3); // tune later
+		LimelightHelpers.setPipelineIndex(limelightName, 0); // tune later
 	}
 
   	public void setStagePipeline() {

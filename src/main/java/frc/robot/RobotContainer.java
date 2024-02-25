@@ -5,38 +5,22 @@
 package frc.robot;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.PS4Controller.Button;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.PhotonConstants;
-import frc.robot.commands.RotateToGoal;
-import frc.robot.commands.RotateToGoalPose;
 import frc.robot.commands.IntakeCommand.IntakeState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -44,14 +28,9 @@ import frc.robot.commands.AutosCommands;
 // import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
 
-import java.util.function.BooleanSupplier;
-
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.SeekNote;
-
-import java.util.List;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -162,6 +141,7 @@ public class RobotContainer {
     m_operatorController.povDown().onTrue(m_shooter.stow());
     m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
     m_operatorController.povUp().onTrue(m_shooter.readyAmp());
+    m_driverController.leftBumper().whileTrue(new SeekNote(m_robotDrive, m_limelight));
     //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
@@ -172,7 +152,6 @@ public class RobotContainer {
   public void setTeleopDefaultStates() {
     m_shooter.setPivotAngleCommand(0);
     m_shooter.setFlywheelVelocityCommand(0);
-    m_driverController.leftBumper().whileTrue(new SeekNote(m_robotDrive, m_limelight));
   }
 
   /**
