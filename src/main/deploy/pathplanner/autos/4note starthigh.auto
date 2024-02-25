@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.325730468864645,
-      "y": 6.593200975274989
+      "x": 0.7401886415755699,
+      "y": 6.581490138729208
     },
     "rotation": -125.90394405415955
   },
@@ -26,12 +26,6 @@
         {
           "type": "named",
           "data": {
-            "name": "alignToGoal"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "intakeBack"
           }
         },
@@ -42,45 +36,21 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "stopIntakeBack"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeFront"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "toptomiddle"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stopIntakeFront"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeBack"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle To Bottom Note"
+            "pathName": "topmiddleback"
           }
         },
         {
           "type": "wait",
           "data": {
             "waitTime": 2.0
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle To Bottom Note"
           }
         }
       ]
