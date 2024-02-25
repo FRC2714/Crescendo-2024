@@ -48,6 +48,10 @@ import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import frc.robot.commands.RotateToGoal;
+import frc.robot.commands.SeekNote;
+
+import java.util.List;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -168,6 +172,7 @@ public class RobotContainer {
   public void setTeleopDefaultStates() {
     m_shooter.setPivotAngleCommand(0);
     m_shooter.setFlywheelVelocityCommand(0);
+    m_driverController.leftBumper().whileTrue(new SeekNote(m_robotDrive, m_limelight));
   }
 
   /**

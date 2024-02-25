@@ -34,10 +34,6 @@ public class Limelight extends SubsystemBase {
 		this.GoalHeight = GoalHeight;
 	}
 
-	public double getGoalHeight() {
-		return GoalHeight;
-	}
-
 	public double getDistanceToGoalMeters() {
 		return Units.inchesToMeters(getDistanceToGoalInches());
 	}
@@ -86,8 +82,12 @@ public class Limelight extends SubsystemBase {
         else LimelightHelpers.setLEDMode_ForceOff(limelightName); // LED force off
     }
 
-	public void setSpeakerPipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 7);
+	public void setAprilTagPipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 2);
+	}
+
+	public void setNoteSeekerPipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 3); // tune later
 	}
 
   	public void setStagePipeline() {
@@ -106,5 +106,6 @@ public class Limelight extends SubsystemBase {
 	public void periodic() {
 		SmartDashboard.putNumber("ll distance to goal", getDistanceToGoalMeters());
 		SmartDashboard.putNumber("ll rotation from apriltag", isTargetVisible() ? getXAngleOffsetDegrees() : 30);
+		SmartDashboard.putBoolean("ll is target visibe", isTargetVisible());
 	}
 }
