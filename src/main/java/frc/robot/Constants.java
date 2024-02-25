@@ -44,6 +44,8 @@ public final class Constants {
     public static final int kConveyorCanId = 12;
     public static final int kFeederCanId = 16;
 
+    public static final int kBreakBeamChannel = 0;
+
     public static final double kRollerNominalVoltage = 11;
 
     public static final int kFrontRollerSmartCurrentLimit = 80; // TBD
@@ -247,6 +249,7 @@ public final class Constants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
+    public static final double kTriggerThreshold = 0.1;
   }
 
   public static final class AutoConstants {

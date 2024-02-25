@@ -26,6 +26,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.RotateToGoalPose;
+import frc.robot.commands.IntakeCommand.IntakeState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
@@ -41,6 +42,9 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutosCommands;
 // import frc.robot.commands.RotateToGoal;
+import frc.robot.commands.IntakeCommand;
+
+import java.util.function.BooleanSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -55,10 +59,9 @@ public class RobotContainer {
   // The robot's subsystems
   private final Limelight m_limelight = new Limelight();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final Shooter m_shooter = new Shooter(m_limelight, m_robotDrive);
+  private final Shooter m_shooter = new Shooter(m_robotDrive);
   private final Intake m_intake = new Intake();
   private final AutosCommands m_autosCommands = new AutosCommands(m_robotDrive, m_limelight, m_shooter, m_intake);
-  private final Vision m_frontCamera = new Vision("frontCamera", PhotonConstants.kFrontCameraLocation);
   private double kPThetaController = .7;
   private SendableChooser<Command> autoChooser;
 
@@ -128,11 +131,12 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_operatorController.rightTrigger(0.1).whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
-    m_operatorController.leftTrigger(0.1).whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
 
-    m_driverController.rightTrigger(0.1).whileTrue(m_intake.intakeBack()).whileFalse(m_intake.stopBack());
-    m_driverController.leftTrigger(0.1).whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
+    m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
+    m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
+
+    m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
+    m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
 
     m_operatorController.rightBumper().whileTrue(m_intake.outtakeBack()).whileFalse(m_intake.stopBack());
     m_operatorController.leftBumper().whileTrue(m_intake.outtakeFront()).whileFalse(m_intake.stopFront());
@@ -140,7 +144,8 @@ public class RobotContainer {
     m_driverController.rightBumper().onTrue(m_robotDrive.toggleRotatingToGoalCommand());
     
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    m_driverController.a().whileTrue(m_intake.setFeederVoltageCommand(IntakeConstants.kFeederVoltage)).onFalse(m_intake.setFeederVoltageCommand(0));;
+    m_driverController.a().whileTrue(m_intake.shoot()).onFalse(m_intake.stopShooter());
+    m_driverController.b().whileTrue(m_shooter.setFlywheelVelocityCommand(8000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
 
     m_operatorController.x().onTrue(m_amp.extend()).onFalse(m_amp.stow());
     m_driverController.y()

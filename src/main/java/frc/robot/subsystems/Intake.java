@@ -4,15 +4,21 @@
 
 package frc.robot.subsystems;
 
+import java.util.function.BooleanSupplier;
+
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
@@ -25,6 +31,8 @@ public class Intake extends SubsystemBase {
   private CANSparkFlex conveyorMotor;
   private CANSparkFlex feederMotor;
 
+  private DigitalInput breakBeam;
+
   private RelativeEncoder frontRollerEncoder;
   private RelativeEncoder backBottomRollerEncoder;
   private RelativeEncoder backDirectionRollerEncoder;
@@ -32,6 +40,7 @@ public class Intake extends SubsystemBase {
   private RelativeEncoder feederEncoder;
 
   private boolean backRunning, frontRunning;
+  private boolean loaded;
   
   public Intake() {
     frontRollerMotor = new CANSparkFlex(IntakeConstants.kFrontRollerCanId, MotorType.kBrushless);
@@ -39,6 +48,8 @@ public class Intake extends SubsystemBase {
     backDirectionRollerMotor = new CANSparkFlex(IntakeConstants.kBackDirectionRollerCanId, MotorType.kBrushless);
     conveyorMotor = new CANSparkFlex(IntakeConstants.kConveyorCanId, MotorType.kBrushless);
     feederMotor = new CANSparkFlex(IntakeConstants.kFeederCanId, MotorType.kBrushless);
+
+    breakBeam = new DigitalInput(IntakeConstants.kBreakBeamChannel);
 
     frontRollerMotor.setInverted(true);
 
@@ -74,7 +85,19 @@ public class Intake extends SubsystemBase {
 
     backRunning = false;
     frontRunning = false;
+
+    loaded = false;
     
+  }
+
+  public void setLoaded() {
+    if (!breakBeam.get()) {
+      loaded = true;
+    }
+  }
+
+  public boolean getLoaded() {
+    return loaded;
   }
 
   public double getFrontRollerVelocity() {
@@ -166,7 +189,7 @@ public class Intake extends SubsystemBase {
                                     setFeederVoltageCommand(0));
   }
 
-  public ParallelCommandGroup intakeBack() {
+  public Command intakeBack() {
     if (frontRunning) return new ParallelCommandGroup();
     else backRunning = true;
     return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(-IntakeConstants.kBackBottomRollerVoltageBackSide),
@@ -189,9 +212,21 @@ public class Intake extends SubsystemBase {
                                     setFeederVoltageCommand(0));
   }
 
+  public Command shoot() {
+    return new SequentialCommandGroup(new InstantCommand(() -> loaded = false),
+      setFeederVoltageCommand(IntakeConstants.kFeederVoltage));
+  }
+
+  public Command stopShooter() {
+    return setFeederVoltageCommand(0);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    setLoaded();
+    SmartDashboard.putBoolean("Loaded", loaded);
 
     // SmartDashboard.putNumber("Front Roller Velocity", getFrontRollerVelocity());
     // SmartDashboard.putNumber("Back Bottom Roller Velocity", getBackBottomRollerVelocity());
