@@ -24,7 +24,7 @@ public class Amp extends SubsystemBase {
   }
 
     public double getPivotAngle() {
-      return Math.abs(leftPivotServo.get());
+      return leftPivotServo.get();
     }
 
     public void setPivotAngle(double targetAngle) {
@@ -32,11 +32,11 @@ public class Amp extends SubsystemBase {
       rightPivotServo.set(-targetAngle);
     }
     public Command stow(){
-      return new InstantCommand(() -> setPivotAngle(1)); // tbd 
+      return new InstantCommand(() -> setPivotAngle(0)); // tbd 
     }
 
     public Command extend(){
-      return new InstantCommand(() -> setPivotAngle(50)); //tbd
+      return new InstantCommand(() -> setPivotAngle(1)); //tbd
     }
 
   @Override

@@ -76,6 +76,8 @@ public class Shooter extends SubsystemBase {
     pivotEncoder.setInverted(true);
     pivotEncoder.setZeroOffset(ShooterConstants.kPivotEncoderZeroOffset);
 
+    pivotMotor.setInverted(true);
+
     flywheelEncoder = topFlywheelMotor.getEncoder();
 
     flywheelEncoder.setVelocityConversionFactor(ShooterConstants.kFlywheelGearRatio);
@@ -206,6 +208,12 @@ public class Shooter extends SubsystemBase {
 
   public double getDynamicFlywheelVelocity(double adjustedDistance) {
     return flywheelVelocityMap.getInterpolated(adjustedDistance);
+  }
+
+  public Command readyAmp() {
+    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+                                    setPivotAngleCommand(ShooterConstants.kAmpAngle),
+                                    setFlywheelVelocityCommand(ShooterConstants.kAmpFlywheelVelocity));
   }
 
   public void tunePivotAngle() {

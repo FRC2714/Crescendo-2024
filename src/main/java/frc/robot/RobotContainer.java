@@ -157,6 +157,7 @@ public class RobotContainer {
     // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_operatorController.povDown().onTrue(m_shooter.stow());
     m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
+    m_operatorController.povUp().onTrue(m_shooter.readyAmp());
     //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));

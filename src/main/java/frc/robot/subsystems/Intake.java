@@ -51,7 +51,8 @@ public class Intake extends SubsystemBase {
 
     breakBeam = new DigitalInput(IntakeConstants.kBreakBeamChannel);
 
-    frontRollerMotor.setInverted(true);
+    frontRollerMotor.setInverted(false);
+    conveyorMotor.setInverted(false);
 
     frontRollerMotor.setIdleMode(IdleMode.kBrake);
     backBottomRollerMotor.setIdleMode(IdleMode.kBrake);
