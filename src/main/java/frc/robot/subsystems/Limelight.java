@@ -86,6 +86,10 @@ public class Limelight extends SubsystemBase {
 		LimelightHelpers.setPipelineIndex(limelightName, 2);
 	}
 
+	public void setSpeakerPipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 4); // tune later
+	}
+
 	public void setNoteSeekerPipeline() {
 		LimelightHelpers.setPipelineIndex(limelightName, 3); // tune later
 	}
