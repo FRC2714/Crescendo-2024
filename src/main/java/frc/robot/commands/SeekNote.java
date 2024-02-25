@@ -19,7 +19,7 @@ public class SeekNote extends Command {
   private ProfiledPIDController xController;
 
   private double kPThetaController = 1;
-  private double kPXController = 0.8;
+  private double kPXController = 0.85;
 
 
   /** Creates a new RotateToGoal. */
