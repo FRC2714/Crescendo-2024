@@ -70,11 +70,11 @@ public final class Constants {
   public static final class LimelightConstants {
     public static final Pose3d kBackLimelightPose = 
       new Pose3d(
-        new Translation3d(15.75, 9.14, 0.0), //inches
-        new Rotation3d(0.0, Units.degreesToRadians(35.0), 0.0));//degrees
+        new Translation3d(-16.2816, 0, 10.3143), //inches
+        new Rotation3d(0.0, Units.degreesToRadians(-21.0), 0.0));//degrees
     public static final String kLimelightName = "limelight-back";
 
-    public static final double kSpeakerGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
+    public static final double kNoteGoalHeight = 0; //inches, deg NEEDS TO BE UPDATED
   }
 
   public static final class LEDConstants {

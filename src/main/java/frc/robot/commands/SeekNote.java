@@ -32,7 +32,7 @@ public class SeekNote extends Command {
     xController = new ProfiledPIDController(kPXController,0,0,new Constraints(4, 4));
 
     
-    addRequirements(m_drivetrain);
+    addRequirements(m_drivetrain, m_limelight);
 
     thetaController.setGoal(0);
     thetaController.setTolerance(Units.degreesToRadians(0),0);
@@ -55,21 +55,19 @@ public class SeekNote extends Command {
 
       double distance = -Math.abs(m_limelight.getDistanceToGoalMeters());
       m_drivetrain.drive(
-        xController.calculate(distance),
+        xController.calculate(-distance),
         0, 
         thetaController.calculate(m_limelight.getXOffsetRadians()), 
         false,
         false);
-      // if(Math.abs(m_limelight.getXAngleOffsetDegrees())< 7){
-      //    double speed = Math.abs(m_limelight.getDistanceToGoalInches()) / 10;
-      //   m_drivetrain.drive(
-      //   speed, 
-      //   0, 
-      //   thetaController.calculate(m_limelight.getXOffsetRadians()), 
-      //   false,
-      //   false);
-        //call intake
-      //}
+    }
+    else {
+      m_drivetrain.drive(
+        0,
+        0, 
+        0, 
+        false,
+        false);
     }
   }  
   

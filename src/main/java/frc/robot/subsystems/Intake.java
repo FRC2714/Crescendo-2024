@@ -174,7 +174,8 @@ public class Intake extends SubsystemBase {
   public ParallelCommandGroup outtakeFront() {
     if (backRunning) return new ParallelCommandGroup();
     else frontRunning = true;
-    return new ParallelCommandGroup(setFrontRollerVoltageCommand(-(IntakeConstants.kFrontRollerVoltage + 1)),
+    return new ParallelCommandGroup(new InstantCommand(() -> loaded = false),
+                                    setFrontRollerVoltageCommand(-(IntakeConstants.kFrontRollerVoltage + 1)),
                                     setBackBottomRollerVoltageCommand(-(IntakeConstants.kBackBottomRollerVoltageFrontSide + 1)),
                                     setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageFrontSide + 1)),
                                     setConveyorVoltageCommand(IntakeConstants.kConveyorVoltage + 1),
@@ -201,7 +202,8 @@ public class Intake extends SubsystemBase {
   public ParallelCommandGroup outtakeBack() {
     if (frontRunning) return new ParallelCommandGroup();
     else backRunning = true;
-    return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageBackSide + 1),
+    return new ParallelCommandGroup(new InstantCommand(() -> loaded = false),
+                                    setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageBackSide + 1),
                                     setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageBackSide + 1)),
                                     setFeederVoltageCommand(-(IntakeConstants.kFeederVoltage + 1)));
   }
