@@ -17,17 +17,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-import frc.robot.Constants.ClimberConstants.LeftClimberPIDConstants;
-import frc.robot.Constants.ClimberConstants.RightClimberPIDConstants;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
 
   private CANSparkFlex leftClimberMotor, rightClimberMotor;
   private RelativeEncoder leftClimberEncoder, rightClimberEncoder;
-
-  private ProfiledPIDController leftClimberController, rightClimberController;
-  private ElevatorFeedforward leftClimberFeedforward, rightClimberFeedforward;
 
   public Climber() {
 
@@ -44,51 +39,40 @@ public class Climber extends SubsystemBase {
     leftClimberEncoder = leftClimberMotor.getEncoder();
     rightClimberEncoder = rightClimberMotor.getEncoder();
 
-    leftClimberController = new ProfiledPIDController(LeftClimberPIDConstants.kP,
-                                                      LeftClimberPIDConstants.kI,
-                                                      LeftClimberPIDConstants.kD,
-                                                      ClimberConstants.kLeftClimberConstraints);
-    
-    rightClimberController = new ProfiledPIDController(RightClimberPIDConstants.kP,
-                                                       RightClimberPIDConstants.kI,
-                                                       RightClimberPIDConstants.kD,
-                                                       ClimberConstants.kRightClimberConstraints);
-    leftClimberFeedforward = new ElevatorFeedforward(LeftClimberPIDConstants.kS,
-                                                     LeftClimberPIDConstants.kG,
-                                                     LeftClimberPIDConstants.kV,
-                                                     LeftClimberPIDConstants.kA);
-
-    rightClimberFeedforward = new ElevatorFeedforward(RightClimberPIDConstants.kS,
-                                                     RightClimberPIDConstants.kG,
-                                                     RightClimberPIDConstants.kV,
-                                                     RightClimberPIDConstants.kA);
-
     leftClimberMotor.burnFlash();
     rightClimberMotor.burnFlash();
   }
 
   public void extendClimbers() {
-    leftClimberController.setGoal(ClimberConstants.kGroundExtension);
-    rightClimberController.setGoal(ClimberConstants.kGroundExtension);
+    if (leftClimberEncoder.getPosition() < ClimberConstants.kMaxExtension) {
+      leftClimberMotor.setVoltage(ClimberConstants.kClimberVoltage);
+    }
+    else {
+      leftClimberMotor.setVoltage(0);
+    }
+
+    if (rightClimberEncoder.getPosition() < ClimberConstants.kMaxExtension) {
+      rightClimberMotor.setVoltage(ClimberConstants.kClimberVoltage);
+    }
+    else {
+      rightClimberMotor.setVoltage(0);
+    }
   }
 
   public void retractClimbers() {
-    leftClimberController.setGoal(ClimberConstants.kGroundRetraction);
-    rightClimberController.setGoal(ClimberConstants.kGroundRetraction);
-  }
+    if (leftClimberEncoder.getPosition() > ClimberConstants.kMinExtension) {
+      leftClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage);
+    }
+    else {
+      leftClimberMotor.setVoltage(0);
+    }
 
-  public void setLeftClimber(double target) {
-    target = target > ClimberConstants.kMaxExtension ? ClimberConstants.kMaxExtension : target;
-    target = target < ClimberConstants.kMinExtension ? ClimberConstants.kMinExtension : target;
-    State goal = new State(target, 0);
-    leftClimberController.setGoal(goal);
-  }
-
-  public void setRightClimber(double target) {
-    target = target > ClimberConstants.kMaxExtension ? ClimberConstants.kMaxExtension : target;
-    target = target < ClimberConstants.kMinExtension ? ClimberConstants.kMinExtension : target;
-    State goal = new State(target, 0);
-    rightClimberController.setGoal(goal);
+    if (rightClimberEncoder.getPosition() > ClimberConstants.kMinExtension) {
+      rightClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage);
+    }
+    else {
+      rightClimberMotor.setVoltage(0);
+    }
   }
 
   public double getLeftClimberPosition() {
@@ -99,33 +83,6 @@ public class Climber extends SubsystemBase {
     return rightClimberEncoder.getPosition();
   }
 
-  public boolean leftClimberAtMax() {
-    return Math.abs(ClimberConstants.kMaxExtension - leftClimberEncoder.getPosition()) < ClimberConstants.kSetpointTolerance;
-  }
-
-  public boolean leftClimberAtMin() {
-    return Math.abs(ClimberConstants.kMinExtension - rightClimberEncoder.getPosition()) < ClimberConstants.kSetpointTolerance;
-  }
-
-  public boolean rightClimberAtMax() {
-    return Math.abs(ClimberConstants.kMaxExtension - rightClimberEncoder.getPosition()) < ClimberConstants.kSetpointTolerance;
-  }
-
-  public boolean rightClimberAtMin() {
-    return Math.abs(ClimberConstants.kMinExtension - rightClimberEncoder.getPosition()) < ClimberConstants.kSetpointTolerance;
-  }
-
-  public void setCalculatedClimberVoltage() {
-    leftClimberMotor.setVoltage(
-      leftClimberController.calculate(getLeftClimberPosition()) +
-      leftClimberFeedforward.calculate(leftClimberController.getSetpoint().velocity)
-    );
-    rightClimberMotor.setVoltage(
-      rightClimberController.calculate(getRightClimberPosition()) +
-      rightClimberFeedforward.calculate(rightClimberController.getSetpoint().velocity)
-    );
-  }
-
   public Command extendClimbersCommand() {
     return new InstantCommand(() -> extendClimbers());
   }
@@ -134,20 +91,10 @@ public class Climber extends SubsystemBase {
     return new InstantCommand(() -> retractClimbers());
   }
 
-  public Command setLeftClimberCommand(double target) {
-    return new InstantCommand(() -> setLeftClimber(target));
-  }
-
-  public Command setRightClimberCommand(double target) {
-    return new InstantCommand(() -> setRightClimber(target));
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Left Climber Extension", leftClimberEncoder.getPosition());
     SmartDashboard.putNumber("Right Climber Extension", rightClimberEncoder.getPosition());
-
-    setCalculatedClimberVoltage();
   }
 }

@@ -28,44 +28,15 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static final class ClimberConstants {
-    public static final int kLeftClimberCanId = 0; // TBD
-    public static final int kRightClimberCanId = 0; // TBD
+    public static final int kLeftClimberCanId = 17; // TBD
+    public static final int kRightClimberCanId = 18; // TBD
     
-    public static final int kLeftClimberSmartCurrentLimit = 0; // TBD
-    public static final int kRightClimberSmartCurrentLimit = 0; // TBD
+    public static final int kLeftClimberSmartCurrentLimit = 80; // TBD
+    public static final int kRightClimberSmartCurrentLimit = 80; // TBD
 
     public static final double kMaxExtension = 0; // TBD
     public static final double kMinExtension = 0; // TBD
-
-    public static final Constraints kLeftClimberConstraints = new Constraints(0, 0); // TBD
-    public static final Constraints kRightClimberConstraints = new Constraints(0, 0); // TBD
-
-    public static final State kGroundExtension = new State(0, 0); // TBD
-    public static final State kGroundRetraction = new State(0, 0); // TBD
-
-    public static final double kSetpointTolerance = 0; // TBD
-
-    public static final class LeftClimberPIDConstants {
-      public static final double kP = 0; // TBD
-      public static final double kI = 0; // TBD
-      public static final double kD = 0; // TBD
-
-      public static final double kS = 0; // TBD
-      public static final double kG = 0; // TBD
-      public static final double kV = 0; // TBD
-      public static final double kA = 0; // TBD
-    }
-
-    public static final class RightClimberPIDConstants {
-      public static final double kP = 0; // TBD
-      public static final double kI = 0; // TBD
-      public static final double kD = 0; // TBD
-
-      public static final double kS = 0; // TBD
-      public static final double kG = 0; // TBD
-      public static final double kV = 0; // TBD
-      public static final double kA = 0; // TBD
-    }
+    public static final double kClimberVoltage = 2;
   }
 
   public static final class DriveConstants {
