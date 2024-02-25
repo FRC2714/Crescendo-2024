@@ -18,10 +18,12 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import java.util.List;
 
@@ -34,9 +36,11 @@ import java.util.List;
 public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Climber m_climber = new Climber();
 
   // The driver's controller
-  XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
+  CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -68,10 +72,19 @@ public class RobotContainer {
    * {@link JoystickButton}.
    */
   private void configureButtonBindings() {
-    new JoystickButton(m_driverController, Button.kR1.value)
+    m_driverController.rightBumper()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+    
+    m_operatorController.leftBumper().whileTrue(m_climber.extendLeftClimber()).whileFalse(m_climber.stopLeftClimber());
+    m_operatorController.rightBumper().whileTrue(m_climber.extendRightClimber()).whileFalse(m_climber.stopRightClimber());
+    m_operatorController.leftTrigger(0.1).whileTrue(m_climber.retractLeftClimber()).whileFalse(m_climber.stopLeftClimber());
+    m_operatorController.rightTrigger(0.1).whileTrue(m_climber.retractRightClimber()).whileFalse(m_climber.stopRightClimber());
+    m_operatorController.povUp().whileTrue(m_climber.extendClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.povDown().whileTrue(m_climber.retractClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.x().onTrue(m_climber.setLeftClimberZero());
+    m_operatorController.b().onTrue(m_climber.setRightClimberZero());
   }
 
   /**

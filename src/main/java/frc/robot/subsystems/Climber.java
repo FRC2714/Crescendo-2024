@@ -74,6 +74,11 @@ public class Climber extends SubsystemBase {
       rightClimberMotor.setVoltage(0);
     }
   }
+  
+  public void stopClimbers() {
+    leftClimberMotor.setVoltage(0);
+    rightClimberMotor.setVoltage(0);
+  }
 
   public double getLeftClimberPosition() {
     return leftClimberEncoder.getPosition();
@@ -89,6 +94,41 @@ public class Climber extends SubsystemBase {
 
   public Command retractClimbersCommand() {
     return new InstantCommand(() -> retractClimbers());
+  }
+
+  public Command stopClimbersCommand() {
+    return new InstantCommand(() -> stopClimbers());
+  }
+
+  public Command setLeftClimberZero() {
+    return new InstantCommand(() -> leftClimberEncoder.setPosition(0));
+  }
+  public Command setRightClimberZero() {
+    return new InstantCommand(() -> rightClimberEncoder.setPosition(0));
+  }
+
+  public Command extendLeftClimber() {
+    return new InstantCommand(() -> leftClimberMotor.setVoltage(ClimberConstants.kClimberVoltage));
+  }
+
+  public Command stopLeftClimber() {
+    return new InstantCommand(() -> leftClimberMotor.setVoltage(0));
+  }
+
+  public Command retractLeftClimber() {
+    return new InstantCommand(() -> leftClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage));
+  }
+
+  public Command extendRightClimber() {
+    return new InstantCommand(() -> rightClimberMotor.setVoltage(ClimberConstants.kClimberVoltage));
+  }
+
+  public Command retractRightClimber() {
+    return new InstantCommand(() -> rightClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage));
+  }
+
+  public Command stopRightClimber() {
+    return new InstantCommand(() -> rightClimberMotor.setVoltage(0));
   }
 
   @Override
