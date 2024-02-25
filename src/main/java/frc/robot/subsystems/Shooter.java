@@ -120,8 +120,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void toggleDynamic() {
-    dynamicEnabled = !dynamicEnabled;
-  }
+    dynamicEnabled = !dynamicEnabled;  }
 
   public void stopDynamic() {
     dynamicEnabled = false;
@@ -291,7 +290,6 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Dynamic Enabled?", dynamicEnabled);
     SmartDashboard.putNumber("Pivot Current", pivotMotor.getOutputCurrent());
     SmartDashboard.putNumber("Flywheel Current", topFlywheelMotor.getOutputCurrent());
-    SmartDashboard.putNumber("dynamic pivot angle", getDynamicPivotAngle());
 
     if (pivotAngleTunableNumber.hasChanged()) {
       tunePivotAngle();
