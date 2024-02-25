@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
@@ -115,7 +116,6 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
 
-
     m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
 
@@ -125,7 +125,7 @@ public class RobotContainer {
     m_operatorController.rightBumper().whileTrue(m_intake.outtakeBack()).whileFalse(m_intake.stopBack());
     m_operatorController.leftBumper().whileTrue(m_intake.outtakeFront()).whileFalse(m_intake.stopFront());
 
-    m_driverController.rightBumper().onTrue(m_robotDrive.toggleRotatingToGoalCommand());
+    m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
     
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     m_driverController.a().whileTrue(m_intake.shoot()).onFalse(m_intake.stopShooter());
@@ -137,17 +137,11 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_limelight));
     m_operatorController.povDown().onTrue(m_shooter.stow());
     m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
     m_operatorController.povUp().onTrue(m_shooter.readyAmp());
     m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),
                                               new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded())));
-    //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
-    // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    // m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
-    // m_driverController.a().onTrue(m_shooter.setFlywheelVelocityCommand(1000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
-
   }
 
   public void setTeleopDefaultStates() {

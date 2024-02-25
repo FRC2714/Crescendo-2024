@@ -126,7 +126,7 @@ public final class Constants {
     }
     
     public static final class FlywheelPIDConstants {
-      public static final double kP = 0.0000061; // TBD
+      public static final double kP = 0.000007; // TBD
       public static final double kI = 0; // TBD
       public static final double kD = 0; // TBD
 
@@ -134,7 +134,7 @@ public final class Constants {
       public static final double kV = 0; // TBD
       public static final double kA = 0; // TBD
 
-      public static final double kFF = 0.00008;
+      public static final double kFF = 0.00009;
     }
   }
 
@@ -265,6 +265,7 @@ public final class Constants {
     public static final int kOperatorControllerPort = 1;
     public static final double kDriveDeadband = 0.05;
     public static final double kTriggerThreshold = 0.1;
+    public static final double kRumble = 1;
   }
 
   public static final class AutoConstants {

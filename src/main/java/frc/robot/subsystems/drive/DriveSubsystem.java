@@ -244,6 +244,10 @@ public class DriveSubsystem extends SubsystemBase {
     rotatingToGoal = !rotatingToGoal;
   }
 
+  public void setRotatingToGoal() {
+    rotatingToGoal = true;
+  }
+
   public boolean getRotatingToGoal(double joystickInput) {
     if (Math.abs(joystickInput) > 0) {
       rotatingToGoal = false;
@@ -253,6 +257,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command toggleRotatingToGoalCommand() {
     return new InstantCommand(() -> toggleRotatingToGoal());
+  }
+
+  public Command setRotatingToGoalCommand() {
+    return new InstantCommand(() -> setRotatingToGoal());
   }
 
   public double getDriveRotationToGoal() {

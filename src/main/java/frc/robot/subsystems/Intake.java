@@ -33,11 +33,11 @@ public class Intake extends SubsystemBase {
 
   private DigitalInput breakBeam;
 
-  private RelativeEncoder frontRollerEncoder;
-  private RelativeEncoder backBottomRollerEncoder;
-  private RelativeEncoder backDirectionRollerEncoder;
-  private RelativeEncoder conveyorEncoder;
-  private RelativeEncoder feederEncoder;
+  // private RelativeEncoder frontRollerEncoder;
+  // private RelativeEncoder backBottomRollerEncoder;
+  // private RelativeEncoder backDirectionRollerEncoder;
+  // private RelativeEncoder conveyorEncoder;
+  // private RelativeEncoder feederEncoder;
 
   private boolean backRunning, frontRunning;
   private boolean loaded;
@@ -72,11 +72,11 @@ public class Intake extends SubsystemBase {
     conveyorMotor.setSmartCurrentLimit(IntakeConstants.kConveyorSmartCurrentLimit);
     feederMotor.setSmartCurrentLimit(IntakeConstants.kFeederSmartCurrentLimit);
 
-    frontRollerEncoder = frontRollerMotor.getEncoder();
-    backBottomRollerEncoder = backBottomRollerMotor.getEncoder();
-    backDirectionRollerEncoder = backDirectionRollerMotor.getEncoder();
-    conveyorEncoder = conveyorMotor.getEncoder();
-    feederEncoder = feederMotor.getEncoder();
+    // frontRollerEncoder = frontRollerMotor.getEncoder();
+    // backBottomRollerEncoder = backBottomRollerMotor.getEncoder();
+    // backDirectionRollerEncoder = backDirectionRollerMotor.getEncoder();
+    // conveyorEncoder = conveyorMotor.getEncoder();
+    // feederEncoder = feederMotor.getEncoder();
 
     frontRollerMotor.burnFlash();
     backBottomRollerMotor.burnFlash();
@@ -101,25 +101,25 @@ public class Intake extends SubsystemBase {
     return loaded;
   }
 
-  public double getFrontRollerVelocity() {
-    return frontRollerEncoder.getVelocity();
-  }
+  // public double getFrontRollerVelocity() {
+  //   return frontRollerEncoder.getVelocity();
+  // }
 
-  public double getBackBottomRollerVelocity() {
-    return backBottomRollerEncoder.getVelocity();
-  }
+  // public double getBackBottomRollerVelocity() {
+  //   return backBottomRollerEncoder.getVelocity();
+  // }
 
-  public double getBackDirectionRollerVelocity() {
-    return backDirectionRollerEncoder.getVelocity();
-  }
+  // public double getBackDirectionRollerVelocity() {
+  //   return backDirectionRollerEncoder.getVelocity();
+  // }
 
-  public double getConveyorVelocity() {
-    return conveyorEncoder.getVelocity();
-  }
+  // public double getConveyorVelocity() {
+  //   return conveyorEncoder.getVelocity();
+  // }
 
-  public double getFeederVelocity() {
-    return feederEncoder.getVelocity();
-  }
+  // public double getFeederVelocity() {
+  //   return feederEncoder.getVelocity();
+  // }
 
   public void setFrontRollerVoltage(double targetVoltage) {
     frontRollerMotor.setVoltage(targetVoltage);
@@ -139,6 +139,10 @@ public class Intake extends SubsystemBase {
 
   public void setFeederVoltage(double targetVoltage) {
     feederMotor.setVoltage(targetVoltage);
+  }
+
+  public double getFrontRollerCurrent() {
+    return frontRollerMotor.getOutputCurrent();
   }
 
   public Command setFrontRollerVoltageCommand(double targetVoltage) {
@@ -230,6 +234,7 @@ public class Intake extends SubsystemBase {
 
     setLoaded();
     SmartDashboard.putBoolean("Loaded", loaded);
+    SmartDashboard.putNumber("Front Roller Current", getFrontRollerCurrent());
 
     // SmartDashboard.putNumber("Front Roller Velocity", getFrontRollerVelocity());
     // SmartDashboard.putNumber("Back Bottom Roller Velocity", getBackBottomRollerVelocity());
