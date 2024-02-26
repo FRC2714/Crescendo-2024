@@ -21,6 +21,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -76,6 +77,8 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+    
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     
     m_operatorController.leftBumper().whileTrue(m_climber.extendLeftClimber()).whileFalse(m_climber.stopLeftClimber());
     m_operatorController.rightBumper().whileTrue(m_climber.extendRightClimber()).whileFalse(m_climber.stopRightClimber());

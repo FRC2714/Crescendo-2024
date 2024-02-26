@@ -34,8 +34,8 @@ public final class Constants {
     public static final int kLeftClimberSmartCurrentLimit = 80; // TBD
     public static final int kRightClimberSmartCurrentLimit = 80; // TBD
 
-    public static final double kMaxExtension = 0; // TBD
-    public static final double kMinExtension = 0; // TBD
+    public static final double kMaxExtension = 127; // TBD
+    public static final double kMinExtension = -72; // TBD
     public static final double kClimberVoltage = 2;
   }
 
