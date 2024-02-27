@@ -88,22 +88,6 @@ public class Climber extends SubsystemBase {
     return rightClimberEncoder.getPosition();
   }
 
-  public boolean leftClimberAtMax() {
-    return (leftClimberEncoder.getPosition() >= ClimberConstants.kMaxExtension);
-  }
-
-  public boolean rightClimberAtMax() {
-    return (rightClimberEncoder.getPosition() >= ClimberConstants.kMaxExtension);
-  }
-
-  public boolean leftClimberAtMin() {
-    return (leftClimberEncoder.getPosition() <= ClimberConstants.kMinExtension);
-  }
-
-  public boolean rightClimberAtMin() {
-    return (rightClimberEncoder.getPosition() <= ClimberConstants.kMinExtension);
-  }
-
   public Command extendClimbersCommand() {
     return new InstantCommand(() -> extendClimbers());
   }
