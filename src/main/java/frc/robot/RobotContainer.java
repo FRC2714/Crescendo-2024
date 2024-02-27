@@ -18,10 +18,15 @@ import edu.wpi.first.wpilibj.PS4Controller.Button;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.climb.ExtendLeftClimbCommand;
+import frc.robot.commands.climb.ExtendRightClimbCommand;
+import frc.robot.commands.climb.RetractLeftClimbCommand;
+import frc.robot.commands.climb.RetractRightClimbCommand;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -84,8 +89,12 @@ public class RobotContainer {
     m_operatorController.rightBumper().whileTrue(m_climber.extendRightClimber()).whileFalse(m_climber.stopRightClimber());
     m_operatorController.leftTrigger(0.1).whileTrue(m_climber.retractLeftClimber()).whileFalse(m_climber.stopLeftClimber());
     m_operatorController.rightTrigger(0.1).whileTrue(m_climber.retractRightClimber()).whileFalse(m_climber.stopRightClimber());
-    m_operatorController.povUp().whileTrue(m_climber.extendClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
-    m_operatorController.povDown().whileTrue(m_climber.retractClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new ExtendLeftClimbCommand().until(() -> m_climber.leftClimberAtMax()),
+                                                                    new ExtendRightClimbCommand().until(() -> m_climber.rightClimberAtMax())))
+                                                                    .whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.povUp().whileTrue(new ParallelCommandGroup(new RetractLeftClimbCommand().until(() -> m_climber.leftClimberAtMin()),
+                                                                    new RetractRightClimbCommand().until(() -> m_climber.rightClimberAtMin())))
+                                                                    .whileFalse(m_climber.stopClimbersCommand());
     m_operatorController.x().onTrue(m_climber.setLeftClimberZero());
     m_operatorController.b().onTrue(m_climber.setRightClimberZero());
   }
