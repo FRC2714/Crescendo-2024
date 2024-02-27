@@ -54,7 +54,7 @@ public final class Constants {
     public static final int kConveyorSmartCurrentLimit = 80; // TBD
     public static final int kFeederSmartCurrentLimit = 80;
 
-    public static final double kFrontRollerVoltage = 3; // TBD
+    public static final double kFrontRollerVoltage = 5; // TBD
     public static final double kBackBottomRollerVoltage = 3; // TBD
     public static final double kBackDirectionRollerVoltageFrontSide = 3; // TBD
     public static final double kFrontDirectionRollerVoltageFrontSide = 3; // TBD
@@ -62,7 +62,7 @@ public final class Constants {
     public static final double kBackDirectionRollerVoltageBackSide = 3; // TBD
     public static final double kBackBottomRollerVoltageBackSide = 3;
     public static final double kFrontDirectionRollerVoltageBackSide = 3; // TBD
-    public static final double kConveyorVoltage = 3; // TBD
+    public static final double kConveyorVoltage = 5; // TBD
     public static final double kFeederVoltage = 3; // TBD
   }
 
