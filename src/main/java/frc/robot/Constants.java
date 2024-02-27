@@ -155,7 +155,7 @@ public final class Constants {
     public static final Pose2d kRedSpeakerAprilTagLocation = new Pose2d(16.57, 5.547, new Rotation2d(0));
   }
   public static final class AmpConstants {
-      public static final int kLeftAmpPivotChannel = 0; //tbd
+      public static final int kLeftAmpPivotChannel = 2; //tbd
       public static final int kRightAmpPivotChannel = 1; //tbd
     }
 

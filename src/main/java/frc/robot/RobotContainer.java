@@ -45,6 +45,7 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(m_robotDrive);
   private final Intake m_intake = new Intake();
+  private final Amp m_amp = new Amp();
   private final AutosCommands m_autosCommands = new AutosCommands(m_robotDrive, m_limelight, m_shooter, m_intake);
   private double kPThetaController = .7;
   private SendableChooser<Command> autoChooser;
@@ -52,7 +53,6 @@ public class RobotContainer {
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
-  private final Amp m_amp = new Amp();
 
 
 
@@ -131,7 +131,8 @@ public class RobotContainer {
     m_driverController.a().whileTrue(m_intake.shoot()).onFalse(m_intake.stopShooter());
     m_driverController.b().whileTrue(m_shooter.setFlywheelVelocityCommand(8000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
 
-    m_operatorController.x().onTrue(m_amp.extend()).onFalse(m_amp.stow());
+    m_operatorController.x().onTrue(m_amp.extend());
+    m_operatorController.y().onTrue(m_amp.stow());
     m_driverController.y()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),

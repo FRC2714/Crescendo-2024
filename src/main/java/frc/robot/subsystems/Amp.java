@@ -21,27 +21,31 @@ public class Amp extends SubsystemBase {
 
     leftPivotServo = new Servo(AmpConstants.kLeftAmpPivotChannel);
     rightPivotServo = new Servo(AmpConstants.kRightAmpPivotChannel);
+
+
+    leftPivotServo.setSpeed(0.5);
+    rightPivotServo.setSpeed(0.5);
   }
 
-    public double getPivotAngle() {
+    public double getTargetPosition() {
       return leftPivotServo.get();
     }
 
-    public void setPivotAngle(double targetAngle) {
-      leftPivotServo.set(targetAngle);
-      rightPivotServo.set(-targetAngle);
+    public void setPivot(double target) {
+      leftPivotServo.set(target);
+      rightPivotServo.set(target);
     }
     public Command stow(){
-      return new InstantCommand(() -> setPivotAngle(0)); // tbd 
+      return new InstantCommand(() -> setPivot(0)); // tbd 
     }
 
     public Command extend(){
-      return new InstantCommand(() -> setPivotAngle(1)); //tbd
+      return new InstantCommand(() -> setPivot(1)); //tbd
     }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Current Amp Angle", getPivotAngle());
+    SmartDashboard.putNumber("Current Amp Angle", getTargetPosition());
   }
 }
