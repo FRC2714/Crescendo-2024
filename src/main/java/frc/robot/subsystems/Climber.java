@@ -15,6 +15,8 @@ import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 
@@ -41,6 +43,42 @@ public class Climber extends SubsystemBase {
 
     leftClimberMotor.burnFlash();
     rightClimberMotor.burnFlash();
+  }
+
+  public void extendLeftClimber() {
+    if (leftClimberEncoder.getPosition() < ClimberConstants.kMaxExtension) {
+      leftClimberMotor.setVoltage(ClimberConstants.kClimberVoltage);
+    }
+    else {
+      leftClimberMotor.setVoltage(0);
+    }
+  }
+
+  public void extendRightClimber() {
+    if (rightClimberEncoder.getPosition() < ClimberConstants.kMaxExtension) {
+      rightClimberMotor.setVoltage(ClimberConstants.kClimberVoltage);
+    }
+    else {
+      rightClimberMotor.setVoltage(0);
+    }
+  }
+
+  public void retractLeftClimber() {
+    if (leftClimberEncoder.getPosition() > ClimberConstants.kMinExtension) {
+      leftClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage);
+    }
+    else {
+      leftClimberMotor.setVoltage(0);
+    }
+  }
+
+  public void retractRightClimber() {
+    if (rightClimberEncoder.getPosition() > ClimberConstants.kMinExtension) {
+      rightClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage);
+    }
+    else {
+      rightClimberMotor.setVoltage(0);
+    }
   }
 
   public void extendClimbers() {
@@ -80,6 +118,22 @@ public class Climber extends SubsystemBase {
     rightClimberMotor.setVoltage(0);
   }
 
+  public boolean leftClimberAtMax() {
+    return leftClimberEncoder.getPosition() >= ClimberConstants.kMaxExtension;
+  }
+
+  public boolean rightClimberAtMax() {
+    return rightClimberEncoder.getPosition() >= ClimberConstants.kMaxExtension;
+  }
+
+  public boolean leftClimberAtMin() {
+    return leftClimberEncoder.getPosition() <= ClimberConstants.kMinExtension;
+  }
+
+  public boolean rightClimberAtMin() {
+    return rightClimberEncoder.getPosition() <= ClimberConstants.kMinExtension;
+  }
+
   public double getLeftClimberPosition() {
     return leftClimberEncoder.getPosition();
   }
@@ -89,11 +143,13 @@ public class Climber extends SubsystemBase {
   }
 
   public Command extendClimbersCommand() {
-    return new InstantCommand(() -> extendClimbers());
+    return new ParallelCommandGroup(new StartEndCommand(() -> extendLeftClimber(), () -> stopLeftClimber()).until(() -> leftClimberAtMax()),
+                                    new StartEndCommand(() -> extendRightClimber(), () -> stopRightClimber()).until(() -> rightClimberAtMax()));
   }
 
   public Command retractClimbersCommand() {
-    return new InstantCommand(() -> retractClimbers());
+    return new ParallelCommandGroup(new StartEndCommand(() -> retractLeftClimber(), () -> stopLeftClimber()).until(() -> leftClimberAtMin()),
+                                    new StartEndCommand(() -> retractRightClimber(), () -> stopRightClimber()).until(() -> rightClimberAtMin()));
   }
 
   public Command stopClimbersCommand() {
@@ -107,7 +163,7 @@ public class Climber extends SubsystemBase {
     return new InstantCommand(() -> rightClimberEncoder.setPosition(0));
   }
 
-  public Command extendLeftClimber() {
+  public Command extendLeftClimberToReset() {
     return new InstantCommand(() -> leftClimberMotor.setVoltage(ClimberConstants.kClimberVoltage));
   }
 
@@ -115,15 +171,15 @@ public class Climber extends SubsystemBase {
     return new InstantCommand(() -> leftClimberMotor.setVoltage(0));
   }
 
-  public Command retractLeftClimber() {
+  public Command retractLeftClimberToReset() {
     return new InstantCommand(() -> leftClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage));
   }
 
-  public Command extendRightClimber() {
+  public Command extendRightClimberToReset() {
     return new InstantCommand(() -> rightClimberMotor.setVoltage(ClimberConstants.kClimberVoltage));
   }
 
-  public Command retractRightClimber() {
+  public Command retractRightClimberToReset() {
     return new InstantCommand(() -> rightClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage));
   }
 
