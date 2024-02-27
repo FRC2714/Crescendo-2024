@@ -48,11 +48,11 @@ public final class Constants {
 
     public static final double kRollerNominalVoltage = 11;
 
-    public static final int kFrontRollerSmartCurrentLimit = 80; // TBD
-    public static final int kBackBottomRollerSmartCurrentLimit = 80; // TBD
-    public static final int kBackDirectionRollerSmartCurrentLimit = 80; // TBD
-    public static final int kConveyorSmartCurrentLimit = 80; // TBD
-    public static final int kFeederSmartCurrentLimit = 80;
+    public static final int kFrontRollerSmartCurrentLimit = 40; // TBD
+    public static final int kBackBottomRollerSmartCurrentLimit = 40; // TBD
+    public static final int kBackDirectionRollerSmartCurrentLimit = 40; // TBD
+    public static final int kConveyorSmartCurrentLimit = 40; // TBD
+    public static final int kFeederSmartCurrentLimit = 40;
 
     public static final double kFrontRollerVoltage = 5; // TBD
     public static final double kBackBottomRollerVoltage = 3; // TBD
@@ -204,7 +204,7 @@ public final class Constants {
 
     // Swerve PID values
     public static final class ThetaPIDConstants {
-      public static final double kP = 0.8;
+      public static final double kP = 1;
       public static final double kI = 0;
       public static final double kD = 0;
     }

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
@@ -41,6 +42,8 @@ public class Intake extends SubsystemBase {
 
   private boolean backRunning, frontRunning;
   private boolean loaded;
+
+  private double elapsedShootTime;
   
   public Intake() {
     frontRollerMotor = new CANSparkFlex(IntakeConstants.kFrontRollerCanId, MotorType.kBrushless);
@@ -88,12 +91,15 @@ public class Intake extends SubsystemBase {
     frontRunning = false;
 
     loaded = false;
+
+    elapsedShootTime = 0;
     
   }
 
   public void setLoaded() {
     if (!breakBeam.get()) {
-      loaded = true;
+      if (elapsedShootTime > 500)
+        loaded = true;
     }
   }
 
@@ -220,8 +226,10 @@ public class Intake extends SubsystemBase {
   }
 
   public Command shoot() {
-    return new SequentialCommandGroup(new InstantCommand(() -> loaded = false),
-      setFeederVoltageCommand(IntakeConstants.kFeederVoltage));
+    return new SequentialCommandGroup(
+      new ParallelCommandGroup(setFeederVoltageCommand(IntakeConstants.kFeederVoltage),
+                               new InstantCommand(() -> elapsedShootTime = 0)),
+                               new InstantCommand(() -> loaded = false));
   }
 
   public Command stopShooter() {
@@ -235,6 +243,8 @@ public class Intake extends SubsystemBase {
     setLoaded();
     SmartDashboard.putBoolean("Loaded", loaded);
     SmartDashboard.putNumber("Front Roller Current", getFrontRollerCurrent());
+
+    elapsedShootTime += 20;
 
     // SmartDashboard.putNumber("Front Roller Velocity", getFrontRollerVelocity());
     // SmartDashboard.putNumber("Back Bottom Roller Velocity", getBackBottomRollerVelocity());
