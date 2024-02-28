@@ -9,7 +9,6 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
@@ -18,14 +17,12 @@ import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Amp;
-import frc.robot.subsystems.drive.Climber;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutosCommands;
@@ -123,8 +120,8 @@ public class RobotContainer {
     m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
 
-    m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
-    m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
+    // m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
+    // m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
 
     m_operatorController.rightBumper().whileTrue(m_intake.outtakeBack()).whileFalse(m_intake.stopBack());
     m_operatorController.leftBumper().whileTrue(m_intake.outtakeFront()).whileFalse(m_intake.stopFront());
@@ -147,6 +144,14 @@ public class RobotContainer {
     m_operatorController.povUp().onTrue(m_shooter.readyAmp());
     m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),
                                               new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded())));
+    m_operatorController.povLeft().whileTrue(m_climber.extendLeftClimberToReset()).whileFalse(m_climber.stopLeftClimber());
+    m_operatorController.povRight().whileTrue(m_climber.extendRightClimberToReset()).whileFalse(m_climber.stopRightClimber());
+    m_operatorController.leftTrigger(0.1).whileTrue(m_climber.retractLeftClimberToReset()).whileFalse(m_climber.stopLeftClimber());
+    m_operatorController.rightTrigger(0.1).whileTrue(m_climber.retractRightClimberToReset()).whileFalse(m_climber.stopRightClimber());
+    m_operatorController.povUp().whileTrue(m_climber.extendClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.povDown().whileTrue(m_climber.retractClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.x().onTrue(m_climber.setLeftClimberZero());
+    m_operatorController.b().onTrue(m_climber.setRightClimberZero());
   }
 
   public void setTeleopDefaultStates() {
@@ -154,15 +159,6 @@ public class RobotContainer {
     m_shooter.setFlywheelVelocityCommand(0);
     
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    
-    m_operatorController.leftBumper().whileTrue(m_climber.extendLeftClimberToReset()).whileFalse(m_climber.stopLeftClimber());
-    m_operatorController.rightBumper().whileTrue(m_climber.extendRightClimberToReset()).whileFalse(m_climber.stopRightClimber());
-    m_operatorController.leftTrigger(0.1).whileTrue(m_climber.retractLeftClimberToReset()).whileFalse(m_climber.stopLeftClimber());
-    m_operatorController.rightTrigger(0.1).whileTrue(m_climber.retractRightClimberToReset()).whileFalse(m_climber.stopRightClimber());
-    m_operatorController.povUp().whileTrue(m_climber.extendClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
-    m_operatorController.povDown().whileTrue(m_climber.retractClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
-    m_operatorController.x().onTrue(m_climber.setLeftClimberZero());
-    m_operatorController.b().onTrue(m_climber.setRightClimberZero());
   }
 
   /**
