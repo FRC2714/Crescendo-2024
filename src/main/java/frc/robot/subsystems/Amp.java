@@ -22,9 +22,6 @@ public class Amp extends SubsystemBase {
     leftPivotServo = new Servo(AmpConstants.kLeftAmpPivotChannel);
     rightPivotServo = new Servo(AmpConstants.kRightAmpPivotChannel);
 
-
-    leftPivotServo.setSpeed(0.5);
-    rightPivotServo.setSpeed(0.5);
   }
 
     public double getTargetPosition() {
@@ -32,8 +29,8 @@ public class Amp extends SubsystemBase {
     }
 
     public void setPivot(double target) {
-      leftPivotServo.set(target);
-      rightPivotServo.set(target);
+      leftPivotServo.setPosition(1 - target);
+      rightPivotServo.setPosition(target);
     }
     public Command stow(){
       return new InstantCommand(() -> setPivot(0)); // tbd 

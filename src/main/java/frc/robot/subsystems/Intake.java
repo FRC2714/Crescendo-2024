@@ -241,6 +241,7 @@ public class Intake extends SubsystemBase {
     // This method will be called once per scheduler run
 
     setLoaded();
+    SmartDashboard.putBoolean("Break beam", breakBeam.get());
     SmartDashboard.putBoolean("Loaded", loaded);
     SmartDashboard.putNumber("Front Roller Current", getFrontRollerCurrent());
 

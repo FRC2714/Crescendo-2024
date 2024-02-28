@@ -143,13 +143,13 @@ public class Climber extends SubsystemBase {
   }
 
   public Command extendClimbersCommand() {
-    return new ParallelCommandGroup(new StartEndCommand(() -> extendLeftClimber(), () -> stopLeftClimber()).until(() -> leftClimberAtMax()),
-                                    new StartEndCommand(() -> extendRightClimber(), () -> stopRightClimber()).until(() -> rightClimberAtMax()));
+    return new ParallelCommandGroup(new StartEndCommand(() -> extendLeftClimber(), () -> stopLeftClimber()),
+                                    new StartEndCommand(() -> extendRightClimber(), () -> stopRightClimber()));
   }
 
   public Command retractClimbersCommand() {
-    return new ParallelCommandGroup(new StartEndCommand(() -> retractLeftClimber(), () -> stopLeftClimber()).until(() -> leftClimberAtMin()),
-                                    new StartEndCommand(() -> retractRightClimber(), () -> stopRightClimber()).until(() -> rightClimberAtMin()));
+    return new ParallelCommandGroup(new StartEndCommand(() -> retractLeftClimber(), () -> stopLeftClimber()),
+                                    new StartEndCommand(() -> retractRightClimber(), () -> stopRightClimber()));
   }
 
   public Command stopClimbersCommand() {

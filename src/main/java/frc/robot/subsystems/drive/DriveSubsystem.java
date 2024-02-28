@@ -472,6 +472,10 @@ public class DriveSubsystem extends SubsystemBase {
     resetPoseEstimator(new Pose2d());
   }
 
+  public void setHeading(double angle) {
+    m_gyro.setGyroAngleZ(angle);
+  }
+
   /**
    * Returns the heading of the robot.
    *

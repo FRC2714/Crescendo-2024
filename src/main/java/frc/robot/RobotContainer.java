@@ -139,26 +139,28 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    m_operatorController.povDown().onTrue(m_shooter.stow());
-    m_operatorController.povLeft().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
-    m_operatorController.povUp().onTrue(m_shooter.readyAmp());
+    m_operatorController.b().onTrue(new ParallelCommandGroup(m_shooter.stow(), m_amp.stow()));
+    m_operatorController.back().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
+    m_operatorController.a().onTrue(new ParallelCommandGroup(m_shooter.readyAmp(), m_amp.extend()));
     m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),
                                               new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded())));
     m_operatorController.povLeft().whileTrue(m_climber.extendLeftClimberToReset()).whileFalse(m_climber.stopLeftClimber());
     m_operatorController.povRight().whileTrue(m_climber.extendRightClimberToReset()).whileFalse(m_climber.stopRightClimber());
     m_operatorController.leftTrigger(0.1).whileTrue(m_climber.retractLeftClimberToReset()).whileFalse(m_climber.stopLeftClimber());
     m_operatorController.rightTrigger(0.1).whileTrue(m_climber.retractRightClimberToReset()).whileFalse(m_climber.stopRightClimber());
-    m_operatorController.povUp().whileTrue(m_climber.extendClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
-    m_operatorController.povDown().whileTrue(m_climber.retractClimbersCommand()).whileFalse(m_climber.stopClimbersCommand());
-    m_operatorController.x().onTrue(m_climber.setLeftClimberZero());
-    m_operatorController.b().onTrue(m_climber.setRightClimberZero());
+    m_operatorController.povUp().whileTrue(m_climber.extendClimbersCommand().until(() -> m_climber.rightClimberAtMax())).whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.povDown().whileTrue(m_climber.retractClimbersCommand().until(() -> m_climber.rightClimberAtMin())).whileFalse(m_climber.stopClimbersCommand());
+    // m_operatorController.x().onTrue(m_climber.setLeftClimberZero());
+    // m_operatorController.b().onTrue(m_climber.setRightClimberZero());
   }
 
   public void setTeleopDefaultStates() {
-    m_shooter.setPivotAngleCommand(0);
-    m_shooter.setFlywheelVelocityCommand(0);
-    
-    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    new ParallelCommandGroup(m_shooter.setPivotAngleCommand(0),
+      m_shooter.setFlywheelVelocityCommand(0)).schedule();
+  }
+
+  public void setAutonomousDefaultStates() {
+    new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
   }
 
   /**
