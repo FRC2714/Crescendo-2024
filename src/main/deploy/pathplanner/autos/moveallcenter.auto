@@ -1,0 +1,73 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7401886415755699,
+      "y": 6.581490138729208
+    },
+    "rotation": -125.57355491910317
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "setupDynamic"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "alignToGoal"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeBack"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "topnote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stowShooter"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setupSlow"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toptocentertop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "centertoptocenterbotto"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

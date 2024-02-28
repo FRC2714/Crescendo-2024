@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4709537816022202,
+      "y": 5.556419458894899
+    },
+    "rotation": -176.66851148783505
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "1 + B3, C5, C4 + end C4"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 15.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeFront"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

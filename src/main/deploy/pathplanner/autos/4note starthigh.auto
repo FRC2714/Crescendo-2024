@@ -1,0 +1,91 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.325730468864645,
+      "y": 6.593200975274989
+    },
+    "rotation": -125.90394405415955
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "setupDynamic"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "alignToGoal"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeBack"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "topnote"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntakeBack"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeFront"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toptomiddle"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntakeFront"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "intakeBack"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Middle To Bottom Note"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

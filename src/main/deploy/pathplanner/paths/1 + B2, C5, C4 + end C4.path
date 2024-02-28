@@ -1,0 +1,295 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4709537816022202,
+        "y": 5.556419458894899
+      },
+      "prevControl": null,
+      "nextControl": {
+<<<<<<< Updated upstream
+        "x": 2.4565555180932432,
+        "y": 5.472864279061892
+=======
+        "x": 2.5247228667698884,
+        "y": 5.492340664396815
+>>>>>>> Stashed changes
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+<<<<<<< Updated upstream
+        "x": 3.5667094821734135,
+        "y": 5.813701022419839
+      },
+      "prevControl": {
+        "x": 2.7836423374964316,
+        "y": 5.535838487211878
+      },
+      "nextControl": {
+        "x": 4.538038447732108,
+        "y": 6.158366139230989
+=======
+        "x": 3.6738296015195377,
+        "y": 5.803962829752653
+      },
+      "prevControl": {
+        "x": 2.890762456842556,
+        "y": 5.526100294544691
+      },
+      "nextControl": {
+        "x": 4.645158567078232,
+        "y": 6.148627946563803
+>>>>>>> Stashed changes
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.541810874970352,
+        "y": 7.457299800095784
+      },
+      "prevControl": {
+        "x": 7.361593959829142,
+        "y": 7.164856670680264
+      },
+      "nextControl": {
+        "x": 9.722027790111563,
+        "y": 7.749742929511305
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.178714886691861,
+        "y": 6.444193244620586
+      },
+      "prevControl": {
+        "x": 5.972489095105416,
+        "y": 6.7470807715152326
+      },
+      "nextControl": {
+        "x": 4.357349601554917,
+        "y": 6.1307775437130685
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.39558931026259,
+        "y": 5.813701022419839
+      },
+      "prevControl": {
+        "x": 7.758481064035919,
+        "y": 6.534364448479516
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0,
+      "rotationDegrees": -179.10482628978903,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": -168.3221487215839,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": -157.5430610000579,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 2,
+      "rotationDegrees": -155.63754698468776,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 3,
+      "rotationDegrees": -168.89145783724754,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+<<<<<<< Updated upstream
+      "name": "shoot",
+      "waypointRelativePos": 0.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+=======
+      "name": "New Event Marker",
+      "waypointRelativePos": 0,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
+        }
+      }
+    },
+    {
+<<<<<<< Updated upstream
+      "name": "intakeBack",
+      "waypointRelativePos": 0.2,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeBack"
+              }
+            }
+          ]
+=======
+      "name": "intake",
+      "waypointRelativePos": 0.2,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
+        }
+      }
+    },
+    {
+      "name": "shoot",
+<<<<<<< Updated upstream
+      "waypointRelativePos": 1.0,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+=======
+      "waypointRelativePos": 0.9,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
+        }
+      }
+    },
+    {
+      "name": "intake",
+      "waypointRelativePos": 1.65,
+      "command": {
+<<<<<<< Updated upstream
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeBack"
+              }
+            }
+          ]
+=======
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
+        }
+      }
+    },
+    {
+      "name": "shoot",
+<<<<<<< Updated upstream
+      "waypointRelativePos": 3.15,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
+              }
+            }
+          ]
+=======
+      "waypointRelativePos": 3.1,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
+        }
+      }
+    },
+    {
+      "name": "intake",
+<<<<<<< Updated upstream
+      "waypointRelativePos": 3.6,
+      "command": {
+        "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeBack"
+              }
+            }
+          ]
+=======
+      "waypointRelativePos": 3.55,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": []
+>>>>>>> Stashed changes
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 164.53878225955816,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "essential",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
