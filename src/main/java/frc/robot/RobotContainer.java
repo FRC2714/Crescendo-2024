@@ -150,12 +150,12 @@ public class RobotContainer {
     m_operatorController.a().onTrue(new ParallelCommandGroup(m_shooter.readyAmp(), m_amp.extend()));
     m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),
                                               new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded())));
-    m_operatorController.povLeft().whileTrue(m_climber.extendLeftClimberToReset()).whileFalse(m_climber.stopLeftClimber());
-    m_operatorController.povRight().whileTrue(m_climber.extendRightClimberToReset()).whileFalse(m_climber.stopRightClimber());
-    m_operatorController.leftTrigger(0.1).whileTrue(m_climber.retractLeftClimberToReset()).whileFalse(m_climber.stopLeftClimber());
-    m_operatorController.rightTrigger(0.1).whileTrue(m_climber.retractRightClimberToReset()).whileFalse(m_climber.stopRightClimber());
-    m_operatorController.povUp().whileTrue(m_climber.extendClimbersCommand().until(() -> m_climber.rightClimberAtMax())).whileFalse(m_climber.stopClimbersCommand());
-    m_operatorController.povDown().whileTrue(m_climber.retractClimbersCommand().until(() -> m_climber.rightClimberAtMin())).whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.povLeft().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.5)))).whileFalse(m_climber.stopLeftClimber());
+    m_operatorController.povRight().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.5)))).whileFalse(m_climber.stopRightClimber());
+    m_operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.5)))).whileFalse(m_climber.stopLeftClimber());
+    m_operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.5)))).whileFalse(m_climber.stopRightClimber());
+    m_operatorController.povUp().whileTrue(new ParallelCommandGroup(m_climber.extendClimbersCommand().until(() -> m_climber.rightClimberAtMax()), new InstantCommand(() -> m_amp.setPivot(0.5)))).whileFalse(m_climber.stopClimbersCommand());
+    m_operatorController.povDown().whileTrue(new ParallelCommandGroup(m_climber.retractClimbersCommand().until(() -> m_climber.rightClimberAtMin()), new InstantCommand(() -> m_amp.setPivot(0.5)))).whileFalse(m_climber.stopClimbersCommand());
     // m_operatorController.x().onTrue(m_climber.setLeftClimberZero());
     // m_operatorController.b().onTrue(m_climber.setRightClimberZero());
   }

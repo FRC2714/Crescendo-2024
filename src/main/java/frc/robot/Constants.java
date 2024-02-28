@@ -48,7 +48,7 @@ public final class Constants {
 
     public static final double kMaxExtension = 127; // TBD
     public static final double kMinExtension = -72; // TBD
-    public static final double kClimberVoltage = 2;
+    public static final double kClimberVoltage = 8;
   }
 
 
