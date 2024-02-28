@@ -66,6 +66,10 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
+    NamedCommands.registerCommand("intakeBackBeam", new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
+    NamedCommands.registerCommand("intakeFrontBeam", new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
+    NamedCommands.registerCommand("shoot", m_intake.shoot().withTimeout(3));
+
     NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
     NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
     NamedCommands.registerCommand("stopIntakeBack", m_intake.stopBack());
@@ -75,11 +79,13 @@ public class RobotContainer {
     NamedCommands.registerCommand("setupShort", m_shooter.setupShot(37));
     NamedCommands.registerCommand("setupDynamic", new InstantCommand(() -> m_shooter.toggleDynamic()));
     NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(1000)));
+    NamedCommands.registerCommand("setupFast", new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)));
+    
     NamedCommands.registerCommand("setupClose", new ParallelCommandGroup(
                                                                           new InstantCommand(() -> m_shooter.setPivotAngle(45)),//tbd
                                                                           new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)))); //tbd
-    NamedCommands.registerCommand("alignToGoal", m_robotDrive.toggleRotatingToGoalCommand());
-    NamedCommands.registerCommand("shoot", m_autosCommands.shoot());
+    NamedCommands.registerCommand("alignToGoal", m_robotDrive.toggleRotatingToGoalCommand().withTimeout(3));
+    
 
 
 
