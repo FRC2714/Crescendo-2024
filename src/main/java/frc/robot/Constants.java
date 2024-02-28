@@ -21,6 +21,8 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -36,6 +38,19 @@ import edu.wpi.first.math.util.Units;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static final class ClimberConstants {
+    public static final int kLeftClimberCanId = 17; // TBD
+    public static final int kRightClimberCanId = 18; // TBD
+    
+    public static final int kLeftClimberSmartCurrentLimit = 80; // TBD
+    public static final int kRightClimberSmartCurrentLimit = 80; // TBD
+
+    public static final double kMaxExtension = 127; // TBD
+    public static final double kMinExtension = -72; // TBD
+    public static final double kClimberVoltage = 2;
+  }
+
 
   public static final class IntakeConstants {
     public static final int kFrontRollerCanId = 9;
@@ -207,6 +222,12 @@ public final class Constants {
       public static final double kP = 1;
       public static final double kI = 0;
       public static final double kD = 0;
+    }
+
+    public static final class RollPIDConstants {
+      public static final double kP = 0; // TBD
+      public static final double kI = 0; // TBD
+      public static final double kD = 0; // TBD
     }
   }
   public static final class ModuleConstants {
