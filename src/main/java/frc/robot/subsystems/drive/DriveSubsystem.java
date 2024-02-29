@@ -279,17 +279,17 @@ public class DriveSubsystem extends SubsystemBase {
       if (DriverStation.getAlliance().get().toString().equals("Red"))
         return Math.atan(
           (pose.getY() - FieldConstants.kRedSpeakerAprilTagLocation.getY()) /
-          Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX())
+          Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX()) - Units.degreesToRadians(10)
         );
     else
       return Math.PI - Math.atan(
           (pose.getY() - FieldConstants.kBlueSpeakerAprilTagLocation.getY()) /
-          Math.abs(pose.getX() - FieldConstants.kBlueSpeakerAprilTagLocation.getX())
+          Math.abs(pose.getX() - FieldConstants.kBlueSpeakerAprilTagLocation.getX()) - Units.degreesToRadians(10)
         );
     }
     return Math.atan(
           (pose.getY() - FieldConstants.kRedSpeakerAprilTagLocation.getY())  /
-          Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX())
+          Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX()) - Units.degreesToRadians(10)
         );
   }
 

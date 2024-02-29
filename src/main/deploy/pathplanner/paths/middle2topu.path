@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.87,
+        "x": 2.68,
         "y": 5.56
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.899600828432426,
+        "x": 2.7096008284324262,
         "y": 5.589600828432427
       },
       "isLocked": false,
@@ -16,28 +16,28 @@
     },
     {
       "anchor": {
-        "x": 2.1454890270693507,
-        "y": 6.230165042355762
+        "x": 1.6774625055041619,
+        "y": 6.191309782876965
       },
       "prevControl": {
-        "x": 1.8292964403332503,
-        "y": 5.7617315805245015
+        "x": 1.3612699187680615,
+        "y": 5.722876321045705
       },
       "nextControl": {
-        "x": 2.375552927037035,
-        "y": 6.571000449715295
+        "x": 1.907526405471845,
+        "y": 6.532145190236498
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.87,
-        "y": 7.003080254377342
+        "x": 2.68,
+        "y": 6.930886036804249
       },
       "prevControl": {
-        "x": 2.911934506944829,
-        "y": 6.973479425945852
+        "x": 2.721934506944829,
+        "y": 6.901285208372759
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,13 +57,19 @@
       "name": "New Event Marker",
       "waypointRelativePos": 2.0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "alignToGoal"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "shoot"
               }
             }
           ]
