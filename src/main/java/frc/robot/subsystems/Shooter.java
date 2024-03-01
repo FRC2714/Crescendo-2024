@@ -230,6 +230,30 @@ public class Shooter extends SubsystemBase {
                                     setFlywheelVelocityCommand(ShooterConstants.kAmpFlywheelVelocity));
   }
 
+  public Command readyAmpTest() {
+    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+                                    setPivotAngleCommand(ShooterConstants.kAmpAngle),
+                                    setFlywheelVelocityCommand(ShooterConstants.kAmpFlywheelVelocity));
+  }
+
+  public Command readySubwoofer() {
+    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+                                    setPivotAngleCommand(40),
+                                    setFlywheelVelocityCommand(8000));
+  }
+
+  public Command readyPass() {
+    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+                                    setPivotAngleCommand(30),
+                                    setFlywheelVelocityCommand(4000));
+  }
+
+  public Command readyAmpSeparate () {
+    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+                                    setPivotAngleCommand(ShooterConstants.kAmpAngle),
+                                    setFlywheelVelocityCommand(ShooterConstants.kAmpFlywheelVelocity));
+  }
+
   public void tunePivotAngle() {
     setPivotAngle(pivotAngleTunableNumber.get());
   }

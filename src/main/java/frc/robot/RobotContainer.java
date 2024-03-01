@@ -54,8 +54,7 @@ public class RobotContainer {
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
-
-
+  CommandXboxController m_configureController = new CommandXboxController(OIConstants.kConfigureControllerPort);
 
   ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
   SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(2, 1);
@@ -126,39 +125,36 @@ public class RobotContainer {
 
     m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
-
-    // m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
-    // m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
-
-    m_operatorController.rightBumper().whileTrue(m_intake.outtakeBack()).whileFalse(m_intake.stopBack());
-    m_operatorController.leftBumper().whileTrue(m_intake.outtakeFront()).whileFalse(m_intake.stopFront());
-
     m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
-    
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     m_driverController.a().whileTrue(m_intake.shoot()).onFalse(m_intake.stopShooter());
     m_driverController.b().whileTrue(m_shooter.setFlywheelVelocityCommand(8000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
-
-    m_operatorController.x().onTrue(m_amp.extend());
-    m_operatorController.y().onTrue(m_amp.stow());
+    m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),
+                                              new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded())));
     m_driverController.y()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+    
 
+    m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
+    m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
+    m_operatorController.rightBumper().whileTrue(m_intake.outtakeBack()).whileFalse(m_intake.stopBack());
+    m_operatorController.leftBumper().whileTrue(m_intake.outtakeFront()).whileFalse(m_intake.stopFront());
     m_operatorController.b().onTrue(new ParallelCommandGroup(m_shooter.stow(), m_amp.stow()));
+    m_operatorController.x().onTrue(m_shooter.readySubwoofer());
+    m_operatorController.y().onTrue(m_shooter.readyPass());
     m_operatorController.back().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
     m_operatorController.a().onTrue(new ParallelCommandGroup(m_shooter.readyAmp(), m_amp.extend()));
-    m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),
-                                              new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded())));
-    m_operatorController.povLeft().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
-    m_operatorController.povRight().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
-    m_operatorController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
-    m_operatorController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
     m_operatorController.povUp().whileTrue(new ParallelCommandGroup(m_climber.extendClimbersCommand().until(() -> m_climber.rightClimberAtMax()), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopClimbersCommand());
-    m_operatorController.povDown().whileTrue(new ParallelCommandGroup(m_climber.retractClimbersCommand().until(() -> m_climber.rightClimberAtMin()), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopClimbersCommand());
-    // m_operatorController.x().onTrue(m_climber.setLeftClimberZero());
-    // m_operatorController.b().onTrue(m_climber.setRightClimberZero());
+    m_operatorController.povDown().whileTrue(new ParallelCommandGroup(m_climber.retractClimbersCommand().until(() -> m_climber.rightClimberAtMin()), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopClimbersCommand());                      
+    
+    m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
+    m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
+    m_configureController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
+    m_configureController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
+    m_configureController.x().onTrue(m_climber.setLeftClimberZero());
+    m_configureController.b().onTrue(m_climber.setRightClimberZero());
   }
 
   public void setTeleopDefaultStates() {

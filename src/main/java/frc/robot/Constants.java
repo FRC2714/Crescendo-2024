@@ -46,7 +46,7 @@ public final class Constants {
     public static final int kLeftClimberSmartCurrentLimit = 80; // TBD
     public static final int kRightClimberSmartCurrentLimit = 80; // TBD
 
-    public static final double kMaxExtension = 127; // TBD
+    public static final double kMaxExtension = 125; // TBD
     public static final double kMinExtension = -72; // TBD
     public static final double kClimberVoltage = 8;
   }
@@ -63,11 +63,11 @@ public final class Constants {
 
     public static final double kRollerNominalVoltage = 11;
 
-    public static final int kFrontRollerSmartCurrentLimit = 40; // TBD
-    public static final int kBackBottomRollerSmartCurrentLimit = 40; // TBD
-    public static final int kBackDirectionRollerSmartCurrentLimit = 40; // TBD
-    public static final int kConveyorSmartCurrentLimit = 40; // TBD
-    public static final int kFeederSmartCurrentLimit = 40;
+    public static final int kFrontRollerSmartCurrentLimit = 80; // TBD
+    public static final int kBackBottomRollerSmartCurrentLimit = 80; // TBD
+    public static final int kBackDirectionRollerSmartCurrentLimit = 80; // TBD
+    public static final int kConveyorSmartCurrentLimit = 80; // TBD
+    public static final int kFeederSmartCurrentLimit = 80;
 
     public static final double kFrontRollerVoltage = 5; // TBD
     public static final double kBackBottomRollerVoltage = 3; // TBD
@@ -131,8 +131,8 @@ public final class Constants {
 
     public static final double kNominalVoltage = 11; // TBD
 
-    public static final double kAmpAngle = 30;
-    public static final double kAmpFlywheelVelocity = 3000;
+    public static final double kAmpAngle = 25;
+    public static final double kAmpFlywheelVelocity = 2000;
 
     public static final class PivotPIDConstants {
       public static final double kP = 0.45; // TBD
@@ -158,7 +158,7 @@ public final class Constants {
     public static final String kFrontCameraName = "frontCamera";
     public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)));
-    public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-15), Units.inchesToMeters(12.249889), Units.inchesToMeters(14.018624)),
+    public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-15), Units.inchesToMeters(12.249889), Units.inchesToMeters(13.018624)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-20), 0));
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -284,6 +284,7 @@ public final class Constants {
   public static final class OIConstants {
     public static final int kDriverControllerPort = 0;
     public static final int kOperatorControllerPort = 1;
+    public static final int kConfigureControllerPort = 2;
     public static final double kDriveDeadband = 0.05;
     public static final double kTriggerThreshold = 0.1;
     public static final double kRumble = 1;

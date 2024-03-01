@@ -37,12 +37,11 @@ public class Amp extends SubsystemBase {
     }
 
     public Command extend(){
-      return new InstantCommand(() -> setPivot(1)); //tbd
+      return new InstantCommand(() -> setPivot(0.65)); //tbd
     }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Current Amp Angle", getTargetPosition());
   }
 }
