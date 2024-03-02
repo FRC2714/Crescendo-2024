@@ -132,7 +132,7 @@ public final class Constants {
     public static final double kNominalVoltage = 11; // TBD
 
     public static final double kAmpAngle = 25;
-    public static final double kAmpFlywheelVelocity = 2000;
+    public static final double kAmpFlywheelVelocity = 2500;
 
     public static final class PivotPIDConstants {
       public static final double kP = 0.45; // TBD
@@ -177,9 +177,10 @@ public final class Constants {
   public static final class DriveConstants {
 
     public static final Pose2d kInitialRedPose = new Pose2d(15.57, 5.547, new Rotation2d(0));
+    public static final Pose2d kInitialBluePose = new Pose2d(1.0381, 5.547, new Rotation2d(180));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 4.8;
+    public static final double kMaxSpeedMetersPerSecond = 7.59864;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second

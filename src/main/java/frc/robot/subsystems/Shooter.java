@@ -242,6 +242,12 @@ public class Shooter extends SubsystemBase {
                                     setFlywheelVelocityCommand(8000));
   }
 
+  public Command readyAllianceZone() {
+    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+                                    setPivotAngleCommand(30),
+                                    setFlywheelVelocityCommand(8000));
+  }
+
   public Command readyPass() {
     return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
                                     setPivotAngleCommand(30),

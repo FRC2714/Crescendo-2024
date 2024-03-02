@@ -107,7 +107,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      }, DriveConstants.kInitialRedPose, stateStdDevs, visionMeasurementStdDevs);
+      }, DriverStation.getAlliance().toString().equals("Red") ? DriveConstants.kInitialRedPose : DriveConstants.kInitialBluePose, stateStdDevs, visionMeasurementStdDevs);
   
 
   /** Creates a new DriveSubsystem. */

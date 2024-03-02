@@ -46,24 +46,6 @@
           "data": {
             "name": "stowShooter"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "setupSlow"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "toptocentertop"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "centertoptocenterbotto"
-          }
         }
       ]
     }

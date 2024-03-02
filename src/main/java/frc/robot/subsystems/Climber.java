@@ -164,7 +164,7 @@ public class Climber extends SubsystemBase {
   }
 
   public Command extendLeftClimberToReset() {
-    return new InstantCommand(() -> leftClimberMotor.setVoltage(ClimberConstants.kClimberVoltage));
+    return new InstantCommand(() -> leftClimberMotor.setVoltage(ClimberConstants.kClimberVoltage - 4));
   }
 
   public Command stopLeftClimber() {
@@ -172,15 +172,15 @@ public class Climber extends SubsystemBase {
   }
 
   public Command retractLeftClimberToReset() {
-    return new InstantCommand(() -> leftClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage));
+    return new InstantCommand(() -> leftClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage - 4));
   }
 
   public Command extendRightClimberToReset() {
-    return new InstantCommand(() -> rightClimberMotor.setVoltage(ClimberConstants.kClimberVoltage));
+    return new InstantCommand(() -> rightClimberMotor.setVoltage(ClimberConstants.kClimberVoltage - 4));
   }
 
   public Command retractRightClimberToReset() {
-    return new InstantCommand(() -> rightClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage));
+    return new InstantCommand(() -> rightClimberMotor.setVoltage(-ClimberConstants.kClimberVoltage - 4));
   }
 
   public Command stopRightClimber() {

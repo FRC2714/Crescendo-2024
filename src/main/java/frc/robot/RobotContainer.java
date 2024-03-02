@@ -68,15 +68,14 @@ public class RobotContainer {
     NamedCommands.registerCommand("intakeBackBeam", new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     NamedCommands.registerCommand("intakeFrontBeam", new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
     NamedCommands.registerCommand("shoot", m_intake.shoot().withTimeout(3));
-
     NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
     NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
     NamedCommands.registerCommand("stopIntakeBack", m_intake.stopBack());
     NamedCommands.registerCommand("stopIntakeFront", m_intake.stopFront());
-   
-
     NamedCommands.registerCommand("setupShort", m_shooter.setupShot(37));
     NamedCommands.registerCommand("setupDynamic", new InstantCommand(() -> m_shooter.toggleDynamic()));
+    NamedCommands.registerCommand("setupSubwoofer", m_shooter.readySubwoofer());
+    NamedCommands.registerCommand("setupAllianceZone", m_shooter.readyAllianceZone());
     NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(1000)));
     NamedCommands.registerCommand("setupFast", new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)));
     
@@ -85,16 +84,9 @@ public class RobotContainer {
                                                                           new InstantCommand(() -> m_shooter.setPivotAngle(45)),//tbd
                                                                           new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)))); //tbd
     NamedCommands.registerCommand("alignToGoal", m_robotDrive.toggleRotatingToGoalCommand().withTimeout(3));
-    
-
-
-
     NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
     NamedCommands.registerCommand("stowShooter", m_shooter.stow()); //tbd
 
-
-
-    
     autoChooser = AutoBuilder.buildAutoChooser("3 Note Auto Top");
     SmartDashboard.putData("Auto Chooser", autoChooser);
     // Configure default commands
@@ -135,7 +127,6 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    
 
     m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
