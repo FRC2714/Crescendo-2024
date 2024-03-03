@@ -139,7 +139,10 @@ public class RobotContainer {
     m_operatorController.a().onTrue(new ParallelCommandGroup(m_shooter.readyAmp(), m_amp.extend()));
     m_operatorController.povUp().whileTrue(new ParallelCommandGroup(m_climber.extendClimbersCommand().until(() -> m_climber.rightClimberAtMax()), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopClimbersCommand());
     m_operatorController.povDown().whileTrue(new ParallelCommandGroup(m_climber.retractClimbersCommand().until(() -> m_climber.rightClimberAtMin()), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopClimbersCommand());                      
-    
+    m_operatorController.povRight().onTrue(m_shooter.incrementPivotAngle());
+    m_operatorController.povLeft().onTrue(m_shooter.decrementPivotAngle());
+
+
     m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
     m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
     m_configureController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());

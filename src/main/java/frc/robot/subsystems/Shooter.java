@@ -254,6 +254,18 @@ public class Shooter extends SubsystemBase {
                                     setFlywheelVelocityCommand(4000));
   }
 
+  public Command incrementPivotAngle() {
+    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+                                    setPivotAngleCommand(pivotController.getSetpoint() + 1),
+                                    setFlywheelVelocityCommand(8000));
+  }
+
+  public Command decrementPivotAngle() {
+    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+                                    setPivotAngleCommand(pivotController.getSetpoint() - 1),
+                                    setFlywheelVelocityCommand(8000));
+  }
+
   public Command readyAmpSeparate () {
     return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
                                     setPivotAngleCommand(ShooterConstants.kAmpAngle),
