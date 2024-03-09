@@ -79,20 +79,38 @@ public class StateMachine extends SubsystemBase {
   }
 
   public Command intakeSelectCommand(IntakeState intakeState) {
-    if (currentIntakeState == IntakeState.IDLE || intakeState == IntakeState.IDLE) {
-      return new SequentialCommandGroup(
-        setCurrentIntakeState(intakeState),
-        new SelectCommand<IntakeState>(Map.ofEntries(
-          Map.entry(IntakeState.BACK, intakeBack()),
-          Map.entry(IntakeState.FRONT, intakeFront()),
-          Map.entry(IntakeState.IDLE, idle())
-        ), () -> intakeState));
-    }
     return new SelectCommand<IntakeState>(Map.ofEntries(
-        Map.entry(IntakeState.BACK, intakeBack()),
-        Map.entry(IntakeState.FRONT, intakeFront()),
-        Map.entry(IntakeState.IDLE, idle())
-      ), () -> currentIntakeState);
+      Map.entry(
+        IntakeState.IDLE,
+        new SequentialCommandGroup(
+          setCurrentIntakeState(intakeState),
+          new SelectCommand<IntakeState>(Map.ofEntries(
+            Map.entry(IntakeState.BACK, intakeBack()),
+            Map.entry(IntakeState.FRONT, intakeFront()),
+            Map.entry(IntakeState.IDLE, idle())
+          ), () -> intakeState))
+      ),
+      Map.entry(
+        IntakeState.BACK,
+        new SequentialCommandGroup(
+          setCurrentIntakeState(currentIntakeState == IntakeState.FRONT ? IntakeState.BACK : intakeState),
+          new SelectCommand<IntakeState>(Map.ofEntries(
+            Map.entry(IntakeState.BACK, intakeBack()),
+            Map.entry(IntakeState.FRONT, intakeFront()),
+            Map.entry(IntakeState.IDLE, idle())
+          ), () -> intakeState))
+      ),
+      Map.entry(
+        IntakeState.FRONT,
+        new SequentialCommandGroup(
+          setCurrentIntakeState(currentIntakeState == IntakeState.BACK ? IntakeState.FRONT : intakeState),
+          new SelectCommand<IntakeState>(Map.ofEntries(
+            Map.entry(IntakeState.BACK, intakeBack()),
+            Map.entry(IntakeState.FRONT, intakeFront()),
+            Map.entry(IntakeState.IDLE, idle())
+          ), () -> intakeState))
+      )
+    ), () -> currentIntakeState);
   }
 
 
