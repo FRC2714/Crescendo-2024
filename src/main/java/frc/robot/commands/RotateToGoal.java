@@ -4,10 +4,14 @@
 
 package frc.robot.commands;
 
+import org.photonvision.targeting.PhotonTrackedTarget;
+
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -28,10 +32,11 @@ public class RotateToGoal extends Command {
     addRequirements(m_drivetrain, m_camera);
 
     thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
+    // thetaController = new ProfiledPIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD, )
 
-    thetaController.setSetpoint(0);
+    // thetaController.setSetpoint(Math.PI);
     thetaController.setTolerance(Units.degreesToRadians(0),0);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+    thetaController.enableContinuousInput(0, 2 *  Math.PI);
   }
 
   // Called when the command is initially scheduled.
@@ -43,13 +48,40 @@ public class RotateToGoal extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_camera.getLatestResult().hasTargets())
+    
+      PhotonTrackedTarget speakerTarget = m_camera.getSpeakerTarget();
+      
+      if(speakerTarget != null){
+      double angleToSpeaker =  -speakerTarget.getBestCameraToTarget().getRotation().getZ();
+      double angleToTurn = angleToSpeaker > 0 ? angleToSpeaker: (Math.PI * 2) + angleToSpeaker;
+      // double setpoint =  angleToSpeaker > 0 ?
+      //                             Math.atan(Units.inchesToMeters(11)/speakerTarget.getBestCameraToTarget().getX()):
+      //                             -Math.atan(Units.inchesToMeters(11)/speakerTarget.getBestCameraToTarget().getX());
+    
+
+      double rotationSpeed = thetaController.calculate(angleToTurn, Math.PI);
+      if(rotationSpeed < -0.5)
+      {
+        rotationSpeed = -0.5;
+      }
+      else if(rotationSpeed > 0.5)
+      {
+        rotationSpeed = 0.5;
+      }
     m_drivetrain.drive(
       0, 
       0, 
-      thetaController.calculate(m_camera.getBestTarget().getYaw()),
+      (rotationSpeed),
       true,
       false);
+    } else {
+      m_drivetrain.drive(
+        0, 
+        0, 
+        0,
+        true,
+        false);
+    }
   }
 
   // Called once the command ends or is interrupted.

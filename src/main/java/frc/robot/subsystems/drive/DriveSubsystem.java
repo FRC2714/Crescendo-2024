@@ -90,7 +90,7 @@ public class DriveSubsystem extends SubsystemBase {
   private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
 
-  private Vision m_backPhotonCamera = new Vision(PhotonConstants.kBackCameraName, PhotonConstants.kBackCameraLocation);
+  // private Vision m_backPhotonCamera = new Vision(PhotonConstants.kBackCameraName, PhotonConstants.kBackCameraLocation);
   private Vision m_frontPhotonCamera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
 
   private Field2d m_field = new Field2d();
@@ -165,7 +165,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
+    // Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
     Optional<EstimatedRobotPose> frontPhotonPoseEstimation = m_frontPhotonCamera.getEstimatedGlobalPose();
     frontPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
       Pose2d estPose = poseEstimation.estimatedPose.toPose2d();

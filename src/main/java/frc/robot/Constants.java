@@ -21,6 +21,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -39,10 +40,10 @@ public final class Constants {
 
   public static final class IntakeConstants {
     public static final int kFrontRollerCanId = 9;
-    public static final int kBackBottomRollerCanId = 10;
-    public static final int kBackDirectionRollerCanId = 11;
-    public static final int kConveyorCanId = 12;
-    public static final int kFeederCanId = 16;
+    public static final int kBackBottomRollerCanId = 55;//10
+    public static final int kBackDirectionRollerCanId = 56;//11
+    public static final int kConveyorCanId = 54;//12
+    public static final int kFeederCanId = 50; //16
 
     public static final int kBreakBeamChannel = 0;
 
@@ -92,9 +93,9 @@ public final class Constants {
   }
 
   public static final class ShooterConstants {
-    public static final int kTopFlywheelCanId = 14;
-    public static final int kBottomFlywheelCanId = 15;
-    public static final int kPivotCanId = 13;
+    public static final int kTopFlywheelCanId = 53;//14
+    public static final int kBottomFlywheelCanId = 52;//15
+    public static final int kPivotCanId = 51;//13
 
     public static final double kPivotGearRatio = 25;
     public static final double kFlywheelGearRatio = 2;
@@ -138,9 +139,9 @@ public final class Constants {
   }
 
   public static final class PhotonConstants {
-    public static final String kBackCameraName = "backCamera";
+    //public static final String kBackCameraName = "backCamera";
     public static final String kFrontCameraName = "frontCamera";
-    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
+    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(8), Units.inchesToMeters(-11.5), Units.inchesToMeters(17)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)));
     public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-15), Units.inchesToMeters(12.249889), Units.inchesToMeters(14.018624)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-20), 0));
@@ -188,21 +189,24 @@ public final class Constants {
     public static final double kBackRightChassisAngularOffset = Math.PI / 2;
 
     // CAN IDs
-    public static final int kFrontLeftDrivingCanId = 4;
-    public static final int kRearLeftDrivingCanId = 3;
-    public static final int kFrontRightDrivingCanId = 1;
-    public static final int kRearRightDrivingCanId = 2;
+    public static final int kFrontLeftDrivingCanId = 17;
+    public static final int kRearLeftDrivingCanId = 15;
+    public static final int kFrontRightDrivingCanId = 13;
+    public static final int kRearRightDrivingCanId = 11;
 
 
-    public static final int kFrontLeftTurningCanId = 8;
-    public static final int kRearLeftTurningCanId = 7;
-    public static final int kFrontRightTurningCanId = 5;
-    public static final int kRearRightTurningCanId = 6;
+    public static final int kFrontLeftTurningCanId = 16;
+    public static final int kRearLeftTurningCanId = 14;
+    public static final int kFrontRightTurningCanId = 12 ;
+    public static final int kRearRightTurningCanId = 10;
 
     public static final boolean kGyroReversed = false;
 
     // Swerve PID values
     public static final class ThetaPIDConstants {
+      public static final TrapezoidProfile.Constraints kThetaConstraints = new TrapezoidProfile.Constraints(
+        0.001, 0.001);
+
       public static final double kP = 0.8;
       public static final double kI = 0;
       public static final double kD = 0;

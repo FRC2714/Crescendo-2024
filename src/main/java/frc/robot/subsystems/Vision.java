@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -60,14 +61,26 @@ public class Vision extends SubsystemBase {
 
   public boolean speakerVisible() {
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
-      if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
+      if (i.getFiducialId() == 4) {
         return true;
       }
-      else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+      else if (i.getFiducialId() == 7) {
         return true;
       }
     }
     return false;
+  }
+
+  public PhotonTrackedTarget getSpeakerTarget() {
+    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+      if (i.getFiducialId() == 4 ) {
+        return i;
+      }
+      else if (i.getFiducialId() == 7) {
+        return i;
+      }
+    }
+    return null;
   }
 
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
@@ -122,5 +135,43 @@ public class Vision extends SubsystemBase {
     // SmartDashboard.putNumber("Best Target Distance", photonCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getX());
     // System.out.println("Targets: "+ photonCamera.getLatestResult().getTargets());
     // System.out.println("Best target: "+ photonCamera.getLatestResult().getBestTarget());
-  }
+
+    if (getLatestResult().hasTargets()){
+      // List<PhotonTrackedTarget> targets = photonCamera.getLatestResult().getTargets();
+      // SmartDashboard.putNumber("number of targets", targets.size());
+      // for(PhotonTrackedTarget i : targets)
+      // {
+      //   if(i.getFiducialId() == 7)
+      //   {
+      //     SmartDashboard.putBoolean("got 7", true);
+      //     SmartDashboard.putNumber("speakerYaw", i.getYaw());
+      //     SmartDashboard.putNumber("speakerDistance", i.getBestCameraToTarget().getX());
+      //   }
+      // }
+      PhotonTrackedTarget speakerTarget = getSpeakerTarget();
+      if(speakerTarget != null){
+        SmartDashboard.putNumber("speakerYaw", Math.toDegrees(speakerTarget.getYaw()));
+        SmartDashboard.putNumber("speakerDistance", speakerTarget.getBestCameraToTarget().getX());
+        SmartDashboard.putNumber("speakerZ", Math.toDegrees(speakerTarget.getBestCameraToTarget().getRotation().getZ()));
+        double angleToSpeaker =  -speakerTarget.getBestCameraToTarget().getRotation().getZ();
+        double angleToTurn = angleToSpeaker > 0 ? angleToSpeaker: (Math.PI * 2) + angleToSpeaker;
+        SmartDashboard.putNumber("angleTurn", Math.toDegrees(angleToTurn));
+  
+
+    // m_drivetrain.drive(
+    //   0, 
+    //   0, 
+    //   thetaController.calculate(m_camera.getSpeakerTarget().getYaw()),
+    //   true,
+    //   false);
+        SmartDashboard.putBoolean("noSpeaker", false);
+    } else {
+        SmartDashboard.putBoolean("noSpeaker", true);
+
+    } 
+  } else {
+        SmartDashboard.putBoolean("noTarget", true);
+
+    }
+}
 }

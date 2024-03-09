@@ -58,6 +58,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 public class RobotContainer {
   // The robot's subsystems
   private final Limelight m_limelight = new Limelight();
+  private final Vision m_camera = new Vision(PhotonConstants.kFrontCameraName,PhotonConstants.kFrontCameraLocation);
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final Shooter m_shooter = new Shooter(m_robotDrive);
   private final Intake m_intake = new Intake();
@@ -166,6 +167,7 @@ public class RobotContainer {
     m_driverController.povLeft().whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
     m_driverController.povUp().onTrue(m_shooter.stow());
 
+    m_driverController.back().whileTrue(new RotateToGoal(m_robotDrive,m_camera));
 
     //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
