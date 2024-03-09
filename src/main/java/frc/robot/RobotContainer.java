@@ -20,6 +20,7 @@ import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.superstructure.StateMachine;
+import frc.robot.subsystems.superstructure.StateMachine.TriggerState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -119,10 +120,10 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     m_driverController.rightTrigger(OIConstants.kTriggerThreshold)
-      .whileTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.BACK))
+      .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.BACK))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
     m_driverController.leftTrigger(OIConstants.kTriggerThreshold)
-      .whileTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.FRONT))
+      .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
 
     // m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
@@ -161,14 +162,15 @@ public class RobotContainer {
     // m_configureController.b().onTrue(m_climber.setRightClimberZero());
   }
 
-  // public void setTeleopDefaultStates() {
-  //   new ParallelCommandGroup(m_shooter.setPivotAngleCommand(0),
-  //     m_shooter.setFlywheelVelocityCommand(0)).schedule();
-  // }
+  public void setTeleopDefaultStates() {
+    // new ParallelCommandGroup(m_shooter.setPivotAngleCommand(0),
+    //   m_shooter.setFlywheelVelocityCommand(0)).schedule();
+    m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE);
+  }
 
-  // public void setAutonomousDefaultStates() {
-  //   new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
-  // }
+  public void setAutonomousDefaultStates() {
+    new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
+  }
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
