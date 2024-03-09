@@ -2,15 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+package frc.robot.subsystems.superstructure;
 
 import java.util.Map;
-import java.util.function.Supplier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,9 +16,7 @@ import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class StateMachine extends SubsystemBase {
   /** Creates a new StateMachine. */
-  Shooter m_shooter;
-  Intake m_intake;
-  DriveSubsystem m_drivetrain;
+  Superstructure m_superstructure;
 
   public enum IntakeState {
     BACK,
@@ -31,47 +27,9 @@ public class StateMachine extends SubsystemBase {
   IntakeState currentIntakeState;
 
   public StateMachine(DriveSubsystem m_drivetrain) {
-    this.m_drivetrain = m_drivetrain;
-    this.m_shooter = new Shooter(m_drivetrain);
-    this.m_intake = new Intake();
+    m_superstructure = new Superstructure(m_drivetrain);
 
     currentIntakeState = IntakeState.IDLE;
-  }
-
-  public Command intakeBack() {
-    return new SequentialCommandGroup(
-      m_intake.stopFront(),
-      m_intake.intakeBack()
-    );
-  }
-
-  public Command intakeFront() {
-    return new SequentialCommandGroup(
-      m_intake.stopBack(),
-      m_intake.intakeFront()
-    );
-  }
-
-  public Command shoot() {
-    return new SequentialCommandGroup(
-      m_intake.disableLoaded(),
-      m_intake.shoot()
-    );
-  }
-
-  public Command idle() {
-    return new ParallelCommandGroup(
-      m_intake.stopBack(),
-      m_intake.stopFront(),
-      m_shooter.stow()
-    );
-  }
-
-  public Command setReadyToShoot() {
-    return new ParallelCommandGroup(
-      m_intake.stopBack(),
-      m_intake.stopFront()
-    );
   }
 
   public Command setCurrentIntakeState(IntakeState intakeState) {
@@ -85,9 +43,9 @@ public class StateMachine extends SubsystemBase {
         new SequentialCommandGroup(
           setCurrentIntakeState(intakeState),
           new SelectCommand<IntakeState>(Map.ofEntries(
-            Map.entry(IntakeState.BACK, intakeBack()),
-            Map.entry(IntakeState.FRONT, intakeFront()),
-            Map.entry(IntakeState.IDLE, idle())
+            Map.entry(IntakeState.BACK, m_superstructure.intakeBack()),
+            Map.entry(IntakeState.FRONT, m_superstructure.intakeFront()),
+            Map.entry(IntakeState.IDLE, m_superstructure.idle())
           ), () -> intakeState))
       ),
       Map.entry(
@@ -95,9 +53,9 @@ public class StateMachine extends SubsystemBase {
         new SequentialCommandGroup(
           setCurrentIntakeState(currentIntakeState == IntakeState.FRONT ? IntakeState.BACK : intakeState),
           new SelectCommand<IntakeState>(Map.ofEntries(
-            Map.entry(IntakeState.BACK, intakeBack()),
-            Map.entry(IntakeState.FRONT, intakeFront()),
-            Map.entry(IntakeState.IDLE, idle())
+            Map.entry(IntakeState.BACK, m_superstructure.intakeBack()),
+            Map.entry(IntakeState.FRONT, m_superstructure.intakeFront()),
+            Map.entry(IntakeState.IDLE, m_superstructure.idle())
           ), () -> intakeState))
       ),
       Map.entry(
@@ -105,9 +63,9 @@ public class StateMachine extends SubsystemBase {
         new SequentialCommandGroup(
           setCurrentIntakeState(currentIntakeState == IntakeState.BACK ? IntakeState.FRONT : intakeState),
           new SelectCommand<IntakeState>(Map.ofEntries(
-            Map.entry(IntakeState.BACK, intakeBack()),
-            Map.entry(IntakeState.FRONT, intakeFront()),
-            Map.entry(IntakeState.IDLE, idle())
+            Map.entry(IntakeState.BACK, m_superstructure.intakeBack()),
+            Map.entry(IntakeState.FRONT, m_superstructure.intakeFront()),
+            Map.entry(IntakeState.IDLE, m_superstructure.idle())
           ), () -> intakeState))
       )
     ), () -> currentIntakeState);
