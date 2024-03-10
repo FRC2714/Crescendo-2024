@@ -9,6 +9,7 @@ import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
@@ -20,6 +21,8 @@ import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.superstructure.StateMachine;
+import frc.robot.subsystems.superstructure.Superstructure;
+import frc.robot.subsystems.superstructure.StateMachine.ShooterState;
 import frc.robot.subsystems.superstructure.StateMachine.TriggerState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -53,7 +56,8 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser;
   // private final Climber m_climber = new Climber();
 
-  private final StateMachine m_stateMachine = new StateMachine(m_robotDrive);
+  private final Superstructure m_superstructure = new Superstructure(m_robotDrive);
+  private final StateMachine m_stateMachine = new StateMachine(m_superstructure);
 
   // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -94,18 +98,18 @@ public class RobotContainer {
     autoChooser = AutoBuilder.buildAutoChooser("3 Note Auto Top");
     SmartDashboard.putData("Auto Chooser", autoChooser);
     // Configure default commands
-    // m_robotDrive.setDefaultCommand(
-    //     // The left stick controls translation of the robot.
-    //     // Turning is controlled by the X axis of the right stick.
-    //     new RunCommand(
-    //         () -> m_robotDrive.drive(
-    //             -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
-    //             -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-    //             m_robotDrive.getRotatingToGoal(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband))
-    //                     ? m_robotDrive.getDriveRotationToGoal()
-    //                     : -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-    //             true, false),
-    //         m_robotDrive));
+    m_robotDrive.setDefaultCommand(
+        // The left stick controls translation of the robot.
+        // Turning is controlled by the X axis of the right stick.
+        new RunCommand(
+            () -> m_robotDrive.drive(
+                -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
+                -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
+                m_robotDrive.getRotatingToGoal(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband))
+                        ? m_robotDrive.getDriveRotationToGoal()
+                        : -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true, false),
+            m_robotDrive));
     }
 
   /**
@@ -120,16 +124,31 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     m_driverController.rightTrigger(OIConstants.kTriggerThreshold)
-      .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.BACK))
+      .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
     m_driverController.leftTrigger(OIConstants.kTriggerThreshold)
-      .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.FRONT))
+      .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
 
+    m_driverController.rightBumper()
+      .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_BACK))
+      .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
+    m_driverController.leftBumper()
+      .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_FRONT))
+      .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
+    
+    m_driverController.povUp().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
+    m_driverController.povDown().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.STOW));
+    m_driverController.povLeft().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
+    m_driverController.povRight().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.DYNAMIC));
+
+    m_driverController.a()
+      .whileTrue(m_superstructure.shoot())
+      .onFalse(m_superstructure.stopShooter());
     // m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     // m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
     // m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
-    // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // m_driverController.a().whileTrue(m_intake.shoot()).onFalse(m_intake.stopShooter());
     // m_driverController.b().whileTrue(m_shooter.setFlywheelVelocityCommand(8000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
     // m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),

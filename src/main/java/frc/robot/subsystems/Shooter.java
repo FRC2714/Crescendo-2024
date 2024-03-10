@@ -42,6 +42,7 @@ public class Shooter extends SubsystemBase {
   private SparkPIDController flywheelController;
 
   private DriveSubsystem m_drivetrain;
+  private Vision m_vision;
 
   private InterpolatingTreeMap pivotAngleMap;
   private InterpolatingTreeMap flywheelVelocityMap;
@@ -54,7 +55,7 @@ public class Shooter extends SubsystemBase {
   private boolean dynamicEnabled;
 
 
-  public Shooter(DriveSubsystem m_drivetrain) {
+  public Shooter(DriveSubsystem m_drivetrain, Vision m_vision) {
     pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
     topFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
     bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
@@ -119,30 +120,50 @@ public class Shooter extends SubsystemBase {
     flywheelP.setDefault(0);
     flywheelV.setDefault(0);
     this.m_drivetrain = m_drivetrain;
+    this.m_vision = m_vision;
   }
 
   public void toggleDynamic() {
-    dynamicEnabled = !dynamicEnabled;  }
+    dynamicEnabled = !dynamicEnabled;
+  }
 
-  public void stopDynamic() {
-    dynamicEnabled = false;
+  public Command enableDynamic() {
+    return new InstantCommand(() -> dynamicEnabled = true);
+  }
+
+  public Command disableDynamic() {
+    return new InstantCommand(() -> dynamicEnabled = false);
   }
 
   public void populatePivotAngleMap() {
-    pivotAngleMap.put(0.93, 35.0);
-    pivotAngleMap.put(1.7, 27.0);
-    pivotAngleMap.put(2.23, 22.0);
-    pivotAngleMap.put(2.74, 18.0);
-    pivotAngleMap.put(2.74, 18.0);
-    pivotAngleMap.put(3.43, 15.0);
-    pivotAngleMap.put(3.43, 15.0);
-    pivotAngleMap.put(3.87, 13.0);
-    pivotAngleMap.put(4.31, 11.5);
-    pivotAngleMap.put(5.02, 10.0);
-    pivotAngleMap.put(5.77, 8.0);
-    pivotAngleMap.put(5.02, 10.0);
-    pivotAngleMap.put(6.40, 7.0);
-    pivotAngleMap.put(6.40, 7.0);
+    pivotAngleMap.put(1.62, 35.0);
+    pivotAngleMap.put(1.82, 33.0);
+    pivotAngleMap.put(2.16, 28.0);
+    pivotAngleMap.put(2.42, 25.0);
+    pivotAngleMap.put(2.86, 21.0);
+    pivotAngleMap.put(3.11, 19.0);
+    pivotAngleMap.put(3.40, 18.0);
+    pivotAngleMap.put(3.64, 16.0);
+    pivotAngleMap.put(4.0, 15.0);
+    pivotAngleMap.put(4.3, 14.0);
+    pivotAngleMap.put(4.52, 13.0);
+    pivotAngleMap.put(4.82, 12.5);
+    //---------------------------
+    // pivotAngleMap.put(0.93, 35.0);
+    // pivotAngleMap.put(1.7, 27.0);
+    // pivotAngleMap.put(2.23, 22.0);
+    // pivotAngleMap.put(2.74, 18.0);
+    // pivotAngleMap.put(2.74, 18.0);
+    // pivotAngleMap.put(3.43, 15.0);
+    // pivotAngleMap.put(3.43, 15.0);
+    // pivotAngleMap.put(3.87, 13.0);
+    // pivotAngleMap.put(4.31, 11.5);
+    // pivotAngleMap.put(5.02, 10.0);
+    // pivotAngleMap.put(5.77, 8.0);
+    // pivotAngleMap.put(5.02, 10.0);
+    // pivotAngleMap.put(6.40, 7.0);
+    // pivotAngleMap.put(6.40, 7.0);
+    //------------------------------
     // pivotAngleMap.put(0.63, 45.0);
     // pivotAngleMap.put(0.88966183597416184, 42.0);
     // pivotAngleMap.put(1.542, 30.0);
@@ -209,11 +230,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public double getDynamicPivotAngle() {
-    return pivotAngleMap.getInterpolated(m_drivetrain.getDistanceToGoalMeters(m_drivetrain.getPose()));
+    return pivotAngleMap.getInterpolated(m_vision.getDistanceToGoalMeters());
   }
 
   public double getDynamicFlywheelVelocity() {
-    return flywheelVelocityMap.getInterpolated(m_drivetrain.getDistanceToGoalMeters(m_drivetrain.getPose()));
+    return flywheelVelocityMap.getInterpolated(m_vision.getDistanceToGoalMeters());
   }
 
   public double getDynamicPivotAngle(double adjustedDistance) {
@@ -225,49 +246,49 @@ public class Shooter extends SubsystemBase {
   }
 
   public Command readyAmp() {
-    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+    return new ParallelCommandGroup(disableDynamic(),
                                     setPivotAngleCommand(ShooterConstants.kAmpAngle),
                                     setFlywheelVelocityCommand(ShooterConstants.kAmpFlywheelVelocity));
   }
 
   public Command readyAmpTest() {
-    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+    return new ParallelCommandGroup(disableDynamic(),
                                     setPivotAngleCommand(ShooterConstants.kAmpAngle),
                                     setFlywheelVelocityCommand(ShooterConstants.kAmpFlywheelVelocity));
   }
 
   public Command readySubwoofer() {
-    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
-                                    setPivotAngleCommand(40),
-                                    setFlywheelVelocityCommand(8000));
+    return new ParallelCommandGroup(disableDynamic(),
+                                    setPivotAngleCommand(ShooterConstants.kSubwooferAngle),
+                                    setFlywheelVelocityCommand(ShooterConstants.kSubwooferFlywheelVelocity));
   }
 
   public Command readyAllianceZone() {
-    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+    return new ParallelCommandGroup(disableDynamic(),
                                     setPivotAngleCommand(30),
                                     setFlywheelVelocityCommand(8000));
   }
 
   public Command readyPass() {
-    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+    return new ParallelCommandGroup(disableDynamic(),
                                     setPivotAngleCommand(30),
                                     setFlywheelVelocityCommand(4000));
   }
 
   public Command incrementPivotAngle() {
-    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+    return new ParallelCommandGroup(disableDynamic(),
                                     setPivotAngleCommand(pivotController.getSetpoint() + 1),
                                     setFlywheelVelocityCommand(8000));
   }
 
   public Command decrementPivotAngle() {
-    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+    return new ParallelCommandGroup(disableDynamic(),
                                     setPivotAngleCommand(pivotController.getSetpoint() - 1),
                                     setFlywheelVelocityCommand(8000));
   }
 
-  public Command readyAmpSeparate () {
-    return new ParallelCommandGroup(new InstantCommand(() -> stopDynamic()),
+  public Command readyAmpSeparate() {
+    return new ParallelCommandGroup(disableDynamic(),
                                     setPivotAngleCommand(ShooterConstants.kAmpAngle),
                                     setFlywheelVelocityCommand(ShooterConstants.kAmpFlywheelVelocity));
   }
@@ -312,7 +333,7 @@ public class Shooter extends SubsystemBase {
 
   public ParallelCommandGroup stow() {
     return new ParallelCommandGroup(
-      new InstantCommand(() -> stopDynamic()),
+      disableDynamic(),
       setPivotAngleCommand(0),
       setFlywheelVelocityCommand(0)
     );

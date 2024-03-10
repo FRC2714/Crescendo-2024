@@ -32,6 +32,8 @@ public class Vision extends SubsystemBase {
   private PhotonCamera photonCamera;
   private PhotonPoseEstimator photonPoseEstimator;
 
+  private double currentDistance;
+
   public Vision(String cameraName, Transform3d cameraLocation) {
     photonCamera = new PhotonCamera(cameraName);
     // photonCamera.setPipelineIndex(0);
@@ -40,6 +42,7 @@ public class Vision extends SubsystemBase {
                                                   photonCamera,
                                                   cameraLocation);
     // photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    currentDistance = 0;
   }
 
   public PhotonPipelineResult getLatestResult() {
@@ -56,6 +59,18 @@ public class Vision extends SubsystemBase {
       }
     }
     return 0;
+  }
+
+  public double getDistanceToGoalMeters() {
+    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+      if (i.getFiducialId() == 17 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        currentDistance = Math.sqrt(Math.pow(i.getBestCameraToTarget().getX(), 2) + Math.pow(i.getBestCameraToTarget().getY(), 2));
+      }
+      else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+        currentDistance = Math.sqrt(Math.pow(i.getBestCameraToTarget().getX(), 2) + Math.pow(i.getBestCameraToTarget().getY(), 2));
+      }
+    }
+    return currentDistance;
   }
 
   public boolean speakerVisible() {
@@ -110,6 +125,8 @@ public class Vision extends SubsystemBase {
       SmartDashboard.putNumber("pv X", poseEstimation.estimatedPose.getX());
       SmartDashboard.putNumber("pv Y", poseEstimation.estimatedPose.getY());
     });
+
+    SmartDashboard.putNumber("Distance To GOal Meters", getDistanceToGoalMeters());
 
     SmartDashboard.putBoolean("Speaker?", speakerVisible());
 

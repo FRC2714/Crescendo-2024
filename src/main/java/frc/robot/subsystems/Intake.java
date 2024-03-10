@@ -103,6 +103,10 @@ public class Intake extends SubsystemBase {
     }
   }
 
+  public Command enableLoaded() {
+    return new InstantCommand(() -> loaded = true);
+  }
+
   public Command disableLoaded() {
     return new InstantCommand(() -> loaded = false);
   }

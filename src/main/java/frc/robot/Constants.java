@@ -78,7 +78,7 @@ public final class Constants {
     public static final double kBackBottomRollerVoltageBackSide = 3;
     public static final double kFrontDirectionRollerVoltageBackSide = 3; // TBD
     public static final double kConveyorVoltage = 5; // TBD
-    public static final double kFeederVoltage = 3; // TBD
+    public static final double kFeederVoltage = 2; // TBD
   }
 
 
@@ -133,6 +133,9 @@ public final class Constants {
 
     public static final double kAmpAngle = 25;
     public static final double kAmpFlywheelVelocity = 2500;
+
+    public static final double kSubwooferAngle = 40;
+    public static final double kSubwooferFlywheelVelocity = 8000;
 
     public static final class PivotPIDConstants {
       public static final double kP = 0.45; // TBD

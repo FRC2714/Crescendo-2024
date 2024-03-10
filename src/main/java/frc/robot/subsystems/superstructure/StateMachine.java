@@ -19,9 +19,18 @@ public class StateMachine extends SubsystemBase {
   Superstructure m_superstructure;
 
   public enum IntakeState {
-    BACK,
-    FRONT,
+    INTAKE_BACK,
+    INTAKE_FRONT,
+    EXTAKE_BACK,
+    EXTAKE_FRONT,
     IDLE
+  }
+
+  public enum ShooterState {
+    DYNAMIC,
+    SUBWOOFER,
+    AMP,
+    STOW
   }
 
   public enum TriggerState {
@@ -30,26 +39,47 @@ public class StateMachine extends SubsystemBase {
     NONE
   }
 
+  public enum BumperState {
+    RIGHT,
+    LEFT,
+    NONE
+  }
+
+  public enum StorageState {
+    LOADED,
+    EMPTY
+  }
+
   private IntakeState currentIntakeState;
   private TriggerState currentTriggerState;
+  private BumperState currentBumperState;
+  private ShooterState currentShooterState;
+  private StorageState currentStorageState;
 
-  public StateMachine(DriveSubsystem m_drivetrain) {
-    m_superstructure = new Superstructure(m_drivetrain);
+  public StateMachine(Superstructure m_superstructure) {
+    this.m_superstructure = m_superstructure;
 
     currentIntakeState = IntakeState.IDLE;
     currentTriggerState = TriggerState.NONE;
-  }
-
-  public TriggerState getCurrentTriggerState() {
-    return currentTriggerState;
+    currentBumperState = BumperState.NONE;
+    currentShooterState = ShooterState.STOW;
+    currentStorageState = StorageState.EMPTY;
   }
 
   public void setTriggerState(TriggerState triggerState) {
     currentTriggerState = triggerState;
   }
 
+  public void setBumperState(BumperState bumperState) {
+    currentBumperState = bumperState;
+  }
+
   public void setIntakeState(IntakeState intakeState) {
     currentIntakeState = intakeState;
+  }
+
+  public void setShooterState(ShooterState shooterState) {
+    currentShooterState = shooterState;
   }
 
   public Command setCurrentIntakeState(IntakeState intakeState) {
@@ -58,6 +88,14 @@ public class StateMachine extends SubsystemBase {
 
   public Command setCurrentTriggerState(TriggerState triggerState) {
     return new InstantCommand(() -> setTriggerState(triggerState));
+  }
+
+  public Command setCurrentBumperState(BumperState bumperState) {
+    return new InstantCommand(() -> setBumperState(bumperState));
+  }
+
+  public Command setCurrentShooterState(ShooterState shooterState) {
+    return new InstantCommand(() -> setShooterState(shooterState));
   }
 
   public Command intakeBack() {
@@ -74,10 +112,59 @@ public class StateMachine extends SubsystemBase {
     );
   }
 
-  public Command idle() {
+  public Command extakeBack() {
+    return new SequentialCommandGroup(
+      setCurrentBumperState(BumperState.RIGHT),
+      m_superstructure.extakeBack()
+    );
+  }
+
+  public Command extakeFront() {
+    return new SequentialCommandGroup(
+      setCurrentBumperState(BumperState.LEFT),
+      m_superstructure.extakeFront()
+    );
+  }
+
+  public Command idleIntake() {
     return new SequentialCommandGroup(
       setCurrentTriggerState(TriggerState.NONE),
-      m_superstructure.idle()
+      m_superstructure.idleIntake()
+    );
+  }
+
+  public Command idleExtake() {
+    return new SequentialCommandGroup(
+      setCurrentBumperState(BumperState.NONE),
+      m_superstructure.idleExtake()
+    );
+  }
+
+  public Command stowShooter() {
+    return new SequentialCommandGroup(
+      setCurrentShooterState(ShooterState.STOW),
+      m_superstructure.stowShooter()
+    );
+  }
+
+  public Command readyShooterToSubwoofer() {
+    return new SequentialCommandGroup(
+      setCurrentShooterState(ShooterState.SUBWOOFER),
+      m_superstructure.readyShooterToSubwoofer()
+    );
+  }
+
+  public Command readyShooterToAmp() {
+    return new SequentialCommandGroup(
+      setCurrentShooterState(ShooterState.AMP),
+      m_superstructure.readyShooterToAmp()
+    );
+  }
+
+  public Command enableDynamicShooter() {
+    return new SequentialCommandGroup(
+      setCurrentShooterState(ShooterState.DYNAMIC),
+      m_superstructure.enableDynamicShooter()
     );
   }
 
@@ -89,28 +176,55 @@ public class StateMachine extends SubsystemBase {
         new SequentialCommandGroup(
           setCurrentIntakeState(intakeState),
           new SelectCommand<IntakeState>(Map.ofEntries(
-            Map.entry(IntakeState.BACK, intakeBack()),
-            Map.entry(IntakeState.FRONT, intakeFront()),
-            Map.entry(IntakeState.IDLE, idle())
+            Map.entry(IntakeState.INTAKE_BACK, intakeBack()),
+            Map.entry(IntakeState.INTAKE_FRONT, intakeFront()),
+            Map.entry(IntakeState.EXTAKE_BACK, extakeBack()),
+            Map.entry(IntakeState.EXTAKE_FRONT, extakeFront()),
+            Map.entry(IntakeState.IDLE, idleIntake())
           ), () -> currentIntakeState))
       ),
       Map.entry(
-        IntakeState.BACK,
+        IntakeState.INTAKE_BACK,
         currentTriggerState == TriggerState.NONE ?
         new SequentialCommandGroup(
           setCurrentIntakeState(IntakeState.IDLE),
-          idle())
+          idleIntake())
         : new InstantCommand()
       ),
       Map.entry(
-        IntakeState.FRONT,
+        IntakeState.INTAKE_FRONT,
         currentTriggerState == TriggerState.NONE ?
         new SequentialCommandGroup(
           setCurrentIntakeState(IntakeState.IDLE),
-          idle())
+          idleIntake())
+        : new InstantCommand()
+      ),
+      Map.entry(
+        IntakeState.EXTAKE_BACK,
+        currentBumperState == BumperState.NONE ?
+        new SequentialCommandGroup(
+          setCurrentIntakeState(IntakeState.IDLE),
+          idleExtake())
+        : new InstantCommand()
+      ),
+      Map.entry(
+        IntakeState.EXTAKE_FRONT,
+        currentBumperState == BumperState.NONE ?
+        new SequentialCommandGroup(
+          setCurrentIntakeState(IntakeState.IDLE),
+          idleExtake())
         : new InstantCommand()
       )),
     () -> currentIntakeState);
+  }
+
+  public Command shooterSelectCommand(ShooterState shooterState) {
+    return new SelectCommand<ShooterState>(Map.ofEntries(
+      Map.entry(ShooterState.STOW, stowShooter()),
+      Map.entry(ShooterState.SUBWOOFER, readyShooterToSubwoofer()),
+      Map.entry(ShooterState.AMP, readyShooterToAmp()),
+      Map.entry(ShooterState.DYNAMIC, enableDynamicShooter())
+    ), () -> shooterState);
   }
 
   @Override
@@ -118,5 +232,7 @@ public class StateMachine extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putString("Intake State", currentIntakeState.toString());
     SmartDashboard.putString("Trigger State", currentTriggerState.toString());
+    SmartDashboard.putString("Bumper State", currentBumperState.toString());
+    SmartDashboard.putString("Shooter State", currentShooterState.toString());
   }
 }

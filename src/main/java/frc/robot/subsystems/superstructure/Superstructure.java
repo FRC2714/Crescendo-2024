@@ -8,8 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.PhotonConstants;
+import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class Superstructure extends SubsystemBase {
@@ -17,39 +20,72 @@ public class Superstructure extends SubsystemBase {
   Shooter m_shooter;
   Intake m_intake;
   DriveSubsystem m_drivetrain;
+  Vision m_vision;
 
   public Superstructure(DriveSubsystem m_drivetrain) {
+    this.m_vision = new Vision("frontCamera", PhotonConstants.kFrontCameraLocation);
     this.m_drivetrain = m_drivetrain;
-    this.m_shooter = new Shooter(m_drivetrain);
+    this.m_shooter = new Shooter(m_drivetrain, m_vision);
     this.m_intake = new Intake();
+  }
+
+  public boolean getLoaded() {
+    return m_intake.getLoaded();
   }
 
   public Command intakeBack() {
     return new SequentialCommandGroup(
       m_intake.stopFront(),
-      m_intake.intakeBack()
+      new IntakeCommand(m_intake, IntakeCommand.IntakeState.BACK)
+        .until(() -> m_intake.getLoaded())
     );
   }
 
   public Command intakeFront() {
     return new SequentialCommandGroup(
       m_intake.stopBack(),
-      m_intake.intakeFront()
+      new IntakeCommand(m_intake, IntakeCommand.IntakeState.FRONT)
+        .until(() -> m_intake.getLoaded())
+    );
+  }
+
+  public Command extakeBack() {
+    return new SequentialCommandGroup(
+      m_intake.stopFront(),
+      m_intake.outtakeBack()
+    );
+  }
+
+  public Command extakeFront() {
+    return new SequentialCommandGroup(
+      m_intake.stopBack(),
+      m_intake.outtakeFront()
     );
   }
 
   public Command shoot() {
+    return m_intake.shoot();
+  }
+
+  public Command stopShooter() {
     return new SequentialCommandGroup(
-      m_intake.disableLoaded(),
-      m_intake.shoot()
+      m_intake.stopShooter(),
+      m_intake.disableLoaded()
     );
   }
 
-  public Command idle() {
+  public Command idleIntake() {
+    return new ParallelCommandGroup(
+      m_intake.stopBack(),
+      m_intake.stopFront()
+    );
+  }
+
+  public Command idleExtake() {
     return new ParallelCommandGroup(
       m_intake.stopBack(),
       m_intake.stopFront(),
-      m_shooter.stow()
+      m_intake.disableLoaded()
     );
   }
 
@@ -58,6 +94,26 @@ public class Superstructure extends SubsystemBase {
       m_intake.stopBack(),
       m_intake.stopFront()
     );
+  }
+
+  public Command enableDynamicShooter() {
+    return m_shooter.enableDynamic();
+  }
+
+  public Command disableDynamicShooter() {
+    return m_shooter.disableDynamic();
+  }
+
+  public Command readyShooterToSubwoofer() {
+    return m_shooter.readySubwoofer();
+  }
+
+  public Command readyShooterToAmp() {
+    return m_shooter.readyAmp();
+  }
+
+  public Command stowShooter() {
+    return m_shooter.stow();
   }
 
   @Override

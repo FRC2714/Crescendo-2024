@@ -89,7 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
   private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
 
   private Vision m_backPhotonCamera = new Vision(PhotonConstants.kBackCameraName, PhotonConstants.kBackCameraLocation);
-  private Vision m_frontPhotonCamera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
+  // private Vision m_frontPhotonCamera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
 
   private Field2d m_field = new Field2d();
   
@@ -153,7 +153,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("back left setpoint", Math.abs(m_rearLeft.getDesiredStateSpeed()));
     SmartDashboard.putNumber("back right setpoint", Math.abs(m_rearRight.getDesiredStateSpeed()));
 
-    SmartDashboard.putNumber("Angle to goal", Units.radiansToDegrees(getSpeakerTargetYaw()));
+    // SmartDashboard.putNumber("Angle to goal", Units.radiansToDegrees(getSpeakerTargetYaw()));
     
     m_pose.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
@@ -164,24 +164,24 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearRight.getPosition()
         });
     Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
-    Optional<EstimatedRobotPose> frontPhotonPoseEstimation = m_frontPhotonCamera.getEstimatedGlobalPose();
-    frontPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
-      Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
-      SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
-      SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
-      SmartDashboard.putNumber("drive photon est theta", poseEstimation.estimatedPose.getRotation().toRotation2d().getDegrees());
-      m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds);
-    }, new Runnable() {
-        @Override
-        public void run() {
+    // Optional<EstimatedRobotPose> frontPhotonPoseEstimation = m_frontPhotonCamera.getEstimatedGlobalPose();
+    // frontPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
+    //   Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
+    //   SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
+    //   SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
+    //   SmartDashboard.putNumber("drive photon est theta", poseEstimation.estimatedPose.getRotation().toRotation2d().getDegrees());
+    //   m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds);
+    // }, new Runnable() {
+        // @Override
+        // public void run() {
           // backPhotonPoseEstimation.ifPresent(poseEstimation -> {
           //   Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
           //   SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
           //   SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
           //   m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_backPhotonCamera.getEstimationStdDevs(estPose));
           // });
-        }
-    });
+        // }
+    // });
 
     
     m_fieldRelativeVelocity = new FieldRelativeVelocity(getChassisSpeed(), new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)));
@@ -197,27 +197,27 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Pose rotation to goal", Units.radiansToDegrees(getRotationFromGoalRadians(getPose())));
   }
 
-  public double getSpeakerTargetYaw() {
-    if (DriverStation.getAlliance().isPresent()) {
-      if (DriverStation.getAlliance().get().toString().equals("Red")) {
-        for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
-          if (i.getFiducialId() == 4) {
-            return i.getBestCameraToTarget().plus(
-              new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
-          }
-        }
-      }
-      else {
-        for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
-            if (i.getFiducialId() == 7) {
-              return i.getBestCameraToTarget().plus(
-                new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
-            }
-        }
-      }
-    }
-    return 0;
-  }
+  // public double getSpeakerTargetYaw() {
+  //   if (DriverStation.getAlliance().isPresent()) {
+  //     if (DriverStation.getAlliance().get().toString().equals("Red")) {
+  //       for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
+  //         if (i.getFiducialId() == 4) {
+  //           return i.getBestCameraToTarget().plus(
+  //             new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
+  //         }
+  //       }
+  //     }
+  //     else {
+  //       for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
+  //           if (i.getFiducialId() == 7) {
+  //             return i.getBestCameraToTarget().plus(
+  //               new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
+  //           }
+  //       }
+  //     }
+  //   }
+  //   return 0;
+  // }
 
   public double getDistanceToGoalMeters(Pose2d pose) {
     if (DriverStation.getAlliance().isPresent()) {
