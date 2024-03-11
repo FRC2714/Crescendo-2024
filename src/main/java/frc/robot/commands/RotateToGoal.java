@@ -47,7 +47,7 @@ public class RotateToGoal extends Command {
       m_drivetrain.drive(
       0, 
       0, 
-      thetaController.calculate(m_camera.getXOffsetDegrees()),
+      -thetaController.calculate(m_camera.getXOffsetDegrees()),
       true,
       false);
     }
