@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.PhotonConstants;
+import frc.robot.Constants.OIConstants;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -127,10 +127,10 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if (getLoaded() && elapsedRumbleTime < 500) {
+    if (getLoaded() && elapsedRumbleTime < OIConstants.kRumbleTimeMS) {
       elapsedRumbleTime += 20;
-      m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0.5);
-      m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.5);
+      m_driverController.getHID().setRumble(RumbleType.kBothRumble, OIConstants.kRumblePower);
+      m_operatorController.getHID().setRumble(RumbleType.kBothRumble, OIConstants.kRumblePower);
     }
     else {
       if (!getLoaded()) elapsedRumbleTime = 0;
