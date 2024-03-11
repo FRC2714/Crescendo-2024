@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class StateMachine extends SubsystemBase {
   /** Creates a new StateMachine. */
@@ -54,7 +53,6 @@ public class StateMachine extends SubsystemBase {
   private TriggerState currentTriggerState;
   private BumperState currentBumperState;
   private ShooterState currentShooterState;
-  private StorageState currentStorageState;
 
   public StateMachine(Superstructure m_superstructure) {
     this.m_superstructure = m_superstructure;
@@ -63,7 +61,6 @@ public class StateMachine extends SubsystemBase {
     currentTriggerState = TriggerState.NONE;
     currentBumperState = BumperState.NONE;
     currentShooterState = ShooterState.STOW;
-    currentStorageState = StorageState.EMPTY;
   }
 
   public void setTriggerState(TriggerState triggerState) {
