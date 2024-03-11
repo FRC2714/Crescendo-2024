@@ -4,10 +4,12 @@
 
 package frc.robot.subsystems.superstructure;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Intake;
@@ -21,12 +23,18 @@ public class Superstructure extends SubsystemBase {
   Intake m_intake;
   DriveSubsystem m_drivetrain;
   Vision m_vision;
+  CommandXboxController m_driverController;
+  CommandXboxController m_operatorController;
 
-  public Superstructure(DriveSubsystem m_drivetrain) {
-    this.m_vision = new Vision("frontCamera", PhotonConstants.kFrontCameraLocation);
+  double elapsedRumbleTime = 0;
+
+  public Superstructure(DriveSubsystem m_drivetrain, Vision m_vision, CommandXboxController m_driverController, CommandXboxController m_operatorController) {
+    this.m_vision = m_vision;
     this.m_drivetrain = m_drivetrain;
     this.m_shooter = new Shooter(m_drivetrain, m_vision);
     this.m_intake = new Intake();
+    this.m_driverController = m_driverController;
+    this.m_operatorController = m_operatorController;
   }
 
   public boolean getLoaded() {
@@ -119,5 +127,15 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if (getLoaded() && elapsedRumbleTime < 500) {
+      elapsedRumbleTime += 20;
+      m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0.5);
+      m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0.5);
+    }
+    else {
+      if (!getLoaded()) elapsedRumbleTime = 0;
+      m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
+      m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    }
   }
 }

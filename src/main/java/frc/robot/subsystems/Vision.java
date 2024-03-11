@@ -32,7 +32,7 @@ public class Vision extends SubsystemBase {
   private PhotonCamera photonCamera;
   private PhotonPoseEstimator photonPoseEstimator;
 
-  private double currentDistance;
+  private double currentDistance, currentRotation;
 
   public Vision(String cameraName, Transform3d cameraLocation) {
     photonCamera = new PhotonCamera(cameraName);
@@ -43,6 +43,7 @@ public class Vision extends SubsystemBase {
                                                   cameraLocation);
     // photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     currentDistance = 0;
+    currentRotation = 0;
   }
 
   public PhotonPipelineResult getLatestResult() {
@@ -51,14 +52,14 @@ public class Vision extends SubsystemBase {
 
   public double getXOffsetDegrees() {
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
-      if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
-        return i.getYaw();
+      if (i.getFiducialId() == 17 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        currentRotation = i.getYaw();
       }
       else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
-        return i.getYaw();
+        currentRotation = i.getYaw();
       }
     }
-    return 0;
+    return currentRotation;
   }
 
   public double getDistanceToGoalMeters() {

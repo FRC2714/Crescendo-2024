@@ -184,7 +184,7 @@ public class Intake extends SubsystemBase {
                                     setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageFrontSide),
                                     setBackDirectionRollerVoltageCommand(IntakeConstants.kBackDirectionRollerVoltageFrontSide),
                                     setConveyorVoltageCommand(-IntakeConstants.kConveyorVoltage),
-                                    setFeederVoltageCommand(IntakeConstants.kFeederVoltage));
+                                    setFeederVoltageCommand(IntakeConstants.kFeederIntakeVoltage));
   }
 
   public Command outtakeFront() {
@@ -193,7 +193,7 @@ public class Intake extends SubsystemBase {
                                     setBackBottomRollerVoltageCommand(-(IntakeConstants.kBackBottomRollerVoltageFrontSide + 1)),
                                     setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageFrontSide + 1)),
                                     setConveyorVoltageCommand(IntakeConstants.kConveyorVoltage + 1),
-                                    setFeederVoltageCommand(-(IntakeConstants.kFeederVoltage + 1))));
+                                    setFeederVoltageCommand(-(IntakeConstants.kFeederIntakeVoltage + 1))));
   }
 
   public ParallelCommandGroup stopFront() {
@@ -207,14 +207,14 @@ public class Intake extends SubsystemBase {
   public Command intakeBack() {
     return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(-IntakeConstants.kBackBottomRollerVoltageBackSide),
                                     setBackDirectionRollerVoltageCommand(IntakeConstants.kBackDirectionRollerVoltageBackSide),
-                                    setFeederVoltageCommand(IntakeConstants.kFeederVoltage));
+                                    setFeederVoltageCommand(IntakeConstants.kFeederIntakeVoltage));
   }
 
   public Command outtakeBack() {
     return new SequentialCommandGroup(new InstantCommand(() -> loaded = false), new ParallelCommandGroup(
                                     setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageBackSide + 1),
                                     setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageBackSide + 1)),
-                                    setFeederVoltageCommand(-(IntakeConstants.kFeederVoltage + 1))));
+                                    setFeederVoltageCommand(-(IntakeConstants.kFeederIntakeVoltage + 1))));
   }
 
   public ParallelCommandGroup stopBack() {
@@ -224,7 +224,7 @@ public class Intake extends SubsystemBase {
   }
 
   public Command shoot() {
-    return setFeederVoltageCommand(IntakeConstants.kFeederVoltage);
+    return setFeederVoltageCommand(IntakeConstants.kFeederShootVoltage);
   }
 
   public Command stopShooter() {

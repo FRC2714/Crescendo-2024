@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.IntakeCommand.IntakeState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -33,6 +35,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutosCommands;
 // import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.RotateToGoal;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -48,6 +51,7 @@ public class RobotContainer {
   // The robot's subsystems
   // private final Limelight m_limelight = new Limelight();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Vision m_camera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
   // private final Shooter m_shooter = new Shooter(m_robotDrive);
   // private final Intake m_intake = new Intake();
   // private final Amp m_amp = new Amp();
@@ -56,13 +60,12 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser;
   // private final Climber m_climber = new Climber();
 
-  private final Superstructure m_superstructure = new Superstructure(m_robotDrive);
-  private final StateMachine m_stateMachine = new StateMachine(m_superstructure);
-
-  // The driver's controller
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   CommandXboxController m_configureController = new CommandXboxController(OIConstants.kConfigureControllerPort);
+
+  private final Superstructure m_superstructure = new Superstructure(m_robotDrive, m_camera, m_driverController, m_operatorController);
+  private final StateMachine m_stateMachine = new StateMachine(m_superstructure);
 
   ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
   SimpleMotorFeedforward driveFF = new SimpleMotorFeedforward(2, 1);
@@ -145,6 +148,7 @@ public class RobotContainer {
     m_driverController.a()
       .whileTrue(m_superstructure.shoot())
       .onFalse(m_superstructure.stopShooter());
+    m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_camera));
     // m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     // m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
     // m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());

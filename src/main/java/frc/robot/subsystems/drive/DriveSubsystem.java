@@ -190,6 +190,8 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_field.setRobotPose(getPose());
 
+    SmartDashboard.putNumber("Gyro Angle", (m_gyro.getAngle(IMUAxis.kZ) % 360));
+
     SmartDashboard.putData("Field Position", m_field);
     SmartDashboard.putNumber("Pose X", getPose().getX());
     SmartDashboard.putNumber("Distance to goal meters", getDistanceToGoalMeters(getPose()));
@@ -480,7 +482,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees();
+    return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees() % 360;
   }
 
   /**
