@@ -133,17 +133,17 @@ public class RobotContainer {
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
 
-    m_driverController.rightBumper()
+    m_operatorController.rightBumper()
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_BACK))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
-    m_driverController.leftBumper()
+    m_operatorController.leftBumper()
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
     
-    m_driverController.povUp().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
-    m_driverController.povDown().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.STOW));
-    m_driverController.povLeft().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
-    m_driverController.povRight().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.DYNAMIC));
+    m_operatorController.povUp().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
+    m_operatorController.povDown().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.STOW));
+    m_operatorController.povLeft().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
+    m_operatorController.povRight().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.DYNAMIC));
 
     m_driverController.a()
       .whileTrue(m_superstructure.shoot())

@@ -58,7 +58,7 @@ public class Vision extends SubsystemBase {
         currentRotation = i.getYaw() - 3;
       }
       else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
-        currentRotation = i.getYaw() - 3;
+        currentRotation = i.getYaw() -+ 3;
       }
     }
     return currentRotation;
