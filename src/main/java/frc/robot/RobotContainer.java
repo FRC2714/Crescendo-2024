@@ -8,6 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -36,6 +37,7 @@ import frc.robot.commands.AutosCommands;
 // import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateToGoal;
+//import frc.robot.commands.RotateToGoalProfiled;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
@@ -56,7 +58,7 @@ public class RobotContainer {
   // private final Intake m_intake = new Intake();
   // private final Amp m_amp = new Amp();
   // private final AutosCommands m_autosCommands = new AutosCommands(m_robotDrive, m_limelight, m_shooter, m_intake);
-  private double kPThetaController = .7;
+  private double kPThetaController = .3;//.7
   private SendableChooser<Command> autoChooser;
   // private final Climber m_climber = new Climber();
 
@@ -161,6 +163,11 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
+
+
+    // m_driverController.back().whileTrue(m_camera.hasTargets() ? new RotateToGoalProfiled(m_camera.getHeadingRelativeAprilTagDegrees(m_robotDrive.getHeading()),m_robotDrive):
+                                                                // new InstantCommand(() -> m_robotDrive.drive(0,0,0,false,false)));
+    m_driverController.back().whileTrue(new RotateToGoal(m_robotDrive,m_camera));
 
     // m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     // m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));

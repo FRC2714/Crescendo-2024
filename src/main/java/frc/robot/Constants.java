@@ -224,9 +224,16 @@ public final class Constants {
 
     // Swerve PID values
     public static final class ThetaPIDConstants {
-      public static final double kP = 1.0;
+
+      public static final TrapezoidProfile.Constraints kThetaConstraints = new TrapezoidProfile.Constraints(
+        0.001, 0.001);
+      public static final double kP = 0.8;
       public static final double kI = 0;
       public static final double kD = 0;
+
+      public static final double kProfiledP = 0.5;
+      public static final double kProfiledI = 0;
+      public static final double kProfiledD = 0;
     }
 
     public static final class RollPIDConstants {

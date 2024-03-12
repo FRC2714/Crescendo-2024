@@ -194,6 +194,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Gyro Angle", (m_gyro.getAngle(IMUAxis.kZ) % 360));
 
+    SmartDashboard.putNumber("gyro heading", getHeading());
     SmartDashboard.putData("Field Position", m_field);
     SmartDashboard.putNumber("Pose X", getPose().getX());
     SmartDashboard.putNumber("Distance to goal meters", getDistanceToGoalMeters(getPose()));
@@ -357,6 +358,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
+   * @return 
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     

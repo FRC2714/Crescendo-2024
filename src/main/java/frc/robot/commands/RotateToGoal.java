@@ -29,7 +29,7 @@ public class RotateToGoal extends Command {
     thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
 
     
-    thetaController.setSetpoint(0);
+    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
     thetaController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
   }

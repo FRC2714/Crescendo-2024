@@ -84,6 +84,7 @@ public class Shooter extends SubsystemBase {
 
     topFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
     bottomFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
+    pivotMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
 
     pivotController = new PIDController(PivotPIDConstants.kP, PivotPIDConstants.kI, PivotPIDConstants.kD);
     flywheelController = topFlywheelMotor.getPIDController();
