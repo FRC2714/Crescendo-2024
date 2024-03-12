@@ -71,6 +71,11 @@ public class Vision extends SubsystemBase {
     return false;
   }
 
+  public Transform3d getSpeakerTargetTransform() {
+    if (getSpeakerTarget() == null) return null;
+    return getSpeakerTarget().getBestCameraToTarget().plus(PhotonConstants.kFrontCameraLocation.inverse());
+  }
+
   public PhotonTrackedTarget getSpeakerTarget() { //add camera offset
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
       if (i.getFiducialId() == 4 ) {
