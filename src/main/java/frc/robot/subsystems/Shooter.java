@@ -41,7 +41,6 @@ public class Shooter extends SubsystemBase {
   private PIDController pivotController;
   private SparkPIDController flywheelController;
 
-  private DriveSubsystem m_drivetrain;
   private Vision m_vision;
 
   private InterpolatingTreeMap pivotAngleMap;
@@ -55,7 +54,7 @@ public class Shooter extends SubsystemBase {
   private boolean dynamicEnabled;
 
 
-  public Shooter(DriveSubsystem m_drivetrain, Vision m_vision) {
+  public Shooter(Vision m_vision) {
     pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
     topFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
     bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
@@ -119,7 +118,6 @@ public class Shooter extends SubsystemBase {
     pivotP.setDefault(0);
     flywheelP.setDefault(0);
     flywheelV.setDefault(0);
-    this.m_drivetrain = m_drivetrain;
     this.m_vision = m_vision;
   }
 
@@ -136,18 +134,36 @@ public class Shooter extends SubsystemBase {
   }
 
   public void populatePivotAngleMap() {
-    pivotAngleMap.put(1.62, 35.0);
-    pivotAngleMap.put(1.82, 33.0);
-    pivotAngleMap.put(2.16, 28.0);
-    pivotAngleMap.put(2.42, 25.0);
-    pivotAngleMap.put(2.86, 21.0);
-    pivotAngleMap.put(3.11, 19.0);
-    pivotAngleMap.put(3.40, 18.0);
-    pivotAngleMap.put(3.64, 16.0);
+    pivotAngleMap.put(1.82, 35.0);
+    pivotAngleMap.put(2.1, 32.0);
+    pivotAngleMap.put(2.6, 27.0);
+    pivotAngleMap.put(2.80, 25.0);
+    pivotAngleMap.put(3.0, 23.0);
+    pivotAngleMap.put(3.25, 21.0);
+    pivotAngleMap.put(3.40, 19.0);
+    pivotAngleMap.put(3.55, 18.0);
+    pivotAngleMap.put(3.9, 16.0);
     pivotAngleMap.put(4.0, 15.0);
     pivotAngleMap.put(4.3, 14.0);
-    pivotAngleMap.put(4.52, 13.0);
-    pivotAngleMap.put(4.82, 12.5);
+    pivotAngleMap.put(4.6, 13.0);
+    pivotAngleMap.put(4.9, 12.0);
+    pivotAngleMap.put(5.1, 11.5);
+    pivotAngleMap.put(5.4, 10.5);
+    pivotAngleMap.put(5.8, 10.0);
+    pivotAngleMap.put(6.0, 9.5);
+    //-------------------------------
+    // pivotAngleMap.put(1.62, 35.0);
+    // pivotAngleMap.put(1.82, 33.0);
+    // pivotAngleMap.put(2.16, 28.0);
+    // pivotAngleMap.put(2.42, 25.0);
+    // pivotAngleMap.put(2.86, 21.0);
+    // pivotAngleMap.put(3.11, 19.0);
+    // pivotAngleMap.put(3.40, 18.0);
+    // pivotAngleMap.put(3.64, 16.0);
+    // pivotAngleMap.put(4.0, 15.0);
+    // pivotAngleMap.put(4.3, 14.0);
+    // pivotAngleMap.put(4.52, 13.0);
+    // pivotAngleMap.put(4.82, 12.5);
     //---------------------------
     // pivotAngleMap.put(0.93, 35.0);
     // pivotAngleMap.put(1.7, 27.0);

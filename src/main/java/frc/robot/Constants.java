@@ -145,7 +145,7 @@ public final class Constants {
     }
     
     public static final class FlywheelPIDConstants {
-      public static final double kP = 0.000007; // TBD
+      public static final double kP = 0.000006; // TBD
       public static final double kI = 0; // TBD
       public static final double kD = 0; // TBD
 
@@ -153,7 +153,7 @@ public final class Constants {
       public static final double kV = 0; // TBD
       public static final double kA = 0; // TBD
 
-      public static final double kFF = 0.00009;
+      public static final double kFF = 0.00008;
     }
   }
 
@@ -224,7 +224,7 @@ public final class Constants {
 
     // Swerve PID values
     public static final class ThetaPIDConstants {
-      public static final double kP = 1;
+      public static final double kP = 1.0;
       public static final double kI = 0;
       public static final double kD = 0;
     }

@@ -31,7 +31,7 @@ public class Superstructure extends SubsystemBase {
   public Superstructure(DriveSubsystem m_drivetrain, Vision m_vision, CommandXboxController m_driverController, CommandXboxController m_operatorController) {
     this.m_vision = m_vision;
     this.m_drivetrain = m_drivetrain;
-    this.m_shooter = new Shooter(m_drivetrain, m_vision);
+    this.m_shooter = new Shooter(m_vision);
     this.m_intake = new Intake();
     this.m_driverController = m_driverController;
     this.m_operatorController = m_operatorController;

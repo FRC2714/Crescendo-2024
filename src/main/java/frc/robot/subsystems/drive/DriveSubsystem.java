@@ -88,7 +88,7 @@ public class DriveSubsystem extends SubsystemBase {
   private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
 
-  private Vision m_backPhotonCamera = new Vision(PhotonConstants.kBackCameraName, PhotonConstants.kBackCameraLocation);
+  // private Vision m_backPhotonCamera = new Vision(PhotonConstants.kBackCameraName, PhotonConstants.kBackCameraLocation);
   // private Vision m_frontPhotonCamera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
 
   private Field2d m_field = new Field2d();
@@ -143,6 +143,8 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
 
+    SmartDashboard.putNumber("turn rate", getTurnRate());
+
     SmartDashboard.putNumber("front left velocity", Math.abs(m_frontLeft.getState().speedMetersPerSecond));
     SmartDashboard.putNumber("front right velocity", Math.abs(m_frontRight.getState().speedMetersPerSecond));
     SmartDashboard.putNumber("back left velocity", Math.abs(m_rearLeft.getState().speedMetersPerSecond));
@@ -163,7 +165,7 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
+    // Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
     // Optional<EstimatedRobotPose> frontPhotonPoseEstimation = m_frontPhotonCamera.getEstimatedGlobalPose();
     // frontPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
     //   Pose2d estPose = poseEstimation.estimatedPose.toPose2d();

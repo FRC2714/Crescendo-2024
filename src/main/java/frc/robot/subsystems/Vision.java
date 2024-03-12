@@ -29,6 +29,8 @@ import frc.robot.Constants.FieldConstants;
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
 
+  private double timeNoTargetSeen = 0;
+
   private PhotonCamera photonCamera;
   private PhotonPoseEstimator photonPoseEstimator;
 
@@ -52,11 +54,11 @@ public class Vision extends SubsystemBase {
 
   public double getXOffsetDegrees() {
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
-      if (i.getFiducialId() == 17 && DriverStation.getAlliance().get().toString().equals("Red")) {
-        currentRotation = i.getYaw();
+      if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        currentRotation = i.getYaw() - 3;
       }
       else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
-        currentRotation = i.getYaw();
+        currentRotation = i.getYaw() - 3;
       }
     }
     return currentRotation;
@@ -64,7 +66,7 @@ public class Vision extends SubsystemBase {
 
   public double getDistanceToGoalMeters() {
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
-      if (i.getFiducialId() == 17 && DriverStation.getAlliance().get().toString().equals("Red")) {
+      if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
         currentDistance = Math.sqrt(Math.pow(i.getBestCameraToTarget().getX(), 2) + Math.pow(i.getBestCameraToTarget().getY(), 2));
       }
       else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
@@ -88,6 +90,10 @@ public class Vision extends SubsystemBase {
 
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
       return photonPoseEstimator.update();
+  }
+
+  public boolean hasTargets() {
+    return timeNoTargetSeen < 100;
   }
 
   public PhotonTrackedTarget getBestTarget() {
@@ -126,6 +132,15 @@ public class Vision extends SubsystemBase {
       SmartDashboard.putNumber("pv X", poseEstimation.estimatedPose.getX());
       SmartDashboard.putNumber("pv Y", poseEstimation.estimatedPose.getY());
     });
+
+    if (!getLatestResult().hasTargets()) {
+      timeNoTargetSeen += 20;
+    }
+    else {
+      timeNoTargetSeen = 0;
+    }
+
+    SmartDashboard.putNumber("Drive offset", getXOffsetDegrees());
 
     SmartDashboard.putNumber("Distance To GOal Meters", getDistanceToGoalMeters());
 
