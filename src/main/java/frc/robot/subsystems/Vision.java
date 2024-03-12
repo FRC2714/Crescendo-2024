@@ -71,7 +71,7 @@ public class Vision extends SubsystemBase {
     return false;
   }
 
-  public PhotonTrackedTarget getSpeakerTarget() {
+  public PhotonTrackedTarget getSpeakerTarget() { //add camera offset
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
       if (i.getFiducialId() == 4 ) {
         return i;
@@ -114,6 +114,15 @@ public class Vision extends SubsystemBase {
 
         return estStdDevs;
     }
+
+    public double getHeadingRelativeAprilTagDegrees(double gyroHeading)
+    {
+      if(getSpeakerTarget() != null)
+      {
+        return gyroHeading - Math.toDegrees(getSpeakerTarget().getYaw());
+      }
+        return gyroHeading;
+    }
   
   @Override
   public void periodic() {
@@ -130,6 +139,8 @@ public class Vision extends SubsystemBase {
     // SmartDashboard.putNumber("Best target x distance", getMultiTagLatestResult().estimatedPose.best.getX());
     // SmartDashboard.putNumber("Best target y distance", getMultiTagLatestResult().estimatedPose.best.getY());
     SmartDashboard.putBoolean("photon pose", photonPoseEstimation.isPresent());
+    //SmartDashboard.putNumber("april tag heading degrees", getSpeakerTarget().getYaw());
+
     // SmartDashboard.putNumber("Number of targets", photonCamera.getLatestResult().getTargets().size());
     // SmartDashboard.putNumber("Best Target ID", photonCamera.getLatestResult().getBestTarget().getFiducialId());
     // SmartDashboard.putNumber("Best Target Distance", photonCamera.getLatestResult().getBestTarget().getBestCameraToTarget().getX());

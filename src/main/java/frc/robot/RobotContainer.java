@@ -26,6 +26,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.RotateToGoalPose;
+import frc.robot.commands.RotateToGoalProfiled;
 import frc.robot.commands.IntakeCommand.IntakeState;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Limelight;
@@ -167,7 +168,7 @@ public class RobotContainer {
     m_driverController.povLeft().whileTrue(m_intake.intakeFront()).whileFalse(m_intake.stopFront());
     m_driverController.povUp().onTrue(m_shooter.stow());
 
-    m_driverController.back().whileTrue(new RotateToGoal(m_robotDrive,m_camera));
+    m_driverController.back().whileTrue(new RotateToGoalProfiled(m_camera.getHeadingRelativeAprilTagDegrees(m_robotDrive.getHeading()),m_robotDrive));
 
     //m_driverController.rightBumper().toggleOnTrue(new MoveAndShoot(m_robotDrive, m_limelight, m_shooter, m_driverController));
     // m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));

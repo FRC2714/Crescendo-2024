@@ -156,6 +156,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("back right setpoint", Math.abs(m_rearRight.getDesiredStateSpeed()));
 
     SmartDashboard.putNumber("Angle to goal", Units.radiansToDegrees(getSpeakerTargetYaw()));
+    SmartDashboard.putNumber("Heading Degrees", getHeading());
     
     m_pose.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
