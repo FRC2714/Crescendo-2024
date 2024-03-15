@@ -14,12 +14,12 @@ import frc.robot.utils.LimelightHelpers;
 public class Limelight extends SubsystemBase {
 
 	private String limelightName = LimelightConstants.kLimelightName;
-	private double kCameraHeight = LimelightConstants.kBackLimelightPose.getY();
+	private double kCameraHeight = LimelightConstants.kBackLimelightPose.getZ();
 	private double kMountingAngle = Units.radiansToDegrees(LimelightConstants.kBackLimelightPose.getRotation().getY());
-	private double GoalHeight = LimelightConstants.kSpeakerGoalHeight;
+	private double GoalHeight = LimelightConstants.kNoteGoalHeight;
 
 	public Limelight() {
-		setPosePipeline();
+		setNoteSeekerPipeline();
 	}
 
 	public double getDistanceToGoalInches() {
@@ -32,10 +32,6 @@ public class Limelight extends SubsystemBase {
 
 	public void setGoalHeight(double GoalHeight) {
 		this.GoalHeight = GoalHeight;
-	}
-
-	public double getGoalHeight() {
-		return GoalHeight;
 	}
 
 	public double getDistanceToGoalMeters() {
@@ -86,8 +82,16 @@ public class Limelight extends SubsystemBase {
         else LimelightHelpers.setLEDMode_ForceOff(limelightName); // LED force off
     }
 
+	public void setAprilTagPipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 2);
+	}
+
 	public void setSpeakerPipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 7);
+		LimelightHelpers.setPipelineIndex(limelightName, 4); // tune later
+	}
+
+	public void setNoteSeekerPipeline() {
+		LimelightHelpers.setPipelineIndex(limelightName, 0); // tune later
 	}
 
   	public void setStagePipeline() {
@@ -95,7 +99,7 @@ public class Limelight extends SubsystemBase {
 	}
 
 	public void setPosePipeline() {
-		LimelightHelpers.setPipelineIndex(limelightName, 0); // TBD
+		LimelightHelpers.setPipelineIndex(limelightName, 5); // TBD
 	}
 
 	public Command setLEDCommand(boolean lightOn) {
@@ -106,5 +110,6 @@ public class Limelight extends SubsystemBase {
 	public void periodic() {
 		SmartDashboard.putNumber("ll distance to goal", getDistanceToGoalMeters());
 		SmartDashboard.putNumber("ll rotation from apriltag", isTargetVisible() ? getXAngleOffsetDegrees() : 30);
+		SmartDashboard.putBoolean("ll is target visible", isTargetVisible());
 	}
 }

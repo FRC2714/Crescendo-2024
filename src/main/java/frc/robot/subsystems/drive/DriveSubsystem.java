@@ -34,10 +34,8 @@ import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
 import frc.robot.Constants.FieldConstants;
@@ -107,7 +105,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      }, DriveConstants.kInitialRedPose, stateStdDevs, visionMeasurementStdDevs);
+      }, DriverStation.getAlliance().toString().equals("Red") ? DriveConstants.kInitialRedPose : DriveConstants.kInitialBluePose, stateStdDevs, visionMeasurementStdDevs);
   
 
   /** Creates a new DriveSubsystem. */
@@ -244,6 +242,10 @@ public class DriveSubsystem extends SubsystemBase {
     rotatingToGoal = !rotatingToGoal;
   }
 
+  public void setRotatingToGoal() {
+    rotatingToGoal = true;
+  }
+
   public boolean getRotatingToGoal(double joystickInput) {
     if (Math.abs(joystickInput) > 0) {
       rotatingToGoal = false;
@@ -253,6 +255,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command toggleRotatingToGoalCommand() {
     return new InstantCommand(() -> toggleRotatingToGoal());
+  }
+
+  public Command setRotatingToGoalCommand() {
+    return new InstantCommand(() -> setRotatingToGoal());
   }
 
   public double getDriveRotationToGoal() {
@@ -271,17 +277,17 @@ public class DriveSubsystem extends SubsystemBase {
       if (DriverStation.getAlliance().get().toString().equals("Red"))
         return Math.atan(
           (pose.getY() - FieldConstants.kRedSpeakerAprilTagLocation.getY()) /
-          Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX())
+          Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX()) - Units.degreesToRadians(10)
         );
     else
       return Math.PI - Math.atan(
           (pose.getY() - FieldConstants.kBlueSpeakerAprilTagLocation.getY()) /
-          Math.abs(pose.getX() - FieldConstants.kBlueSpeakerAprilTagLocation.getX())
+          Math.abs(pose.getX() - FieldConstants.kBlueSpeakerAprilTagLocation.getX()) - Units.degreesToRadians(10)
         );
     }
     return Math.atan(
           (pose.getY() - FieldConstants.kRedSpeakerAprilTagLocation.getY())  /
-          Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX())
+          Math.abs(pose.getX() - FieldConstants.kRedSpeakerAprilTagLocation.getX()) - Units.degreesToRadians(10)
         );
   }
 
@@ -462,6 +468,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void zeroHeading() {
     m_gyro.reset();
     resetPoseEstimator(new Pose2d());
+  }
+
+  public void setHeading(double angle) {
+    m_gyro.setGyroAngleZ(angle);
   }
 
   /**
