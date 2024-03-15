@@ -39,14 +39,14 @@ public class IntakeCommand extends Command {
       case BACK:
         m_intake.setBackBottomRollerVoltage(-IntakeConstants.kBackBottomRollerVoltageBackSide);
         m_intake.setBackDirectionRollerVoltage(IntakeConstants.kBackDirectionRollerVoltageBackSide);
-        m_intake.setFeederVoltage(IntakeConstants.kFeederVoltage);
+        m_intake.setFeederVoltage(IntakeConstants.kFeederIntakeVoltage);
         break;
       case FRONT:
         m_intake.setFrontRollerVoltage(IntakeConstants.kFrontRollerVoltage);
         m_intake.setBackBottomRollerVoltage(IntakeConstants.kBackBottomRollerVoltageFrontSide);
         m_intake.setBackDirectionRollerVoltage(IntakeConstants.kBackDirectionRollerVoltageFrontSide);
         m_intake.setConveyorVoltage(-IntakeConstants.kConveyorVoltage);
-        m_intake.setFeederVoltage(IntakeConstants.kFeederVoltage);
+        m_intake.setFeederVoltage(IntakeConstants.kFeederIntakeVoltage);
         break;
     }
   }

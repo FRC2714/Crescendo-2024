@@ -103,6 +103,14 @@ public class Intake extends SubsystemBase {
     }
   }
 
+  public Command enableLoaded() {
+    return new InstantCommand(() -> loaded = true);
+  }
+
+  public Command disableLoaded() {
+    return new InstantCommand(() -> loaded = false);
+  }
+
   public boolean getLoaded() {
     return loaded;
   }
@@ -172,28 +180,23 @@ public class Intake extends SubsystemBase {
   }
 
   public ParallelCommandGroup intakeFront() {
-    if (backRunning) return new ParallelCommandGroup();
-    else frontRunning = true;
     return new ParallelCommandGroup(setFrontRollerVoltageCommand(IntakeConstants.kFrontRollerVoltage),
                                     setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageFrontSide),
                                     setBackDirectionRollerVoltageCommand(IntakeConstants.kBackDirectionRollerVoltageFrontSide),
                                     setConveyorVoltageCommand(-IntakeConstants.kConveyorVoltage),
-                                    setFeederVoltageCommand(IntakeConstants.kFeederVoltage));
+                                    setFeederVoltageCommand(IntakeConstants.kFeederIntakeVoltage));
   }
 
   public Command outtakeFront() {
-    if (backRunning) return new ParallelCommandGroup();
-    else frontRunning = true;
     return new SequentialCommandGroup(new InstantCommand(() -> loaded = false), new ParallelCommandGroup(
                                     setFrontRollerVoltageCommand(-(IntakeConstants.kFrontRollerVoltage + 1)),
                                     setBackBottomRollerVoltageCommand(-(IntakeConstants.kBackBottomRollerVoltageFrontSide + 1)),
                                     setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageFrontSide + 1)),
                                     setConveyorVoltageCommand(IntakeConstants.kConveyorVoltage + 1),
-                                    setFeederVoltageCommand(-(IntakeConstants.kFeederVoltage + 1))));
+                                    setFeederVoltageCommand(-(IntakeConstants.kFeederIntakeVoltage + 1))));
   }
 
   public ParallelCommandGroup stopFront() {
-    frontRunning = false;
     return new ParallelCommandGroup(setFrontRollerVoltageCommand(0),
                                     setBackBottomRollerVoltageCommand(0),
                                     setBackDirectionRollerVoltageCommand(0),
@@ -202,34 +205,26 @@ public class Intake extends SubsystemBase {
   }
 
   public Command intakeBack() {
-    if (frontRunning) return new ParallelCommandGroup();
-    else backRunning = true;
     return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(-IntakeConstants.kBackBottomRollerVoltageBackSide),
                                     setBackDirectionRollerVoltageCommand(IntakeConstants.kBackDirectionRollerVoltageBackSide),
-                                    setFeederVoltageCommand(IntakeConstants.kFeederVoltage));
+                                    setFeederVoltageCommand(IntakeConstants.kFeederIntakeVoltage));
   }
 
   public Command outtakeBack() {
-    if (frontRunning) return new ParallelCommandGroup();
-    else backRunning = true;
     return new SequentialCommandGroup(new InstantCommand(() -> loaded = false), new ParallelCommandGroup(
                                     setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageBackSide + 1),
                                     setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageBackSide + 1)),
-                                    setFeederVoltageCommand(-(IntakeConstants.kFeederVoltage + 1))));
+                                    setFeederVoltageCommand(-(IntakeConstants.kFeederIntakeVoltage + 1))));
   }
 
   public ParallelCommandGroup stopBack() {
-    backRunning = false;
     return new ParallelCommandGroup(setBackBottomRollerVoltageCommand(0),
                                     setBackDirectionRollerVoltageCommand(0),
                                     setFeederVoltageCommand(0));
   }
 
   public Command shoot() {
-    return new SequentialCommandGroup(
-      new ParallelCommandGroup(setFeederVoltageCommand(IntakeConstants.kFeederVoltage),
-                               new InstantCommand(() -> elapsedShootTime = 0)),
-                               new InstantCommand(() -> loaded = false));
+    return setFeederVoltageCommand(IntakeConstants.kFeederShootVoltage);
   }
 
   public Command stopShooter() {

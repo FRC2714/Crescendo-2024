@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -83,15 +84,18 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   private boolean rotatingToGoal = false;
+  private boolean stopped = false;
 
   private FieldRelativeVelocity m_fieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeAcceleration m_fieldRelativeAcceleration = new FieldRelativeAcceleration();
 
-  private Vision m_backPhotonCamera = new Vision(PhotonConstants.kBackCameraName, PhotonConstants.kBackCameraLocation);
-  private Vision m_frontPhotonCamera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
+  // private Vision m_backPhotonCamera = new Vision(PhotonConstants.kBackCameraName, PhotonConstants.kBackCameraLocation);
+  // private Vision m_frontPhotonCamera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
 
   private Field2d m_field = new Field2d();
+
+  private Vision m_camera;
   
   // Pose class for tracking robot pose
   Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(0.01)); // Increase for less state trust
@@ -109,8 +113,11 @@ public class DriveSubsystem extends SubsystemBase {
   
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public DriveSubsystem(Vision m_camera) {
     m_gyro.calibrate();
+    this.m_camera = m_camera;
+
+    PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
 
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
@@ -143,6 +150,10 @@ public class DriveSubsystem extends SubsystemBase {
   public void periodic() {
     // Update the odometry in the periodic block
 
+    SmartDashboard.putBoolean("Stopped?", stopped);
+
+    SmartDashboard.putNumber("turn rate", getTurnRate());
+
     SmartDashboard.putNumber("front left velocity", Math.abs(m_frontLeft.getState().speedMetersPerSecond));
     SmartDashboard.putNumber("front right velocity", Math.abs(m_frontRight.getState().speedMetersPerSecond));
     SmartDashboard.putNumber("back left velocity", Math.abs(m_rearLeft.getState().speedMetersPerSecond));
@@ -153,7 +164,7 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("back left setpoint", Math.abs(m_rearLeft.getDesiredStateSpeed()));
     SmartDashboard.putNumber("back right setpoint", Math.abs(m_rearRight.getDesiredStateSpeed()));
 
-    SmartDashboard.putNumber("Angle to goal", Units.radiansToDegrees(getSpeakerTargetYaw()));
+    // SmartDashboard.putNumber("Angle to goal", Units.radiansToDegrees(getSpeakerTargetYaw()));
     
     m_pose.update(
         Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)),
@@ -163,25 +174,25 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
-    Optional<EstimatedRobotPose> frontPhotonPoseEstimation = m_frontPhotonCamera.getEstimatedGlobalPose();
-    frontPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
-      Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
-      SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
-      SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
-      SmartDashboard.putNumber("drive photon est theta", poseEstimation.estimatedPose.getRotation().toRotation2d().getDegrees());
-      m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds);
-    }, new Runnable() {
-        @Override
-        public void run() {
+    // Optional<EstimatedRobotPose> backPhotonPoseEstimation = m_backPhotonCamera.getEstimatedGlobalPose();
+    // Optional<EstimatedRobotPose> frontPhotonPoseEstimation = m_frontPhotonCamera.getEstimatedGlobalPose();
+    // frontPhotonPoseEstimation.ifPresentOrElse(poseEstimation -> {
+    //   Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
+    //   SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
+    //   SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
+    //   SmartDashboard.putNumber("drive photon est theta", poseEstimation.estimatedPose.getRotation().toRotation2d().getDegrees());
+    //   m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds);
+    // }, new Runnable() {
+        // @Override
+        // public void run() {
           // backPhotonPoseEstimation.ifPresent(poseEstimation -> {
           //   Pose2d estPose = poseEstimation.estimatedPose.toPose2d();
           //   SmartDashboard.putNumber("drive photon est x", poseEstimation.estimatedPose.getX());
           //   SmartDashboard.putNumber("drive photon est y", poseEstimation.estimatedPose.getY());
           //   m_pose.addVisionMeasurement(estPose, poseEstimation.timestampSeconds, m_backPhotonCamera.getEstimationStdDevs(estPose));
           // });
-        }
-    });
+        // }
+    // });
 
     
     m_fieldRelativeVelocity = new FieldRelativeVelocity(getChassisSpeed(), new Rotation2d(m_gyro.getAngle(IMUAxis.kZ)));
@@ -190,6 +201,9 @@ public class DriveSubsystem extends SubsystemBase {
 
     m_field.setRobotPose(getPose());
 
+    SmartDashboard.putNumber("Gyro Angle", (m_gyro.getAngle(IMUAxis.kZ) % 360));
+
+    SmartDashboard.putNumber("gyro heading", getHeading());
     SmartDashboard.putData("Field Position", m_field);
     SmartDashboard.putNumber("Pose X", getPose().getX());
     SmartDashboard.putNumber("Distance to goal meters", getDistanceToGoalMeters(getPose()));
@@ -197,27 +211,27 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Pose rotation to goal", Units.radiansToDegrees(getRotationFromGoalRadians(getPose())));
   }
 
-  public double getSpeakerTargetYaw() {
-    if (DriverStation.getAlliance().isPresent()) {
-      if (DriverStation.getAlliance().get().toString().equals("Red")) {
-        for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
-          if (i.getFiducialId() == 4) {
-            return i.getBestCameraToTarget().plus(
-              new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
-          }
-        }
-      }
-      else {
-        for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
-            if (i.getFiducialId() == 7) {
-              return i.getBestCameraToTarget().plus(
-                new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
-            }
-        }
-      }
-    }
-    return 0;
-  }
+  // public double getSpeakerTargetYaw() {
+  //   if (DriverStation.getAlliance().isPresent()) {
+  //     if (DriverStation.getAlliance().get().toString().equals("Red")) {
+  //       for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
+  //         if (i.getFiducialId() == 4) {
+  //           return i.getBestCameraToTarget().plus(
+  //             new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
+  //         }
+  //       }
+  //     }
+  //     else {
+  //       for (PhotonTrackedTarget i : m_frontPhotonCamera.getLatestResult().getTargets()) {
+  //           if (i.getFiducialId() == 7) {
+  //             return i.getBestCameraToTarget().plus(
+  //               new Transform3d(0, -12, 0, new Rotation3d(0, 0, 0))).getRotation().getZ();
+  //           }
+  //       }
+  //     }
+  //   }
+  //   return 0;
+  // }
 
   public double getDistanceToGoalMeters(Pose2d pose) {
     if (DriverStation.getAlliance().isPresent()) {
@@ -246,6 +260,10 @@ public class DriveSubsystem extends SubsystemBase {
     rotatingToGoal = true;
   }
 
+  public void disableRotatingToGoal() {
+    rotatingToGoal = false;
+  }
+
   public boolean getRotatingToGoal(double joystickInput) {
     if (Math.abs(joystickInput) > 0) {
       rotatingToGoal = false;
@@ -261,7 +279,11 @@ public class DriveSubsystem extends SubsystemBase {
     return new InstantCommand(() -> setRotatingToGoal());
   }
 
-  public double getDriveRotationToGoal() {
+  public Command disableRotatingToGoalCommand() {
+    return new InstantCommand(() -> disableRotatingToGoal());
+  }
+
+  public double getDriveRotationToGoalPose() {
     PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
     thetaController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -270,6 +292,33 @@ public class DriveSubsystem extends SubsystemBase {
     thetaController.setSetpoint(-rotationToGoal);
 
     return thetaController.calculate(getPose().getRotation().getRadians());
+  }
+
+  public double getDriveRotationToGoal() {
+    PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
+    thetaController.setTolerance(Units.degreesToRadians(0),0);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
+
+    return m_camera.speakerVisible() ? thetaController.calculate(Units.degreesToRadians(m_camera.getXOffsetDegrees())) : 0;
+  }
+
+  public Command enableStopped() {
+    return new InstantCommand(() -> stopped = true);
+  }
+
+  public Command disableStopped() {
+    return new InstantCommand(() -> stopped = false);
+  }
+
+  public Optional<Rotation2d> getDriveRotationToGoalOptional() {
+    PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
+    thetaController.setTolerance(Units.degreesToRadians(0),0);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
+    return (m_camera.speakerVisible() && stopped) ? Optional.of(new Rotation2d(Units.degreesToRadians(m_camera.getXOffsetDegrees()))) : Optional.empty();
   }
 
   public double getRotationFromGoalRadians(Pose2d pose) {
@@ -353,6 +402,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @param fieldRelative Whether the provided x and y speeds are relative to the
    *                      field.
    * @param rateLimit     Whether to enable rate limiting for smoother control.
+   * @return 
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     
@@ -480,7 +530,7 @@ public class DriveSubsystem extends SubsystemBase {
    * @return the robot's heading in degrees, from -180 to 180
    */
   public double getHeading() {
-    return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees();
+    return Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)).getDegrees() % 360;
   }
 
   /**

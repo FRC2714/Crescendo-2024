@@ -78,7 +78,8 @@ public final class Constants {
     public static final double kBackBottomRollerVoltageBackSide = 3;
     public static final double kFrontDirectionRollerVoltageBackSide = 3; // TBD
     public static final double kConveyorVoltage = 5; // TBD
-    public static final double kFeederVoltage = 3; // TBD
+    public static final double kFeederIntakeVoltage = 2; // TBD
+    public static final double kFeederShootVoltage = 12;
   }
 
 
@@ -114,7 +115,7 @@ public final class Constants {
     public static final double kPivotGearRatio = 25;
     public static final double kFlywheelGearRatio = 2;
 
-    public static final double kPivotEncoderZeroOffset = 192 * kPivotGearRatio;
+    public static final double kPivotEncoderZeroOffset = 24 * kPivotGearRatio;
     public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
 
     public static final double kMinPivotAngle = 0;
@@ -134,6 +135,9 @@ public final class Constants {
     public static final double kAmpAngle = 25;
     public static final double kAmpFlywheelVelocity = 2500;
 
+    public static final double kSubwooferAngle = 40;
+    public static final double kSubwooferFlywheelVelocity = 8000;
+
     public static final class PivotPIDConstants {
       public static final double kP = 0.45; // TBD
       public static final double kI = 0; // TBD
@@ -141,7 +145,7 @@ public final class Constants {
     }
     
     public static final class FlywheelPIDConstants {
-      public static final double kP = 0.000007; // TBD
+      public static final double kP = 0.000006; // TBD
       public static final double kI = 0; // TBD
       public static final double kD = 0; // TBD
 
@@ -149,7 +153,7 @@ public final class Constants {
       public static final double kV = 0; // TBD
       public static final double kA = 0; // TBD
 
-      public static final double kFF = 0.00009;
+      public static final double kFF = 0.00008;
     }
   }
 
@@ -180,7 +184,7 @@ public final class Constants {
     public static final Pose2d kInitialBluePose = new Pose2d(1.0381, 5.547, new Rotation2d(180));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 7.59864;
+    public static final double kMaxSpeedMetersPerSecond = 6.77;
     public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
@@ -220,9 +224,16 @@ public final class Constants {
 
     // Swerve PID values
     public static final class ThetaPIDConstants {
-      public static final double kP = 1;
+
+      public static final TrapezoidProfile.Constraints kThetaConstraints = new TrapezoidProfile.Constraints(
+        0.001, 0.001);
+      public static final double kP = 0.8;
       public static final double kI = 0;
       public static final double kD = 0;
+
+      public static final double kProfiledP = 0.5;
+      public static final double kProfiledI = 0;
+      public static final double kProfiledD = 0;
     }
 
     public static final class RollPIDConstants {
@@ -235,7 +246,7 @@ public final class Constants {
     // The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
     // robot that drives faster).
-    public static final int kDrivingMotorPinionTeeth = 16;
+    public static final int kDrivingMotorPinionTeeth = 15;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.
@@ -245,8 +256,8 @@ public final class Constants {
     public static final double kDrivingMotorFreeSpeedRps = NeoVortexMotorConstants.kFreeSpeedRpm / 60;
     public static final double kWheelDiameterMeters = 0.0762;
     public static final double kWheelCircumferenceMeters = kWheelDiameterMeters * Math.PI;
-    // 45 teeth on the wheel's bevel gear, 19 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-    public static final double kDrivingMotorReduction = (45.0 * 19) / (kDrivingMotorPinionTeeth * 15);
+    // 45 teeth on the wheel's bevel gear, 20 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
+    public static final double kDrivingMotorReduction = (45.0 * 20) / (kDrivingMotorPinionTeeth * 15);
     public static final double kDriveWheelFreeSpeedRps = (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters)
         / kDrivingMotorReduction;
 
@@ -288,7 +299,8 @@ public final class Constants {
     public static final int kConfigureControllerPort = 2;
     public static final double kDriveDeadband = 0.05;
     public static final double kTriggerThreshold = 0.1;
-    public static final double kRumble = 1;
+    public static final double kRumblePower = 0.5;
+    public static final double kRumbleTimeMS = 500;
   }
 
   public static final class AutoConstants {
