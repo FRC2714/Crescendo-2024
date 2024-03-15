@@ -51,9 +51,9 @@ import frc.robot.commands.SeekNote;
  */
 public class RobotContainer {
   // The robot's subsystems
-  // private final Limelight m_limelight = new Limelight();
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final Limelight m_limelight = new Limelight();
   private final Vision m_camera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_camera);
   // private final Shooter m_shooter = new Shooter(m_robotDrive);
   // private final Intake m_intake = new Intake();
   // private final Amp m_amp = new Amp();
@@ -150,10 +150,10 @@ public class RobotContainer {
     m_driverController.a()
       .whileTrue(m_superstructure.shoot())
       .onFalse(m_superstructure.stopShooter());
-    m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_camera));
+    // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_camera));
     // m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     // m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
-    // m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
+    m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // m_driverController.a().whileTrue(m_intake.shoot()).onFalse(m_intake.stopShooter());
     // m_driverController.b().whileTrue(m_shooter.setFlywheelVelocityCommand(8000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));

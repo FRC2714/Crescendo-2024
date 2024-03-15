@@ -43,7 +43,7 @@ public class RotateToGoal extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (m_camera.hasTargets()) {
+    if (m_camera.speakerVisible()) {
       m_drivetrain.drive(
       0, 
       0, 

@@ -157,7 +157,7 @@ public class Vision extends SubsystemBase {
       SmartDashboard.putNumber("pv Y", poseEstimation.estimatedPose.getY());
     });
 
-    if (!getLatestResult().hasTargets()) {
+    if (!speakerVisible()) {
       timeNoTargetSeen += 20;
     }
     else {

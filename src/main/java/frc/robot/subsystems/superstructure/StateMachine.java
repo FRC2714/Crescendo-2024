@@ -166,7 +166,7 @@ public class StateMachine extends SubsystemBase {
   }
 
   public Command intakeSelectCommand(IntakeState intakeState) {
-    System.out.println(currentTriggerState);
+    // System.out.println(currentTriggerState);
     return new SelectCommand<IntakeState>(Map.ofEntries(
       Map.entry(
         IntakeState.IDLE,

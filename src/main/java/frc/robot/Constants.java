@@ -79,7 +79,7 @@ public final class Constants {
     public static final double kFrontDirectionRollerVoltageBackSide = 3; // TBD
     public static final double kConveyorVoltage = 5; // TBD
     public static final double kFeederIntakeVoltage = 2; // TBD
-    public static final double kFeederShootVoltage = 3;
+    public static final double kFeederShootVoltage = 12;
   }
 
 

@@ -92,6 +92,8 @@ public class DriveSubsystem extends SubsystemBase {
   // private Vision m_frontPhotonCamera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
 
   private Field2d m_field = new Field2d();
+
+  private Vision m_camera;
   
   // Pose class for tracking robot pose
   Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(0.01)); // Increase for less state trust
@@ -109,8 +111,9 @@ public class DriveSubsystem extends SubsystemBase {
   
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem() {
+  public DriveSubsystem(Vision m_camera) {
     m_gyro.calibrate();
+    this.m_camera = m_camera;
 
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
@@ -266,7 +269,7 @@ public class DriveSubsystem extends SubsystemBase {
     return new InstantCommand(() -> setRotatingToGoal());
   }
 
-  public double getDriveRotationToGoal() {
+  public double getDriveRotationToGoalPose() {
     PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
     thetaController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
@@ -275,6 +278,16 @@ public class DriveSubsystem extends SubsystemBase {
     thetaController.setSetpoint(-rotationToGoal);
 
     return thetaController.calculate(getPose().getRotation().getRadians());
+  }
+
+  public double getDriveRotationToGoal() {
+    PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
+    thetaController.setTolerance(Units.degreesToRadians(0),0);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
+
+    return m_camera.speakerVisible() ? thetaController.calculate(Units.degreesToRadians(m_camera.getXOffsetDegrees())) : 0;
   }
 
   public double getRotationFromGoalRadians(Pose2d pose) {
