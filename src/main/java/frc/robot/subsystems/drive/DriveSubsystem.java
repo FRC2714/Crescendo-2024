@@ -9,6 +9,7 @@ import java.util.Optional;
 import org.photonvision.EstimatedRobotPose;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
@@ -83,6 +84,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   private boolean rotatingToGoal = false;
+  private boolean stopped = false;
 
   private FieldRelativeVelocity m_fieldRelativeVelocity = new FieldRelativeVelocity();
   private FieldRelativeVelocity m_lastFieldRelativeVelocity = new FieldRelativeVelocity();
@@ -115,6 +117,8 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.calibrate();
     this.m_camera = m_camera;
 
+    PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
+
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
             this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -145,6 +149,8 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
+
+    SmartDashboard.putBoolean("Stopped?", stopped);
 
     SmartDashboard.putNumber("turn rate", getTurnRate());
 
@@ -254,6 +260,10 @@ public class DriveSubsystem extends SubsystemBase {
     rotatingToGoal = true;
   }
 
+  public void disableRotatingToGoal() {
+    rotatingToGoal = false;
+  }
+
   public boolean getRotatingToGoal(double joystickInput) {
     if (Math.abs(joystickInput) > 0) {
       rotatingToGoal = false;
@@ -267,6 +277,10 @@ public class DriveSubsystem extends SubsystemBase {
 
   public Command setRotatingToGoalCommand() {
     return new InstantCommand(() -> setRotatingToGoal());
+  }
+
+  public Command disableRotatingToGoalCommand() {
+    return new InstantCommand(() -> disableRotatingToGoal());
   }
 
   public double getDriveRotationToGoalPose() {
@@ -288,6 +302,23 @@ public class DriveSubsystem extends SubsystemBase {
     thetaController.setSetpoint(Units.degreesToRadians(m_camera.getXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
 
     return m_camera.speakerVisible() ? thetaController.calculate(Units.degreesToRadians(m_camera.getXOffsetDegrees())) : 0;
+  }
+
+  public Command enableStopped() {
+    return new InstantCommand(() -> stopped = true);
+  }
+
+  public Command disableStopped() {
+    return new InstantCommand(() -> stopped = false);
+  }
+
+  public Optional<Rotation2d> getDriveRotationToGoalOptional() {
+    PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
+    thetaController.setTolerance(Units.degreesToRadians(0),0);
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
+    return (m_camera.speakerVisible() && stopped) ? Optional.of(new Rotation2d(Units.degreesToRadians(m_camera.getXOffsetDegrees()))) : Optional.empty();
   }
 
   public double getRotationFromGoalRadians(Pose2d pose) {

@@ -78,16 +78,12 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-    // NamedCommands.registerCommand("intakeBackBeam", new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
-    // NamedCommands.registerCommand("intakeFrontBeam", new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
-    // NamedCommands.registerCommand("shoot", m_intake.shoot().withTimeout(3));
-    // NamedCommands.registerCommand("intakeBack", m_intake.intakeBack());
-    // NamedCommands.registerCommand("intakeFront", m_intake.intakeFront());
-    // NamedCommands.registerCommand("stopIntakeBack", m_intake.stopBack());
-    // NamedCommands.registerCommand("stopIntakeFront", m_intake.stopFront());
-    // NamedCommands.registerCommand("setupShort", m_shooter.setupShot(37));
-    // NamedCommands.registerCommand("setupDynamic", new InstantCommand(() -> m_shooter.toggleDynamic()));
-    // NamedCommands.registerCommand("setupSubwoofer", m_shooter.readySubwoofer());
+    NamedCommands.registerCommand("intakeBack", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK));
+    NamedCommands.registerCommand("intakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT));
+    NamedCommands.registerCommand("shoot", m_superstructure.shoot().withTimeout(3));
+    NamedCommands.registerCommand("stopIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK));
+    NamedCommands.registerCommand("setupSubwoofer", m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
+    NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());
     // NamedCommands.registerCommand("setupAllianceZone", m_shooter.readyAllianceZone());
     // NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(1000)));
     // NamedCommands.registerCommand("setupFast", new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)));
@@ -96,9 +92,11 @@ public class RobotContainer {
     // NamedCommands.registerCommand("setupClose", new ParallelCommandGroup(
     //                                                                       new InstantCommand(() -> m_shooter.setPivotAngle(45)),//tbd
     //                                                                       new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)))); //tbd
-    // NamedCommands.registerCommand("alignToGoal", m_robotDrive.toggleRotatingToGoalCommand().withTimeout(3));
+    NamedCommands.registerCommand("alignToGoal", new InstantCommand());
     // NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
-    // NamedCommands.registerCommand("stowShooter", m_shooter.stow()); //tbd
+    NamedCommands.registerCommand("stowShooter", m_stateMachine.shooterSelectCommand(ShooterState.STOW)); //tbd
+    NamedCommands.registerCommand("enableStoppedState", m_robotDrive.enableStopped());
+    NamedCommands.registerCommand("disableStoppedState", m_robotDrive.disableStopped());
 
     autoChooser = AutoBuilder.buildAutoChooser("3 Note Auto Top");
     SmartDashboard.putData("Auto Chooser", autoChooser);
