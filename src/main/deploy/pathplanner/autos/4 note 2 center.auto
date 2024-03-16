@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7516461186768542,
+      "y": 6.591117797620211
+    },
+    "rotation": -121.9001569177337
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "toptotoptotopcenter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "topcentershoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "shooto2ndtop"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2ndtoptoshoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

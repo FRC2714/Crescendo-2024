@@ -46,9 +46,11 @@ public final class Constants {
     public static final int kLeftClimberSmartCurrentLimit = 80; // TBD
     public static final int kRightClimberSmartCurrentLimit = 80; // TBD
 
-    public static final double kMaxExtension = 125; // TBD
-    public static final double kMinExtension = -72; // TBD
+    public static final double kMaxExtension = 45; // TBD
+    public static final double kMinExtension = -25; // TBD
     public static final double kClimberVoltage = 8;
+    public static final double kClimberConfigureVoltage = 1;
+    public static final double kP = 1;
   }
 
 
@@ -158,11 +160,11 @@ public final class Constants {
   }
 
   public static final class PhotonConstants {
-    public static final String kBackCameraName = "backCamera";
-    public static final String kFrontCameraName = "frontCamera";
-    public static final Transform3d kBackCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(0), Units.inchesToMeters(-11.000111), Units.inchesToMeters(12.17225)),
-                                                                          new Rotation3d(0, Units.degreesToRadians(-20), Units.degreesToRadians(180)));
-    public static final Transform3d kFrontCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(-15), Units.inchesToMeters(12.249889), Units.inchesToMeters(13.018624)),
+    public static final String kRightCameraName = "rightCamera";
+    public static final String kLeftCameraName = "leftCamera";
+    public static final Transform3d kRightCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(1.509948), Units.inchesToMeters(-12.250111), Units.inchesToMeters(16.242982)),
+                                                                          new Rotation3d(0, Units.degreesToRadians(-40), Units.degreesToRadians(180)));
+    public static final Transform3d kLeftCameraLocation = new Transform3d(new Translation3d(Units.inchesToMeters(1.488783), Units.inchesToMeters(12.249889), Units.inchesToMeters(15.836252)),
                                                                           new Rotation3d(0, Units.degreesToRadians(-25), 0));
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
@@ -174,8 +176,10 @@ public final class Constants {
     public static final Pose2d kRedSpeakerAprilTagLocation = new Pose2d(16.57, 5.547, new Rotation2d(0));
   }
   public static final class AmpConstants {
-      public static final int kLeftAmpPivotChannel = 1;
-      public static final int kRightAmpPivotChannel = 0;
+      public static final int kLeftAmpPivotChannel = 0;
+      public static final int kRightAmpPivotChannel = 1;
+
+      public static final double kClimbPivot = 0.1;
     }
 
   public static final class DriveConstants {

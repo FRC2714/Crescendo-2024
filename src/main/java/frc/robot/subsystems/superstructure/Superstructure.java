@@ -10,8 +10,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.IntakeCommand;
+import frc.robot.subsystems.Amp;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
@@ -23,16 +26,20 @@ public class Superstructure extends SubsystemBase {
   Intake m_intake;
   DriveSubsystem m_drivetrain;
   Vision m_vision;
+  Climber m_climber;
+  Amp m_amp;
   CommandXboxController m_driverController;
   CommandXboxController m_operatorController;
 
   double elapsedRumbleTime = 0;
 
-  public Superstructure(DriveSubsystem m_drivetrain, Vision m_vision, CommandXboxController m_driverController, CommandXboxController m_operatorController) {
+  public Superstructure(DriveSubsystem m_drivetrain, Vision m_vision, Climber m_climber, Amp m_amp, CommandXboxController m_driverController, CommandXboxController m_operatorController) {
     this.m_vision = m_vision;
     this.m_drivetrain = m_drivetrain;
     this.m_shooter = new Shooter(m_vision);
     this.m_intake = new Intake();
+    this.m_climber = m_climber;
+    this.m_amp = m_amp;
     this.m_driverController = m_driverController;
     this.m_operatorController = m_operatorController;
   }
@@ -117,11 +124,31 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command readyShooterToAmp() {
-    return m_shooter.readyAmp();
+    return new ParallelCommandGroup(m_shooter.readyAmp(),
+                                    m_amp.extend());
   }
 
   public Command stowShooter() {
-    return m_shooter.stow();
+    return new ParallelCommandGroup(m_shooter.stow(),
+                                    m_amp.stow());
+  }
+
+  public Command extendClimbers() {
+    return new SequentialCommandGroup(
+      m_amp.toClimberPosition(),
+      m_climber.extendClimbersCommand());
+  }
+
+  public Command retractClimbers() {
+    return new SequentialCommandGroup(
+      m_amp.toClimberPosition(),
+      m_climber.retractClimbersCommand());
+  }
+
+  public Command zeroClimbers() {
+    return new SequentialCommandGroup(
+      m_amp.toClimberPosition(),
+      m_climber.zeroClimbersCommand());
   }
 
   @Override

@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutosCommands;
+import frc.robot.commands.DriveToAmp;
 // import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateToGoal;
@@ -52,21 +53,22 @@ import frc.robot.commands.SeekNote;
 public class RobotContainer {
   // The robot's subsystems
   private final Limelight m_limelight = new Limelight();
-  private final Vision m_camera = new Vision(PhotonConstants.kFrontCameraName, PhotonConstants.kFrontCameraLocation);
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_camera);
+  private final Vision m_leftCamera = new Vision(PhotonConstants.kLeftCameraName, PhotonConstants.kLeftCameraLocation);
+  private final Vision m_rightCamera = new Vision(PhotonConstants.kRightCameraName, PhotonConstants.kRightCameraLocation);
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_leftCamera);
   // private final Shooter m_shooter = new Shooter(m_robotDrive);
   // private final Intake m_intake = new Intake();
-  // private final Amp m_amp = new Amp();
+  private final Amp m_amp = new Amp();
   // private final AutosCommands m_autosCommands = new AutosCommands(m_robotDrive, m_limelight, m_shooter, m_intake);
   private double kPThetaController = .3;//.7
   private SendableChooser<Command> autoChooser;
-  // private final Climber m_climber = new Climber();
+  private final Climber m_climber = new Climber();
 
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   CommandXboxController m_configureController = new CommandXboxController(OIConstants.kConfigureControllerPort);
 
-  private final Superstructure m_superstructure = new Superstructure(m_robotDrive, m_camera, m_driverController, m_operatorController);
+  private final Superstructure m_superstructure = new Superstructure(m_robotDrive, m_leftCamera, m_climber, m_amp, m_driverController, m_operatorController);
   private final StateMachine m_stateMachine = new StateMachine(m_superstructure);
 
   ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
@@ -140,10 +142,10 @@ public class RobotContainer {
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
     
-    m_operatorController.povUp().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
-    m_operatorController.povDown().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.STOW));
-    m_operatorController.povLeft().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
-    m_operatorController.povRight().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.DYNAMIC));
+    m_operatorController.y().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
+    m_operatorController.a().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.STOW));
+    m_operatorController.x().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
+    m_operatorController.b().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.DYNAMIC));
 
     m_driverController.a()
       .whileTrue(m_superstructure.shoot())
@@ -153,6 +155,7 @@ public class RobotContainer {
     // m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
     m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
     // m_driverController.a().whileTrue(m_intake.shoot()).onFalse(m_intake.stopShooter());
     // m_driverController.b().whileTrue(m_shooter.setFlywheelVelocityCommand(8000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
     // m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),
@@ -165,35 +168,26 @@ public class RobotContainer {
 
     // m_driverController.back().whileTrue(m_camera.hasTargets() ? new RotateToGoalProfiled(m_camera.getHeadingRelativeAprilTagDegrees(m_robotDrive.getHeading()),m_robotDrive):
                                                                 // new InstantCommand(() -> m_robotDrive.drive(0,0,0,false,false)));
-    m_driverController.back().whileTrue(new RotateToGoal(m_robotDrive,m_camera));
+    m_driverController.back().whileTrue(new RotateToGoal(m_robotDrive, m_leftCamera));
 
     // m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
     // m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
-    // m_operatorController.rightBumper().whileTrue(m_intake.outtakeBack()).whileFalse(m_intake.stopBack());
-    // m_operatorController.leftBumper().whileTrue(m_intake.outtakeFront()).whileFalse(m_intake.stopFront());
-    // m_operatorController.b().onTrue(new ParallelCommandGroup(m_shooter.stow(), m_amp.stow()));
-    // m_operatorController.x().onTrue(m_shooter.readySubwoofer());
-    // m_operatorController.y().onTrue(m_shooter.readyPass());
-    // m_operatorController.back().onTrue(new InstantCommand(() -> m_shooter.toggleDynamic()));
     // m_operatorController.a().onTrue(new ParallelCommandGroup(m_shooter.readyAmp(), m_amp.extend()));
-    // m_operatorController.povUp().whileTrue(new ParallelCommandGroup(m_climber.extendClimbersCommand().until(() -> m_climber.rightClimberAtMax()), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopClimbersCommand());
-    // m_operatorController.povDown().whileTrue(new ParallelCommandGroup(m_climber.retractClimbersCommand().until(() -> m_climber.rightClimberAtMin()), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopClimbersCommand());                      
-    // m_operatorController.povRight().onTrue(m_shooter.incrementPivotAngle());
-    // m_operatorController.povLeft().onTrue(m_shooter.decrementPivotAngle());
+    m_operatorController.povUp().onTrue(m_stateMachine.extendClimbers());
+    m_operatorController.povDown().onTrue(m_stateMachine.retractClimbers());
+    m_operatorController.povRight().onTrue(m_stateMachine.zeroClimbers());
 
-
-    // m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
-    // m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
-    // m_configureController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
-    // m_configureController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
-    // m_configureController.x().onTrue(m_climber.setLeftClimberZero());
-    // m_configureController.b().onTrue(m_climber.setRightClimberZero());
+    m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
+    m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
+    m_configureController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
+    m_configureController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
+    m_configureController.x().onTrue(m_climber.setLeftClimberZero());
+    m_configureController.b().onTrue(m_climber.setRightClimberZero());
   }
 
   public void setTeleopDefaultStates() {
-    // new ParallelCommandGroup(m_shooter.setPivotAngleCommand(0),
-    //   m_shooter.setFlywheelVelocityCommand(0)).schedule();
-    m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE);
+    m_stateMachine.shooterSelectCommand(ShooterState.STOW).schedule();;
+    m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE).schedule();
   }
 
   public void setAutonomousDefaultStates() {

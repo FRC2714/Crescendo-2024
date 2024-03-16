@@ -29,12 +29,14 @@ import frc.robot.Constants.FieldConstants;
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
 
-  private double timeNoTargetSeen = 0;
+  private double timeNoSpeakerTargetSeen = 0;
+  private double timeNoAmpTargetSeen = 0;
 
   private PhotonCamera photonCamera;
   private PhotonPoseEstimator photonPoseEstimator;
 
   private double currentDistance, currentRotation;
+  private double currentXDistance, currentYDistance;
 
   public Vision(String cameraName, Transform3d cameraLocation) {
     photonCamera = new PhotonCamera(cameraName);
@@ -52,16 +54,52 @@ public class Vision extends SubsystemBase {
     return photonCamera.getLatestResult();
   }
 
-  public double getXOffsetDegrees() {
+  public double getSpeakerXOffsetDegrees() {
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
       if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
         currentRotation = i.getYaw() - 3;
       }
       else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
-        currentRotation = i.getYaw() -+ 3;
+        currentRotation = i.getYaw() - 3;
       }
     }
     return currentRotation;
+  }
+
+  public double getAmpXOffsetDegrees() {
+    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+      if (i.getFiducialId() == 5 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        currentRotation = i.getYaw() - 3;
+      }
+      else if (i.getFiducialId() == 6 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+        currentRotation = i.getYaw() - 3;
+      }
+    }
+    return currentRotation;
+  }
+
+  public double getXDistanceMeters() {
+    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+      if (i.getFiducialId() == 5 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        currentXDistance = i.getBestCameraToTarget().getX();
+      }
+      else if (i.getFiducialId() == 6 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+        currentXDistance = i.getBestCameraToTarget().getX();
+      }
+    }
+    return currentXDistance;
+  }
+
+  public double getYDistanceMeters() {
+    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+      if (i.getFiducialId() == 5 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        currentYDistance = i.getBestCameraToTarget().getY();
+      }
+      else if (i.getFiducialId() == 6 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+        currentYDistance = i.getBestCameraToTarget().getY();
+      }
+    }
+    return currentYDistance;
   }
 
   public double getDistanceToGoalMeters() {
@@ -88,12 +126,24 @@ public class Vision extends SubsystemBase {
     return false;
   }
 
+  public boolean ampVisible() {
+    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+      if (i.getFiducialId() == 5 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        return true;
+      }
+      else if (i.getFiducialId() == 6 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
       return photonPoseEstimator.update();
   }
 
   public boolean hasTargets() {
-    return timeNoTargetSeen < 100;
+    return timeNoSpeakerTargetSeen < 100;
   }
 
   public PhotonTrackedTarget getBestTarget() {
@@ -158,19 +208,27 @@ public class Vision extends SubsystemBase {
     });
 
     if (!speakerVisible()) {
-      timeNoTargetSeen += 20;
+      timeNoSpeakerTargetSeen += 20;
     }
     else {
-      timeNoTargetSeen = 0;
+      timeNoSpeakerTargetSeen = 0;
     }
 
-    SmartDashboard.putNumber("Drive offset", getXOffsetDegrees());
+    if (!ampVisible()) {
+      timeNoAmpTargetSeen += 20;
+    }
+    else {
+      timeNoAmpTargetSeen = 0;
+    }
+
+    SmartDashboard.putNumber("Drive offset", getSpeakerXOffsetDegrees());
 
     SmartDashboard.putNumber("Distance To GOal Meters", getDistanceToGoalMeters());
 
     SmartDashboard.putBoolean("Speaker?", speakerVisible());
+    SmartDashboard.putBoolean("Amp?", ampVisible());
 
-    SmartDashboard.putNumber("offset deg", getXOffsetDegrees());
+    SmartDashboard.putNumber("offset deg", getSpeakerXOffsetDegrees());
     // SmartDashboard.putNumber("Best target x distance", getMultiTagLatestResult().estimatedPose.best.getX());
     // SmartDashboard.putNumber("Best target y distance", getMultiTagLatestResult().estimatedPose.best.getY());
     SmartDashboard.putBoolean("photon pose", photonPoseEstimation.isPresent());

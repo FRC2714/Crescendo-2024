@@ -40,6 +40,10 @@ public class Amp extends SubsystemBase {
       return new InstantCommand(() -> setPivot(0.65)); //tbd
     }
 
+    public Command toClimberPosition() {
+      return new InstantCommand(() -> setPivot(AmpConstants.kClimbPivot)); //tbd
+    }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

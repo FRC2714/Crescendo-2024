@@ -44,15 +44,17 @@ public class StateMachine extends SubsystemBase {
     NONE
   }
 
-  public enum StorageState {
-    LOADED,
-    EMPTY
+  public enum ClimberState {
+    EXTENDED,
+    ZERO,
+    RETRACTED
   }
 
   private IntakeState currentIntakeState;
   private TriggerState currentTriggerState;
   private BumperState currentBumperState;
   private ShooterState currentShooterState;
+  private ClimberState currentClimberState;
 
   public StateMachine(Superstructure m_superstructure) {
     this.m_superstructure = m_superstructure;
@@ -61,6 +63,7 @@ public class StateMachine extends SubsystemBase {
     currentTriggerState = TriggerState.NONE;
     currentBumperState = BumperState.NONE;
     currentShooterState = ShooterState.STOW;
+    currentClimberState = ClimberState.ZERO;
   }
 
   public void setTriggerState(TriggerState triggerState) {
@@ -79,6 +82,10 @@ public class StateMachine extends SubsystemBase {
     currentShooterState = shooterState;
   }
 
+  public void setClimberState(ClimberState climberState) {
+    currentClimberState = climberState;
+  }
+
   public Command setCurrentIntakeState(IntakeState intakeState) {
     return new InstantCommand(() -> setIntakeState(intakeState));
   }
@@ -93,6 +100,10 @@ public class StateMachine extends SubsystemBase {
 
   public Command setCurrentShooterState(ShooterState shooterState) {
     return new InstantCommand(() -> setShooterState(shooterState));
+  }
+
+  public Command setCurrentClimberState(ClimberState climberState) {
+    return new InstantCommand(() -> setClimberState(climberState));
   }
 
   public Command intakeBack() {
@@ -165,6 +176,27 @@ public class StateMachine extends SubsystemBase {
     );
   }
 
+  public Command extendClimbers() {
+    return new SequentialCommandGroup(
+      setCurrentClimberState(ClimberState.EXTENDED),
+      m_superstructure.extendClimbers()
+    );
+  }
+
+  public Command retractClimbers() {
+    return new SequentialCommandGroup(
+      setCurrentClimberState(ClimberState.RETRACTED),
+      m_superstructure.retractClimbers()
+    );
+  }
+
+  public Command zeroClimbers() {
+    return new SequentialCommandGroup(
+      setCurrentClimberState(ClimberState.ZERO),
+      m_superstructure.zeroClimbers()
+    );
+  }
+
   public Command intakeSelectCommand(IntakeState intakeState) {
     // System.out.println(currentTriggerState);
     return new SelectCommand<IntakeState>(Map.ofEntries(
@@ -231,5 +263,6 @@ public class StateMachine extends SubsystemBase {
     SmartDashboard.putString("Trigger State", currentTriggerState.toString());
     SmartDashboard.putString("Bumper State", currentBumperState.toString());
     SmartDashboard.putString("Shooter State", currentShooterState.toString());
+    SmartDashboard.putString("Climber State", currentClimberState.toString());
   }
 }
