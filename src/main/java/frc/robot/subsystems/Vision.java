@@ -38,7 +38,10 @@ public class Vision extends SubsystemBase {
   private double currentDistance, currentRotation;
   private double currentXDistance, currentYDistance;
 
+  private String cameraName;
+
   public Vision(String cameraName, Transform3d cameraLocation) {
+    this.cameraName = cameraName;
     photonCamera = new PhotonCamera(cameraName);
     // photonCamera.setPipelineIndex(0);
     photonPoseEstimator = new PhotonPoseEstimator(FieldConstants.kAprilTagFieldLayout,
@@ -223,7 +226,7 @@ public class Vision extends SubsystemBase {
 
     SmartDashboard.putNumber("Drive offset", getSpeakerXOffsetDegrees());
 
-    SmartDashboard.putNumber("Distance To GOal Meters", getDistanceToGoalMeters());
+    SmartDashboard.putNumber("Distance To Goal Meters " + this.cameraName, getDistanceToGoalMeters());
 
     SmartDashboard.putBoolean("Speaker?", speakerVisible());
     SmartDashboard.putBoolean("Amp?", ampVisible());
