@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 2.0,
-      "y": 7.0
+      "x": 0.7607347530216694,
+      "y": 4.480646518544946
     },
-    "rotation": 0
+    "rotation": 119.89890183861456
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Drive Test"
+            "pathName": "2 note podium"
           }
         }
       ]

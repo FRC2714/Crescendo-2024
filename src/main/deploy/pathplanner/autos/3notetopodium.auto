@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.7607347530216694,
+      "y": 4.480646518544946
+    },
+    "rotation": 119.93151184050778
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2 note podium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "turnatpodium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "podiumtobottomcenter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "bottomcentertoshoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

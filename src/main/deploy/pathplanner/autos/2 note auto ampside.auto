@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.491842576560472,
-      "y": 2.9766532815508384
+      "x": 0.7516461186768542,
+      "y": 6.591117797620211
     },
-    "rotation": 116.16008717567358
+    "rotation": -119.06616147625235
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "1+B3, B2,B1 + end C1"
+            "pathName": "2notetop"
           }
         }
       ]
