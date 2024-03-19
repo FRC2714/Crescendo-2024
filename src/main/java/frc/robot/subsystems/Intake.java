@@ -222,7 +222,6 @@ public class Intake extends SubsystemBase {
                                     setBackDirectionRollerVoltageCommand(0),
                                     setFeederVoltageCommand(0));
   }
-
   public Command shoot() {
     return setFeederVoltageCommand(IntakeConstants.kFeederShootVoltage);
   }
