@@ -134,16 +134,16 @@ public final class Constants {
 
     public static final double kNominalVoltage = 11; // TBD
 
-    public static final double kAmpAngle = 25;
+    public static final double kAmpAngle = 25; 
     public static final double kAmpFlywheelVelocity = 2500;
 
-    public static final double kPassToAmpAngle = 50;
+    public static final double kPassToAmpAngle = 35; //need tuning
     public static final double kPassToAmpFlywheelVelocity  = 4800;
 
-    public static final double kSourceToMidAngle  = 40;
-    public static final double kPassToMidFlywheelVelocity  = 4500;
+    public static final double kSourceToMidAngle  = 37; //need tuning
+    public static final double kPassToMidFlywheelVelocity  = 4000;
 
-    public static final double kPassUnderStageAngle  = 0;
+    public static final double kPassUnderStageAngle  = 0; //need tuning
     public static final double kPassUnderStageFlywheelVelocity  = 3000;
 
 

@@ -143,9 +143,9 @@ public class RobotContainer {
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
     
-    m_operatorController.y().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
+    m_operatorController.y().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SOURCETOMID));
     m_operatorController.a().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.STOW));
-    m_operatorController.x().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
+    m_operatorController.x().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.UNDERSTAGE));
     m_operatorController.b().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.DYNAMIC));
 
     m_driverController.a()
