@@ -12,9 +12,65 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "toptotoptotopcenter"
+            "name": "setLoaded"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setupDynamic"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2notetop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "topcentertop2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
           }
         },
         {
@@ -24,15 +80,64 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "shooto2ndtop"
+            "name": "alignToGoal"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "shooto2ndtop"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "2ndtoptoshoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "alignToGoal"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 2.0
           }
         }
       ]

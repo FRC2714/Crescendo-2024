@@ -12,9 +12,46 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "2 note podium"
+            "name": "setLoaded"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 5.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2 note podium"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
@@ -24,15 +61,40 @@
           }
         },
         {
-          "type": "path",
+          "type": "parallel",
           "data": {
-            "pathName": "podiumtobottomcenter"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "podiumtobottomcenter"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "bottomcentertoshoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "alignToGoal"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]

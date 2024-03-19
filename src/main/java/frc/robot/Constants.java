@@ -149,7 +149,9 @@ public final class Constants {
 
     
 
-    public static final double kSubwooferAngle = 40;
+    public static final double kSubwooferAngle = 40.0;
+    public static final double kPodiumAngle = 18.9; //use later
+
     public static final double kSubwooferFlywheelVelocity = 8000;
 
     
