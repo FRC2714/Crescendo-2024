@@ -78,6 +78,11 @@ public class Superstructure extends SubsystemBase {
     );
   }
 
+
+  public Command shootAndSetLoadedFalse(){
+    return new SequentialCommandGroup(m_intake.shoot(),
+                                      m_intake.disableLoaded());
+  }
   public Command shoot() {
     return m_intake.shoot();
   }
