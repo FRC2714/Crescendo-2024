@@ -280,17 +280,34 @@ public class Shooter extends SubsystemBase {
                                     setFlywheelVelocityCommand(ShooterConstants.kSubwooferFlywheelVelocity));
   }
 
+  public Command readyPassToAmp() {
+    return new ParallelCommandGroup(disableDynamic(),
+                                    setPivotAngleCommand(ShooterConstants.kPassToAmpAngle),
+                                    setFlywheelVelocityCommand(ShooterConstants.kPassToAmpFlywheelVelocity));
+  }
+
+    public Command readySourceToMid() {
+    return new ParallelCommandGroup(disableDynamic(),
+                                    setPivotAngleCommand(ShooterConstants.kSourceToMidAngle),
+                                    setFlywheelVelocityCommand(ShooterConstants.kPassToMidFlywheelVelocity));
+  }
+
+      public Command readyUnderstage() {
+    return new ParallelCommandGroup(disableDynamic(),
+                                    setPivotAngleCommand(ShooterConstants.kPassUnderStageAngle),
+                                    setFlywheelVelocityCommand(ShooterConstants.kPassUnderStageFlywheelVelocity));
+  }
+
+
+
+
+
   public Command readyAllianceZone() {
     return new ParallelCommandGroup(disableDynamic(),
                                     setPivotAngleCommand(30),
                                     setFlywheelVelocityCommand(8000));
   }
 
-  public Command readyPass() {
-    return new ParallelCommandGroup(disableDynamic(),
-                                    setPivotAngleCommand(30),
-                                    setFlywheelVelocityCommand(4000));
-  }
 
   public Command incrementPivotAngle() {
     return new ParallelCommandGroup(disableDynamic(),

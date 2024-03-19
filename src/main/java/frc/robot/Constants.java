@@ -135,8 +135,22 @@ public final class Constants {
     public static final double kAmpAngle = 25;
     public static final double kAmpFlywheelVelocity = 2500;
 
+    public static final double kPassToAmpAngle = 50;
+    public static final double kPassToAmpFlywheelVelocity  = 4800;
+
+    public static final double kSourceToMidAngle  = 40;
+    public static final double kPassToMidFlywheelVelocity  = 4500;
+
+    public static final double kPassUnderStageAngle  = 0;
+    public static final double kPassUnderStageFlywheelVelocity  = 3000;
+
+
+    
+
     public static final double kSubwooferAngle = 40;
     public static final double kSubwooferFlywheelVelocity = 8000;
+
+    
 
     public static final class PivotPIDConstants {
       public static final double kP = 0.45; // TBD

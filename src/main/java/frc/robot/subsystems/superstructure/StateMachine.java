@@ -28,6 +28,9 @@ public class StateMachine extends SubsystemBase {
   public enum ShooterState {
     DYNAMIC,
     SUBWOOFER,
+    PASSTOAMP,
+    SOURCETOMID,
+    UNDERSTAGE,
     AMP,
     STOW
   }
@@ -151,6 +154,32 @@ public class StateMachine extends SubsystemBase {
     );
   }
 
+  public Command readyPassToAmp()
+  {
+      return new SequentialCommandGroup(
+      setCurrentShooterState(ShooterState.PASSTOAMP),
+      m_superstructure.readyPassToAmp()
+    );
+  }
+
+  public Command readyPassToMid()
+  {
+      return new SequentialCommandGroup(
+      setCurrentShooterState(ShooterState.SOURCETOMID),
+      m_superstructure.readySourceToMid()
+    );
+  }
+
+  
+  public Command readyPassUnderstage()
+  {
+      return new SequentialCommandGroup(
+      setCurrentShooterState(ShooterState.UNDERSTAGE),
+      m_superstructure.readyUnderstage()
+    );
+  }
+
+
   public Command readyShooterToAmp() {
     return new SequentialCommandGroup(
       setCurrentShooterState(ShooterState.AMP),
@@ -220,7 +249,10 @@ public class StateMachine extends SubsystemBase {
       Map.entry(ShooterState.STOW, stowShooter()),
       Map.entry(ShooterState.SUBWOOFER, readyShooterToSubwoofer()),
       Map.entry(ShooterState.AMP, readyShooterToAmp()),
-      Map.entry(ShooterState.DYNAMIC, enableDynamicShooter())
+      Map.entry(ShooterState.DYNAMIC, enableDynamicShooter()),
+      Map.entry(ShooterState.PASSTOAMP, readyPassToAmp()),
+      Map.entry(ShooterState.SOURCETOMID, readyPassToMid()),
+      Map.entry(ShooterState.UNDERSTAGE, readyPassUnderstage())
     ), () -> shooterState);
   }
 
