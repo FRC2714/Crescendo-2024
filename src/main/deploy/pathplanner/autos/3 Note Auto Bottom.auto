@@ -26,19 +26,32 @@
         {
           "type": "named",
           "data": {
-            "name": "intakeBack"
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2 Note Auto"
+                }
+              }
+            ]
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "2 Note Auto"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Middle To Bottom Note"
+            "pathName": "middletoshoot"
           }
         },
         {
@@ -50,7 +63,50 @@
         {
           "type": "named",
           "data": {
-            "name": "stowShooter"
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopShooter"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "subtopodium"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "podiumtosub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         }
       ]

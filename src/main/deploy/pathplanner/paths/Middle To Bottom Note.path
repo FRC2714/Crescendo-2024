@@ -16,28 +16,28 @@
     },
     {
       "anchor": {
-        "x": 1.6067905459634015,
-        "y": 4.930262185774015
+        "x": 1.5858421538726035,
+        "y": 4.950644405105604
       },
       "prevControl": {
-        "x": 1.5952562236289156,
-        "y": 5.601405330778502
+        "x": 1.5743078315381176,
+        "y": 5.621787550110091
       },
       "nextControl": {
-        "x": 1.6137297796377619,
-        "y": 4.526491684389052
+        "x": 1.5927813875469639,
+        "y": 4.546873903720641
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.6,
-        "y": 3.81
+        "x": 2.567615516910424,
+        "y": 4.000204234505161
       },
       "prevControl": {
-        "x": 2.6419345069448297,
-        "y": 3.78039917156851
+        "x": 2.6095500238552534,
+        "y": 3.9706034060736712
       },
       "nextControl": null,
       "isLocked": false,
@@ -52,59 +52,7 @@
     }
   ],
   "constraintZones": [],
-  "eventMarkers": [
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 1.2,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "intakeBack"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 0.6,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "stopIntakeFront"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 2.0,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "alignToGoal"
-              }
-            }
-          ]
-        }
-      }
-    }
-  ],
+  "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.0,
     "maxAcceleration": 0.5,

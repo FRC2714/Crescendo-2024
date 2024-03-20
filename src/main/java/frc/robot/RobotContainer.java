@@ -81,9 +81,10 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-    NamedCommands.registerCommand("intakeBack", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK));
+    NamedCommands.registerCommand("intakeBack", m_superstructure.resetLoadedAndIntakeBack());
     NamedCommands.registerCommand("intakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT));
-    NamedCommands.registerCommand("shoot", m_superstructure.shootAndSetLoadedFalse().withTimeout(3));
+    NamedCommands.registerCommand("stopShooter",m_superstructure.stopShooter());
+    NamedCommands.registerCommand("shoot", m_superstructure.shootAndSetLoadedFalse());
     NamedCommands.registerCommand("stopIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK));
     NamedCommands.registerCommand("setupSubwoofer", m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
     NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());

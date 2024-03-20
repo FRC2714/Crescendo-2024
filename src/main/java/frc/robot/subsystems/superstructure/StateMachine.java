@@ -116,6 +116,7 @@ public class StateMachine extends SubsystemBase {
     );
   }
 
+
   public Command intakeFront() {
     return new SequentialCommandGroup(
       setCurrentTriggerState(TriggerState.LEFT),

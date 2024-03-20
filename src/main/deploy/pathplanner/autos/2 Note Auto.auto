@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "setLoaded"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "setupDynamic"
           }
         },
@@ -40,15 +34,15 @@
           "data": {
             "commands": [
               {
-                "type": "path",
-                "data": {
-                  "pathName": "2 Note Auto"
-                }
-              },
-              {
                 "type": "named",
                 "data": {
                   "name": "intakeBack"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2 Note Auto"
                 }
               }
             ]

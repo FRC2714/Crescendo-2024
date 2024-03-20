@@ -47,7 +47,14 @@ public class Superstructure extends SubsystemBase {
   public boolean getLoaded() {
     return m_intake.getLoaded();
   }
-
+  public Command resetLoadedAndIntakeBack(){
+    return new SequentialCommandGroup(
+      m_intake.disableLoaded(),
+      m_intake.stopFront(),
+      new IntakeCommand(m_intake, IntakeCommand.IntakeState.BACK)
+        .until(() -> m_intake.getLoaded())
+    );
+  }
   public Command intakeBack() {
     return new SequentialCommandGroup(
       m_intake.stopFront(),
