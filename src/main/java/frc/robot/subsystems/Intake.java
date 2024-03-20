@@ -96,7 +96,7 @@ public class Intake extends SubsystemBase {
     
   }
 
-  public void setLoaded() {
+  public void   setLoaded() {
     if (!breakBeam.get()) {
       if (elapsedShootTime > 500)
         loaded = true;

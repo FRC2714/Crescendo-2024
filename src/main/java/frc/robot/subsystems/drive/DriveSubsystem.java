@@ -117,7 +117,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.calibrate();
     this.m_camera = m_camera;
 
-    PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
+    // PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
 
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
@@ -312,14 +312,14 @@ public class DriveSubsystem extends SubsystemBase {
     return new InstantCommand(() -> stopped = false);
   }
 
-  public Optional<Rotation2d> getDriveRotationToGoalOptional() {
-    PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
-    thetaController.setTolerance(Units.degreesToRadians(0),0);
-    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+  // public Optional<Rotation2d> getDriveRotationToGoalOptional() {
+  //   PIDController thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
+  //   thetaController.setTolerance(Units.degreesToRadians(0),0);
+  //   thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
-    return (m_camera.speakerVisible() && stopped) ? Optional.of(new Rotation2d(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()))) : Optional.empty();
-  }
+  //   thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
+  //   return (m_camera.speakerVisible() && stopped) ? Optional.of(new Rotation2d(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()))) : Optional.empty();
+  // }
 
   public double getRotationFromGoalRadians(Pose2d pose) {
     if (DriverStation.getAlliance().isPresent()) {

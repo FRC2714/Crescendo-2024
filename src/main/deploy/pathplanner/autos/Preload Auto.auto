@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "setLoaded"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "setupDynamic"
           }
         },
