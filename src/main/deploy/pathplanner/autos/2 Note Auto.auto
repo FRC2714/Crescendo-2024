@@ -14,13 +14,19 @@
         {
           "type": "named",
           "data": {
+            "name": "setLoaded"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "setupDynamic"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.5
+            "waitTime": 5.0
           }
         },
         {
