@@ -138,6 +138,17 @@ public class RobotContainer {
     m_driverController.leftTrigger(OIConstants.kTriggerThreshold)
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
+    m_driverController.a()
+      .whileTrue(m_superstructure.shoot())
+      .onFalse(m_superstructure.stopShooter());
+    m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
+    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
+    m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
+    m_driverController.y()
+        .whileTrue(new RunCommand(
+            () -> m_robotDrive.setX(),
+            m_robotDrive));
+    m_driverController.back().whileTrue(new RotateToGoal(m_robotDrive, m_leftCamera));
 
     m_operatorController.rightBumper()
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_BACK))
@@ -145,38 +156,15 @@ public class RobotContainer {
     m_operatorController.leftBumper()
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
-    
     m_operatorController.y().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SOURCETOMID));
     m_operatorController.a().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.STOW));
     m_operatorController.x().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.UNDERSTAGE));
     m_operatorController.b().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.DYNAMIC));
-
-    m_driverController.a()
-      .whileTrue(m_superstructure.shoot())
-      .onFalse(m_superstructure.stopShooter());
-    // m_driverController.x().whileTrue(new RotateToGoal(m_robotDrive, m_camera));
-    // m_driverController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
-    // m_driverController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
-    m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
-    m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
-    // m_driverController.a().whileTrue(m_intake.shoot()).onFalse(m_intake.stopShooter());
-    // m_driverController.b().whileTrue(m_shooter.setFlywheelVelocityCommand(8000)).onFalse(m_shooter.setFlywheelVelocityCommand(0));
-    // m_driverController.leftBumper().whileTrue(new ParallelCommandGroup(new SeekNote(m_robotDrive, m_limelight),
-    //                                           new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded())));
-    m_driverController.y()
-        .whileTrue(new RunCommand(
-            () -> m_robotDrive.setX(),
-            m_robotDrive));
-
-
-    // m_driverController.back().whileTrue(m_camera.hasTargets() ? new RotateToGoalProfiled(m_camera.getHeadingRelativeAprilTagDegrees(m_robotDrive.getHeading()),m_robotDrive):
-                                                                // new InstantCommand(() -> m_robotDrive.drive(0,0,0,false,false)));
-    m_driverController.back().whileTrue(new RotateToGoal(m_robotDrive, m_leftCamera));
-
-    // m_operatorController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.BACK).until(() -> m_intake.getLoaded()));
-    // m_operatorController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new IntakeCommand(m_intake, IntakeState.FRONT).until(() -> m_intake.getLoaded()));
-    // m_operatorController.a().onTrue(new ParallelCommandGroup(m_shooter.readyAmp(), m_amp.extend()));
+    m_operatorController.rightTrigger(OIConstants.kTriggerThreshold)
+      .onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
+    m_operatorController.leftTrigger(OIConstants.kTriggerThreshold)
+      .onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
+    m_operatorController.povLeft().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.PASSTOAMP));
     m_operatorController.povUp().onTrue(m_stateMachine.extendClimbers());
     m_operatorController.povDown().onTrue(m_stateMachine.retractClimbers());
     m_operatorController.povRight().onTrue(m_stateMachine.zeroClimbers());
@@ -190,7 +178,7 @@ public class RobotContainer {
   }
 
   public void setTeleopDefaultStates() {
-    m_stateMachine.shooterSelectCommand(ShooterState.STOW).schedule();;
+    m_stateMachine.shooterSelectCommand(ShooterState.STOW).schedule();
     m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE).schedule();
   }
 
