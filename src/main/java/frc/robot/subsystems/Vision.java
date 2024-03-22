@@ -34,6 +34,7 @@ public class Vision extends SubsystemBase {
 
   private PhotonCamera photonCamera;
   private PhotonPoseEstimator photonPoseEstimator;
+  private LED m_blinkin;
 
   private double currentDistance, currentRotation;
   private double currentXDistance, currentYDistance;
@@ -51,6 +52,23 @@ public class Vision extends SubsystemBase {
     // photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
     currentDistance = 0;
     currentRotation = 0;
+
+    m_blinkin = null;
+  }
+
+  public Vision(String cameraName, Transform3d cameraLocation, LED m_blinkin) {
+    this.cameraName = cameraName;
+    photonCamera = new PhotonCamera(cameraName);
+    // photonCamera.setPipelineIndex(0);
+    photonPoseEstimator = new PhotonPoseEstimator(FieldConstants.kAprilTagFieldLayout,
+                                                  PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
+                                                  photonCamera,
+                                                  cameraLocation);
+    // photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+    currentDistance = 0;
+    currentRotation = 0;
+
+    this.m_blinkin = m_blinkin;
   }
 
   public PhotonPipelineResult getLatestResult() {
@@ -120,12 +138,18 @@ public class Vision extends SubsystemBase {
   public boolean speakerVisible() {
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
       if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
+        if (m_blinkin != null)
+          m_blinkin.setGreen();
         return true;
       }
       else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+        if (m_blinkin != null)
+          m_blinkin.setGreen();
         return true;
       }
     }
+    if (m_blinkin != null)
+      m_blinkin.setRed();
     return false;
   }
 

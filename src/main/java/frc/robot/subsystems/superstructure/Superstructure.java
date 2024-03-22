@@ -6,6 +6,8 @@ package frc.robot.subsystems.superstructure;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,6 +18,7 @@ import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -33,7 +36,7 @@ public class Superstructure extends SubsystemBase {
 
   double elapsedRumbleTime = 0;
 
-  public Superstructure(DriveSubsystem m_drivetrain, Vision m_vision, Climber m_climber, Amp m_amp, CommandXboxController m_driverController, CommandXboxController m_operatorController) {
+  public Superstructure(DriveSubsystem m_drivetrain, Vision m_vision, Climber m_climber, Amp m_amp, LED m_blinkin, CommandXboxController m_driverController, CommandXboxController m_operatorController) {
     this.m_vision = m_vision;
     this.m_drivetrain = m_drivetrain;
     this.m_shooter = new Shooter(m_vision);
@@ -47,6 +50,7 @@ public class Superstructure extends SubsystemBase {
   public boolean getLoaded() {
     return m_intake.getLoaded();
   }
+  
   public Command resetLoadedAndIntakeBack(){
     return new SequentialCommandGroup(
       m_intake.disableLoaded(),
@@ -157,6 +161,10 @@ public class Superstructure extends SubsystemBase {
   public Command stowShooter() {
     return new ParallelCommandGroup(m_shooter.stow(),
                                     m_amp.stow());
+  }
+
+  public Command cancelAllCommands() {
+    return new InstantCommand(() -> CommandScheduler.getInstance().cancelAll());
   }
 
   public Command extendClimbers() {

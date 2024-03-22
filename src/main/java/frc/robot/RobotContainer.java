@@ -18,6 +18,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.IntakeCommand.IntakeState;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
@@ -56,7 +57,8 @@ import frc.robot.commands.SeekNote;
 public class RobotContainer {
   // The robot's subsystems
   private final Limelight m_limelight = new Limelight();
-  private final Vision m_leftCamera = new Vision(PhotonConstants.kLeftCameraName, PhotonConstants.kLeftCameraLocation);
+  private final LED m_blinkin = new LED();
+  private final Vision m_leftCamera = new Vision(PhotonConstants.kLeftCameraName, PhotonConstants.kLeftCameraLocation, m_blinkin);
   private final Vision m_rightCamera = new Vision(PhotonConstants.kRightCameraName, PhotonConstants.kRightCameraLocation);
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_leftCamera);
   // private final Shooter m_shooter = new Shooter(m_robotDrive);
@@ -71,7 +73,7 @@ public class RobotContainer {
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   CommandXboxController m_configureController = new CommandXboxController(OIConstants.kConfigureControllerPort);
 
-  private final Superstructure m_superstructure = new Superstructure(m_robotDrive, m_leftCamera, m_climber, m_amp, m_driverController, m_operatorController);
+  private final Superstructure m_superstructure = new Superstructure(m_robotDrive, m_leftCamera, m_climber, m_amp, m_blinkin, m_driverController, m_operatorController);
   private final StateMachine m_stateMachine = new StateMachine(m_superstructure);
 
   ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
@@ -168,6 +170,7 @@ public class RobotContainer {
     m_operatorController.povUp().onTrue(m_stateMachine.extendClimbers());
     m_operatorController.povDown().onTrue(m_stateMachine.retractClimbers());
     m_operatorController.povRight().onTrue(m_stateMachine.zeroClimbers());
+    m_operatorController.back().onTrue(m_superstructure.cancelAllCommands());
 
     m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
     m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
@@ -184,6 +187,10 @@ public class RobotContainer {
 
   public void setAutonomousDefaultStates() {
     new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
+  }
+
+  public void setRobotDefaultStates() {
+    m_blinkin.setFire().schedule();
   }
 
   /**

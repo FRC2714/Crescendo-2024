@@ -96,7 +96,7 @@ public final class Constants {
   }
 
   public static final class LEDConstants {
-    public static final int kArmBlinkinPort = 0;
+    public static final int kBlinkinPort = 0;
 
     public static final double kFire = -0.57;
     public static final double kRainbow = -0.99;
