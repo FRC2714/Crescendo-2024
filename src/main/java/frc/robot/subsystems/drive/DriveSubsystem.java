@@ -299,7 +299,9 @@ public class DriveSubsystem extends SubsystemBase {
     thetaController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
+    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0
+      ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters()
+      : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
 
     return m_camera.speakerVisible() ? thetaController.calculate(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees())) : 0;
   }

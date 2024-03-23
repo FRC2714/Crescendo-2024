@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3140196323188638,
-      "y": 5.564955745296107
+      "x": 0.7401886415755699,
+      "y": 6.581490138729208
     },
-    "rotation": 180.0
+    "rotation": -125.57
   },
   "command": {
     "type": "sequential",
@@ -36,7 +36,7 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
@@ -48,22 +48,10 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2 Note Auto"
+                  "pathName": "topnote"
                 }
               }
             ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middletoshoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
           }
         },
         {
@@ -73,46 +61,9 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "subtopodium"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "podiumtosub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
+            "pathName": "toptocentertop"
           }
         },
         {

@@ -22,16 +22,24 @@ public class LED extends SubsystemBase {
     m_blinkin.set(val);
   }
 
-  public Command setFire() {
-    return new InstantCommand(() -> set(LEDConstants.kFire));
+  public void setFire() {
+    set(LEDConstants.kFire);
   }
 
-  public Command setGreen() {
-    return new InstantCommand(() -> set(LEDConstants.kGreen));
+  public void setOrange() {
+    set(LEDConstants.kOrange);
   }
 
-  public Command setRed() {
-    return new InstantCommand(() -> set(LEDConstants.kRed));
+  public void setPink() {
+    set(LEDConstants.kPink);
+  }
+
+  public void setGreen() {
+    set(LEDConstants.kGreen);
+  }
+
+  public void setRed() {
+    set(LEDConstants.kRed);
   }
 
   @Override

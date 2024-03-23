@@ -148,7 +148,7 @@ public class Vision extends SubsystemBase {
         return true;
       }
     }
-    if (m_blinkin != null)
+    if (m_blinkin != null && !hasTargets())
       m_blinkin.setRed();
     return false;
   }

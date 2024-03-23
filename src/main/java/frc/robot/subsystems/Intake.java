@@ -190,10 +190,10 @@ public class Intake extends SubsystemBase {
   public Command outtakeFront() {
     return new SequentialCommandGroup(new InstantCommand(() -> loaded = false), new ParallelCommandGroup(
                                     setFrontRollerVoltageCommand(-(IntakeConstants.kFrontRollerVoltage + 1)),
-                                    setBackBottomRollerVoltageCommand(-(IntakeConstants.kBackBottomRollerVoltageFrontSide + 1)),
-                                    setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageFrontSide + 1)),
+                                    setBackBottomRollerVoltageCommand(-(IntakeConstants.kBackBottomRollerVoltageFrontSide+ 1)),
+                                    setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageFrontSide+ 1)),
                                     setConveyorVoltageCommand(IntakeConstants.kConveyorVoltage + 1),
-                                    setFeederVoltageCommand(-(IntakeConstants.kFeederIntakeVoltage + 1))));
+                                    setFeederVoltageCommand(-(IntakeConstants.kFeederIntakeVoltage + 1)))); //+1
   }
 
   public ParallelCommandGroup stopFront() {
@@ -213,8 +213,8 @@ public class Intake extends SubsystemBase {
   public Command outtakeBack() {
     return new SequentialCommandGroup(new InstantCommand(() -> loaded = false), new ParallelCommandGroup(
                                     setBackBottomRollerVoltageCommand(IntakeConstants.kBackBottomRollerVoltageBackSide + 1),
-                                    setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageBackSide + 1)),
-                                    setFeederVoltageCommand(-(IntakeConstants.kFeederIntakeVoltage + 1))));
+                                    setBackDirectionRollerVoltageCommand(-(IntakeConstants.kBackDirectionRollerVoltageBackSide+ 1)),
+                                    setFeederVoltageCommand(-(IntakeConstants.kFeederIntakeVoltage + 1)))); //+1
   }
 
   public ParallelCommandGroup stopBack() {

@@ -123,6 +123,7 @@ public class RobotContainer {
             m_robotDrive));
     }
 
+
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
@@ -140,7 +141,7 @@ public class RobotContainer {
     m_driverController.leftTrigger(OIConstants.kTriggerThreshold)
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
-    m_driverController.a()
+    m_driverController.a()                                        
       .whileTrue(m_superstructure.shoot())
       .onFalse(m_superstructure.stopShooter());
     m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
@@ -150,7 +151,6 @@ public class RobotContainer {
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
             m_robotDrive));
-    m_driverController.back().whileTrue(new RotateToGoal(m_robotDrive, m_leftCamera));
 
     m_operatorController.rightBumper()
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_BACK))
@@ -170,7 +170,6 @@ public class RobotContainer {
     m_operatorController.povUp().onTrue(m_stateMachine.extendClimbers());
     m_operatorController.povDown().onTrue(m_stateMachine.retractClimbers());
     m_operatorController.povRight().onTrue(m_stateMachine.zeroClimbers());
-    m_operatorController.back().onTrue(m_superstructure.cancelAllCommands());
 
     m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
     m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
@@ -187,10 +186,11 @@ public class RobotContainer {
 
   public void setAutonomousDefaultStates() {
     new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
+    m_amp.stow().schedule();
   }
 
   public void setRobotDefaultStates() {
-    m_blinkin.setFire().schedule();
+    m_blinkin.setFire();
   }
 
   /**

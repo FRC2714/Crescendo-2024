@@ -96,12 +96,14 @@ public final class Constants {
   }
 
   public static final class LEDConstants {
-    public static final int kBlinkinPort = 0;
+    public static final int kBlinkinPort = 2;
 
     public static final double kFire = -0.57;
     public static final double kRainbow = -0.99;
     public static final double kSinelonLava = -0.73;
 
+    public static final double kPink = 0.57;
+    public static final double kOrange = 0.65;
     public static final double kPurple = 0.91;
     public static final double kYellow = 0.69;
     public static final double kGreen = 0.77;
@@ -231,13 +233,13 @@ public final class Constants {
     // CAN IDs
     public static final int kFrontLeftDrivingCanId = 4;
     public static final int kRearLeftDrivingCanId = 3;
-    public static final int kFrontRightDrivingCanId = 1;
+    public static final int kFrontRightDrivingCanId = 1; //1
     public static final int kRearRightDrivingCanId = 2;
 
 
     public static final int kFrontLeftTurningCanId = 8;
     public static final int kRearLeftTurningCanId = 7;
-    public static final int kFrontRightTurningCanId = 5;
+    public static final int kFrontRightTurningCanId = 5; //5
     public static final int kRearRightTurningCanId = 6;
 
     public static final boolean kGyroReversed = false;

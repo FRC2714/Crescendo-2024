@@ -164,7 +164,8 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command cancelAllCommands() {
-    return new InstantCommand(() -> CommandScheduler.getInstance().cancelAll());
+    CommandScheduler.getInstance().cancelAll();
+    return new InstantCommand();
   }
 
   public Command extendClimbers() {
