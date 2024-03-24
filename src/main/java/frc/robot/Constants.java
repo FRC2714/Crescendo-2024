@@ -39,6 +39,10 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+  public static final class PeriodicConstants {
+    public static final double kPeriodSeconds = 0.02;
+  }
+
   public static final class ClimberConstants {
     public static final int kLeftClimberCanId = 17; // TBD
     public static final int kRightClimberCanId = 18; // TBD
