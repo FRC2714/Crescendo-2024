@@ -46,7 +46,12 @@ import frc.robot.commands.RotateToGoal;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 import frc.robot.commands.SeekNote;
+
+import com.choreo.lib.Choreo;
+import com.choreo.lib.ChoreoTrajectory;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -82,8 +87,9 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    PathPlannerPath fourNote = PathPlannerPath.fromChoreoTrajectory("fourNote");
 
-    // Configure the button bindings
+
     configureButtonBindings();
     NamedCommands.registerCommand("intakeBack", m_superstructure.resetLoadedAndIntakeBack());
     NamedCommands.registerCommand("intakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT));
