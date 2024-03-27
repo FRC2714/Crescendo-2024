@@ -87,7 +87,6 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-    PathPlannerPath fourNote = PathPlannerPath.fromChoreoTrajectory("fourNote");
 
 
     configureButtonBindings();
@@ -197,6 +196,12 @@ public class RobotContainer {
 
   public void setRobotDefaultStates() {
     m_blinkin.setFire();
+  }
+
+  public Command getChoreoAuto() {
+    PathPlannerPath fourNote = PathPlannerPath.fromChoreoTrajectory("fourNote");
+    
+    return AutoBuilder.followPath(fourNote);
   }
 
   /**
