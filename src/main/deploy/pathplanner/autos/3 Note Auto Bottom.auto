@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3140196323188638,
-      "y": 5.564955745296107
+      "x": 0.89,
+      "y": 5.56
     },
     "rotation": 180.0
   },
@@ -14,19 +14,13 @@
         {
           "type": "named",
           "data": {
-            "name": "setLoaded"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "setupDynamic"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 4.0
+            "waitTime": 5.0
           }
         },
         {
@@ -63,7 +57,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 2.0
           }
         },
         {
@@ -75,7 +69,13 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.5
+            "waitTime": 1.0
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopShooter"
           }
         },
         {
@@ -107,18 +107,6 @@
           "type": "named",
           "data": {
             "name": "shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stowShooter"
           }
         }
       ]
