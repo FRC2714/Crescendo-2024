@@ -39,6 +39,10 @@ import edu.wpi.first.math.util.Units;
  */
 public final class Constants {
 
+  public static final class PeriodicConstants {
+    public static final double kPeriodSeconds = 0.02;
+  }
+
   public static final class ClimberConstants {
     public static final int kLeftClimberCanId = 17; // TBD
     public static final int kRightClimberCanId = 18; // TBD
@@ -206,8 +210,8 @@ public final class Constants {
     public static final Pose2d kInitialBluePose = new Pose2d(1.0381, 5.547, new Rotation2d(180));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 6.77;
-    public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+    public static final double kMaxSpeedMetersPerSecond = 20;
+    public static final double kMaxAngularSpeed = 15 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
