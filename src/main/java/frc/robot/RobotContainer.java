@@ -38,6 +38,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutosCommands;
+import frc.robot.commands.DriveStraight;
 import frc.robot.commands.DriveToAmp;
 // import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
@@ -46,7 +47,6 @@ import frc.robot.commands.RotateToGoal;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.auto.PathPlannerPath;
 import frc.robot.commands.SeekNote;
 
 /*
@@ -153,6 +153,8 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    m_driverController.x().onTrue(new DriveStraight(m_robotDrive));
+
     m_operatorController.rightBumper()
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_BACK))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
@@ -200,7 +202,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    PathPlannerPath test = PathPlannerPath.fromPathFile("translation");
-    return AutoBuilder.followPath(test);
+    return autoChooser.getSelected();
   }
 }

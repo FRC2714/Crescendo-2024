@@ -45,6 +45,7 @@ import frc.robot.subsystems.Vision;
 import frc.robot.utils.FieldRelativeAcceleration;
 import frc.robot.utils.FieldRelativeVelocity;
 import frc.robot.utils.SwerveUtils;
+import frc.robot.utils.TunableNumber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -96,6 +97,8 @@ public class DriveSubsystem extends SubsystemBase {
   private Field2d m_field = new Field2d();
 
   private Vision m_camera;
+
+  private TunableNumber translationP, rotationP;
   
   // Pose class for tracking robot pose
   Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(0.01)); // Increase for less state trust
@@ -117,6 +120,12 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.calibrate();
     this.m_camera = m_camera;
 
+    translationP = new TunableNumber("translation P");
+    rotationP = new TunableNumber("rotation P");
+
+    translationP.setDefault(1.5);
+    rotationP.setDefault(2.8);
+
     // PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
@@ -124,8 +133,8 @@ public class DriveSubsystem extends SubsystemBase {
             this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(2.8, 0.0, 0.0), // Rotation PID constants
+                    new PIDConstants(5, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(5, 0.0, 0.0), // Rotation PID constants
                     4.5, // Max module speed, in m/s
                     0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -148,6 +157,34 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
+
+    if (translationP.hasChanged() || rotationP.hasChanged()) {
+      AutoBuilder.configureHolonomic(
+            this::getPose, // Robot pose supplier
+            this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+            this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+                    new PIDConstants(translationP.get(), 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(rotationP.get(), 0.0, 0.0), // Rotation PID constants
+                    4.5, // Max module speed, in m/s
+                    0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
+                    new ReplanningConfig() // Default path replanning config. See the API for the options here
+            ),
+            () -> {
+              // Boolean supplier that controls when the path will be mirrored for the red alliance
+              // This will flip the path being followed to the red side of the field.
+              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+              var alliance = DriverStation.getAlliance();
+              if (alliance.isPresent()) {
+                return alliance.get() == DriverStation.Alliance.Red;
+              }
+              return false;
+            },
+            this // Reference to this subsystem to set requirements
+    );
+    }
 
     SmartDashboard.putBoolean("Stopped?", stopped);
 
