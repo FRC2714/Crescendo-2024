@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutosCommands;
+import frc.robot.commands.DriveStraight;
 // import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.commands.RotateToGoal;
@@ -168,6 +169,7 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    m_driverController.x().onTrue(new DriveStraight(m_robotDrive));
 
     // m_driverController.back().whileTrue(m_camera.hasTargets() ? new RotateToGoalProfiled(m_camera.getHeadingRelativeAprilTagDegrees(m_robotDrive.getHeading()),m_robotDrive):
                                                                 // new InstantCommand(() -> m_robotDrive.drive(0,0,0,false,false)));
