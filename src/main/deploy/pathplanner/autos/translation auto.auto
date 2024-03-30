@@ -2,37 +2,37 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.889,
-      "y": 5.564955745296107
+      "x": 1.4813981790813457,
+      "y": 1.702436789097496
     },
-    "rotation": 180.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "setupDynamic"
+            "pathName": "translation test"
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 5.0
+            "pathName": "Copy of translation test"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "shoot"
+            "pathName": "translation test"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "stowShooter"
+            "pathName": "Copy of translation test"
           }
         }
       ]

@@ -46,6 +46,7 @@ import frc.robot.commands.RotateToGoal;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.auto.PathPlannerPath;
 import frc.robot.commands.SeekNote;
 
 /*
@@ -173,8 +174,8 @@ public class RobotContainer {
 
     m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
     m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
-    m_configureController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
-    m_configureController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
+    m_configureController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
+    m_configureController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
     m_configureController.x().onTrue(m_climber.setLeftClimberZero());
     m_configureController.b().onTrue(m_climber.setRightClimberZero());
   }
@@ -185,7 +186,7 @@ public class RobotContainer {
   }
 
   public void setAutonomousDefaultStates() {
-    new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
+    // new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
     m_amp.stow().schedule();
   }
 
@@ -199,6 +200,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    PathPlannerPath test = PathPlannerPath.fromPathFile("translation");
+    return AutoBuilder.followPath(test);
   }
 }

@@ -24,27 +24,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "alignToGoal"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeBack"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "topnote"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stowShooter"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "topnote"
+                }
+              }
+            ]
           }
         },
         {

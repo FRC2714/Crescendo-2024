@@ -109,7 +109,7 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      }, DriverStation.getAlliance().toString().equals("Red") ? DriveConstants.kInitialRedPose : DriveConstants.kInitialBluePose, stateStdDevs, visionMeasurementStdDevs);
+      }, new Pose2d(), stateStdDevs, visionMeasurementStdDevs);
   
 
   /** Creates a new DriveSubsystem. */
@@ -118,7 +118,6 @@ public class DriveSubsystem extends SubsystemBase {
     this.m_camera = m_camera;
 
     // PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
-
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
             this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
@@ -126,7 +125,7 @@ public class DriveSubsystem extends SubsystemBase {
             this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(2.8, 0.05, 0.15), // Rotation PID constants
+                    new PIDConstants(2.8, 0.0, 0.0), // Rotation PID constants
                     4.5, // Max module speed, in m/s
                     0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
