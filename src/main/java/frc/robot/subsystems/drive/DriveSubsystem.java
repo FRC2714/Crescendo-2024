@@ -40,7 +40,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
 import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.PeriodicConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.Vision;
 import frc.robot.utils.FieldRelativeAcceleration;
@@ -127,9 +126,9 @@ public class DriveSubsystem extends SubsystemBase {
             this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(2.8, 0, 0), // Rotation PID constants
+                    new PIDConstants(2.8, 0.05, 0.15), // Rotation PID constants
                     4.5, // Max module speed, in m/s
-                    0.3706, / / Drive base radius in meters. Distance from robot center to furthest module.
+                    0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
             () -> {
@@ -466,11 +465,9 @@ public class DriveSubsystem extends SubsystemBase {
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
-      ChassisSpeeds.discretize(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)))
-            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered),
-          PeriodicConstants.kPeriodSeconds));
+            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
