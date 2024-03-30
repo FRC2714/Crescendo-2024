@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7607347530216694,
-      "y": 4.480646518544946
+      "x": 1.4188551902770996,
+      "y": 5.545194149017334
     },
-    "rotation": 122.25797134181515
+    "rotation": 179.45434910508928
   },
   "command": {
     "type": "sequential",
@@ -30,32 +30,14 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "2 note podium"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "intakeBack"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
+            "pathName": "3NoteAmpSide"
           }
         }
       ]
     }
   },
   "folder": null,
-  "choreoAuto": false
+  "choreoAuto": true
 }
