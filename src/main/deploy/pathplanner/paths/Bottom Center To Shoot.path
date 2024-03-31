@@ -3,49 +3,55 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.29,
-        "y": 7.43
+        "x": 8.3,
+        "y": 0.71
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.28973292584782,
-        "y": 7.371811849199025
+        "x": 8.31747018394132,
+        "y": 0.7288727041773788
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 5.37,
-        "y": 6.63
+        "x": 2.8266068394532997,
+        "y": 1.7626128727939547
       },
       "prevControl": {
-        "x": 5.39921457800211,
-        "y": 6.620261807332631
+        "x": 2.8442023254817963,
+        "y": 1.7626128727939547
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.45,
+      "rotationDegrees": 164.10388647545915,
+      "rotateFast": false
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 1.5,
     "maxAcceleration": 2.0,
     "maxAngularVelocity": 540.0,
-    "maxAngularAcceleration": 720.0
+    "maxAngularAcceleration": 540.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -169.49026028233123,
+    "rotation": 138.81407483429032,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Open Podium",
   "previewStartingState": {
-    "rotation": 179.9778535241036,
+    "rotation": 178.65997296176505,
     "velocity": 0
   },
   "useDefaultConstraints": false

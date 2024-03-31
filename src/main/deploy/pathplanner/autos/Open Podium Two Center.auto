@@ -1,0 +1,43 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4924744440236215,
+      "y": 2.0158058821455733
+    },
+    "rotation": 180.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Open Podium to Bottom Center"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Bottom Center To Shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Shoot to C4"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C4 To Shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
