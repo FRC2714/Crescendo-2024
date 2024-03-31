@@ -58,7 +58,6 @@ public class StateMachine extends SubsystemBase {
   private BumperState currentBumperState;
   private ShooterState currentShooterState;
   private ClimberState currentClimberState;
-
   public StateMachine(Superstructure m_superstructure) {
     this.m_superstructure = m_superstructure;
 
@@ -226,6 +225,8 @@ public class StateMachine extends SubsystemBase {
       m_superstructure.zeroClimbers()
     );
   }
+
+
 
   public Command intakeSelectCommand(IntakeState intakeState) {
     // System.out.println(currentTriggerState);

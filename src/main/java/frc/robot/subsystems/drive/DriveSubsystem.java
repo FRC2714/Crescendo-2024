@@ -40,7 +40,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
 import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.PeriodicConstants;
 import frc.robot.Constants.PhotonConstants;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Vision;
 import frc.robot.utils.FieldRelativeAcceleration;
 import frc.robot.utils.FieldRelativeVelocity;
@@ -112,24 +114,25 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      }, new Pose2d(), stateStdDevs, visionMeasurementStdDevs);
+      }, DriverStation.getAlliance().toString().equals("Red") ? DriveConstants.kInitialRedPose : DriveConstants.kInitialBluePose, stateStdDevs, visionMeasurementStdDevs);
   
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Vision m_camera) {
     m_gyro.calibrate();
     this.m_camera = m_camera;
-
+    
+    PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     translationP = new TunableNumber("translation P");
     rotationP = new TunableNumber("rotation P");
-
-    translationP.setDefault(1.5);
+    
+translationP.setDefault(1.5);
     rotationP.setDefault(2.8);
 
-    // PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
+// PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
     AutoBuilder.configureHolonomic(
             this::getPose, // Robot pose supplier
-            this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
+            this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starti ng pose)
             this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
@@ -287,7 +290,16 @@ public class DriveSubsystem extends SubsystemBase {
         Math.pow(Math.abs(pose.getY() - FieldConstants.kRedSpeakerAprilTagLocation.getY()), 2)
       );
   }
-
+  public Optional<Rotation2d> getRotationTargetOverride(){
+    // Some condition that should decide if we want to override rotation
+    if(rotatingToGoal) {
+        // Return an optional containing the rotation override (this should be a field relative rotation)
+        return Optional.of(Rotation2d.fromDegrees(getDriveRotationToGoal()));
+    } else {
+        // return an empty optional when we don't want to override the path's rotation
+        return Optional.empty();
+    }
+}
   public void toggleRotatingToGoal() {
     rotatingToGoal = !rotatingToGoal;
   }
@@ -501,9 +513,11 @@ public class DriveSubsystem extends SubsystemBase {
     double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
+      ChassisSpeeds.discretize(
         fieldRelative
             ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered, Rotation2d.fromDegrees(m_gyro.getAngle(IMUAxis.kZ)))
-            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered));
+            : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered),
+          PeriodicConstants.kPeriodSeconds));
     SwerveDriveKinematics.desaturateWheelSpeeds(
         swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);

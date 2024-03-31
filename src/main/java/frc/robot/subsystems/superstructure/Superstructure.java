@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems.superstructure;
 
+import java.util.Optional;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -14,11 +17,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
+import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveSubsystem;
@@ -94,9 +99,13 @@ public class Superstructure extends SubsystemBase {
     return new SequentialCommandGroup(m_intake.shoot(),
                                       m_intake.disableLoaded());
   }
+
+
   public Command shoot() {
     return m_intake.shoot();
   }
+
+
 
   public Command stopShooter() {
     return new SequentialCommandGroup(

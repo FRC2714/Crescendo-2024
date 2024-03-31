@@ -11,10 +11,12 @@ import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
+
 public class RotateToGoal extends Command {
   
   private DriveSubsystem m_drivetrain;
   private Vision m_camera;
+
 
   private PIDController thetaController;
 
@@ -27,7 +29,7 @@ public class RotateToGoal extends Command {
     addRequirements(m_drivetrain, m_camera);
 
     thetaController = new PIDController(ThetaPIDConstants.kP, ThetaPIDConstants.kI, ThetaPIDConstants.kD);
-
+     
     
     thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0 ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters() : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
     thetaController.setTolerance(Units.degreesToRadians(0),0);

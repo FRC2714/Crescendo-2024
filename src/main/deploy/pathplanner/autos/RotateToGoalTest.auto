@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.6062989112929598,
+      "y": 6.923854986500009
+    },
+    "rotation": -176.3322119444686
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "setLoaded"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setupDynamic"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 4.0
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "rotateToGoal"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "rotateToGoal"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "States Autos",
+  "choreoAuto": false
+}

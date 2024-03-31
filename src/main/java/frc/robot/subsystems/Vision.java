@@ -87,6 +87,8 @@ public class Vision extends SubsystemBase {
     return currentRotation;
   }
 
+  
+
   public double getAmpXOffsetDegrees() {
     for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
       if (i.getFiducialId() == 5 && DriverStation.getAlliance().get().toString().equals("Red")) {

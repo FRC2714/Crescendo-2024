@@ -38,7 +38,6 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.AutosCommands;
-import frc.robot.commands.DriveStraight;
 import frc.robot.commands.DriveToAmp;
 // import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
@@ -86,11 +85,13 @@ public class RobotContainer {
 
     // Configure the button bindings
     configureButtonBindings();
-    NamedCommands.registerCommand("intakeBack", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK));
+    NamedCommands.registerCommand("intakeBack", m_superstructure.resetLoadedAndIntakeBack());
     NamedCommands.registerCommand("intakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT));
-    NamedCommands.registerCommand("shoot", new SequentialCommandGroup(m_superstructure.shoot(), new WaitCommand(0.1), m_superstructure.stopShooter()));
+    NamedCommands.registerCommand("shoot", new SequentialCommandGroup(m_superstructure.shoot(), new WaitCommand(0.5), new InstantCommand(() -> m_robotDrive.disableRotatingToGoal()), m_superstructure.stopShooter()));
+    NamedCommands.registerCommand("rotateToGoal", new SequentialCommandGroup(new InstantCommand(() -> m_robotDrive.setRotatingToGoal()),new RotateToGoal(m_robotDrive, m_leftCamera), new WaitCommand(0.25)));
+
     NamedCommands.registerCommand("stopShooter", m_superstructure.stopShooter());
-    NamedCommands.registerCommand("stopIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
+    NamedCommands.registerCommand("stopIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK));
     NamedCommands.registerCommand("setupSubwoofer", m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
     NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());
     // NamedCommands.registerCommand("setupAllianceZone", m_shooter.readyAllianceZone());
@@ -101,7 +102,7 @@ public class RobotContainer {
     // NamedCommands.registerCommand("setupClose", new ParallelCommandGroup(
     //                                                                       new InstantCommand(() -> m_shooter.setPivotAngle(45)),//tbd
     //                                                                       new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)))); //tbd
-    NamedCommands.registerCommand("alignToGoal", new InstantCommand());
+    //NamedCommands.registerCommand("alignToGoal", new RotateToGoal(m_robotDrive, m_leftCamera));
     // NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
     NamedCommands.registerCommand("stowShooter", m_stateMachine.shooterSelectCommand(ShooterState.STOW)); //tbd
     NamedCommands.registerCommand("enableStoppedState", m_robotDrive.enableStopped());
@@ -153,8 +154,6 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
-    m_driverController.x().onTrue(new DriveStraight(m_robotDrive));
-
     m_operatorController.rightBumper()
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_BACK))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
@@ -176,8 +175,8 @@ public class RobotContainer {
 
     m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
     m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
-    m_configureController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
-    m_configureController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
+    m_configureController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
+    m_configureController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
     m_configureController.x().onTrue(m_climber.setLeftClimberZero());
     m_configureController.b().onTrue(m_climber.setRightClimberZero());
   }
