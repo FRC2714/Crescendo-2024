@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2630356689284812,
-      "y": 5.564955745296107
+      "x": 1.5231757689978491,
+      "y": 1.3682160697654737
     },
-    "rotation": 180.0
+    "rotation": 89.42706130231655
   },
   "command": {
     "type": "sequential",
@@ -24,9 +24,21 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "extakeFront"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "open to bottom center"
+          }
+        },
+        {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 1.0
           }
         },
         {
@@ -36,40 +48,15 @@
           }
         },
         {
-          "type": "parallel",
+          "type": "path",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Sub to Center Wing Note"
-                }
-              }
-            ]
+            "pathName": "shoot to second center"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stowShooter"
           }
         }
       ]

@@ -28,15 +28,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "Sub to Amp"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
                 }
               }
             ]
@@ -53,15 +53,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "Amp to Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
                 }
               }
             ]
@@ -84,15 +84,15 @@
           "data": {
             "commands": [
               {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
                 "type": "path",
                 "data": {
                   "pathName": "Wing to Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
                 }
               }
             ]
