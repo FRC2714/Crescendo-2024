@@ -2,153 +2,24 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.2776951268188257,
-      "y": 5.599912914111543
+      "x": 1.431812405586243,
+      "y": 5.56098747253418
     },
-    "rotation": 180.0
+    "rotation": 179.99469134034814
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "setLoaded"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "setupDynamic"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 4.0
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Sub to Amp 3"
-                }
-              }
-            ]
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Amp to Sub 2"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Sub to Center Wing Note 2"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Center Wing to Sub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Sub to Podium"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Podium to Sub"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "stowShooter"
+            "pathName": "4notestartmid"
           }
         }
       ]
     }
   },
-  "folder": "States Autos",
-  "choreoAuto": false
+  "folder": null,
+  "choreoAuto": true
 }

@@ -1,0 +1,93 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 0.76,
+      "y": 4.480646518544946
+    },
+    "rotation": 118.44996834393592
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "setLoaded"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setupDynamic"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Sub to Source Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Center to Wing"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Wing to Source Center"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Source Center to Wing 2"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "States Autos",
+  "choreoAuto": false
+}
