@@ -88,7 +88,7 @@ public class RobotContainer {
     configureButtonBindings();
     NamedCommands.registerCommand("intakeBack", m_superstructure.resetLoadedAndIntakeBack());
     NamedCommands.registerCommand("intakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT));
-    NamedCommands.registerCommand("shoot", new SequentialCommandGroup(m_superstructure.shoot(), new WaitCommand(0.5), m_superstructure.stopShooter()));
+    NamedCommands.registerCommand("shoot", new SequentialCommandGroup(m_superstructure.shoot(), new WaitCommand(0.1), m_superstructure.stopShooter()));
     NamedCommands.registerCommand("stopShooter", m_superstructure.stopShooter());
     NamedCommands.registerCommand("stopIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK));
     NamedCommands.registerCommand("setupSubwoofer", m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
