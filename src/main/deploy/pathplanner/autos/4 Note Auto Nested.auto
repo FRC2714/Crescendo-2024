@@ -73,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2 Note Auto"
+                  "pathName": "Sub to Center Wing Note"
                 }
               }
             ]
@@ -82,7 +82,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middletoshoot"
+            "pathName": "Center Wing to Sub"
           }
         },
         {
@@ -116,7 +116,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "subtopodium"
+                  "pathName": "Sub to Podium"
                 }
               }
             ]
@@ -125,7 +125,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "podiumtosub"
+            "pathName": "Podium to Sub"
           }
         },
         {

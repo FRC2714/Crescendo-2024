@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.74,
-        "y": 5.3
+        "x": 2.68,
+        "y": 5.56
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.832241261405601,
-        "y": 5.8130810261620525
+        "x": 2.191617207661897,
+        "y": 5.556419458894899
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.170477427550348,
-        "y": 5.82
+        "x": 1.47,
+        "y": 5.56
       },
       "prevControl": {
-        "x": 5.176905594252835,
-        "y": 6.0074719134053645
+        "x": 2.0757750537892923,
+        "y": 5.556419458894899
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,20 +32,20 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 1.75,
+    "maxVelocity": 1.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -167.25333866575136,
+    "rotation": -179.91071780216183,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "3 Note Auto Stage",
   "previewStartingState": {
-    "rotation": 136.1421474320397,
+    "rotation": -179.88950244258712,
     "velocity": 0
   },
   "useDefaultConstraints": false

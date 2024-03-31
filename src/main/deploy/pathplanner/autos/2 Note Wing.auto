@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.889,
+      "x": 1.2630356689284812,
       "y": 5.564955745296107
     },
     "rotation": 180.0
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2 Note Auto"
+                  "pathName": "Sub to Center Wing Note"
                 }
               }
             ]
@@ -75,6 +75,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "States Autos",
   "choreoAuto": false
 }

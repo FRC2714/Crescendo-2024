@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2notetop"
+                  "pathName": "Sub to Amp"
                 }
               },
               {
@@ -55,7 +55,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "topcentertop2"
+                  "pathName": "Amp to Center"
                 }
               },
               {
@@ -70,7 +70,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "topcentershoot"
+            "pathName": "Center to Wing"
           }
         },
         {
@@ -86,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "shooto2ndtop"
+                  "pathName": "Wing to Center"
                 }
               },
               {
@@ -101,7 +101,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "2ndtoptoshoot"
+            "pathName": "Center to Wing 2"
           }
         },
         {
@@ -113,6 +113,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "States Autos",
   "choreoAuto": false
 }

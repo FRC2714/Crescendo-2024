@@ -3,11 +3,16 @@
   "robotLength": 0.736,
   "holonomicMode": true,
   "pathFolders": [
-    "essential",
-    "other autos",
-    "secrets"
+    "2 Note Wing",
+    "3 Note Auto Amp",
+    "3 Note Auto Stage",
+    "4 Note 2 Center",
+    "4 Note Wing",
+    "essential"
   ],
-  "autoFolders": [],
+  "autoFolders": [
+    "States Autos"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,

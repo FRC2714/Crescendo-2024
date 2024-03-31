@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3140196323188638,
+      "x": 1.2630356689284812,
       "y": 5.564955745296107
     },
     "rotation": 180.0
@@ -26,7 +26,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 5.0
+            "waitTime": 4.0
           }
         },
         {
@@ -36,7 +36,7 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "subtotop"
+                  "pathName": "Sub to Center Wing Note"
                 }
               }
             ]
@@ -57,7 +57,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "toptosub"
+            "pathName": "Center Wing to Sub"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
           }
         },
         {
@@ -67,7 +73,13 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -79,44 +91,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2 Note Auto"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "middletoshoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "intakeBack"
-                }
-              },
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "subtopodium4"
+                  "pathName": "Sub to Amp 2"
                 }
               }
             ]
@@ -125,7 +100,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "podiumtosub"
+            "pathName": "Amp to Sub"
           }
         },
         {
@@ -149,6 +124,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "States Autos",
   "choreoAuto": false
 }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.59,
+        "x": 2.45,
         "y": 3.98
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.3996163622861606,
-        "y": 4.182647363920681
+        "x": 1.8413491055553548,
+        "y": 4.98421568271708
       },
       "isLocked": false,
       "linkedName": null
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "3 Note Auto Stage",
   "previewStartingState": {
     "rotation": 179.39951677125376,
     "velocity": 0

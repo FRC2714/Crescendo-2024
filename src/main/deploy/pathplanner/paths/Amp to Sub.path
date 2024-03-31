@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.68,
-        "y": 5.56
+        "x": 2.51,
+        "y": 6.96
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.191617207661897,
-        "y": 5.556419458894899
+        "x": 2.0253274792263873,
+        "y": 6.538118219093581
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.4662605074140238,
-        "y": 5.56
+        "x": 1.9581156423368469,
+        "y": 5.117635570506519
       },
       "prevControl": {
-        "x": 2.0720355612033163,
-        "y": 5.556419458894899
+        "x": 2.125226002002858,
+        "y": 4.929636415882256
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -179.91071780216183,
+    "rotation": 180.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "3 Note Auto Amp",
   "previewStartingState": {
-    "rotation": -179.88950244258712,
+    "rotation": 179.39951677125376,
     "velocity": 0
   },
   "useDefaultConstraints": false

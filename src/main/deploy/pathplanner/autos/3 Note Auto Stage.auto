@@ -2,7 +2,7 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3140196323188638,
+      "x": 1.2630356689284812,
       "y": 5.564955745296107
     },
     "rotation": 180.0
@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2 Note Auto"
+                  "pathName": "Sub to Center Wing Note"
                 }
               }
             ]
@@ -57,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "middletoshoot"
+            "pathName": "Center Wing to Sub"
           }
         },
         {
@@ -91,7 +91,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "subtopodium"
+                  "pathName": "Sub to Podium"
                 }
               }
             ]
@@ -100,7 +100,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "podiumtosub"
+            "pathName": "Podium to Sub"
           }
         },
         {
@@ -124,6 +124,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "States Autos",
   "choreoAuto": false
 }
