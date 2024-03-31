@@ -14,7 +14,19 @@
         {
           "type": "named",
           "data": {
+            "name": "setLoaded"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "setupDynamic"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
           }
         },
         {
