@@ -32,6 +32,7 @@ import frc.robot.subsystems.superstructure.StateMachine.TriggerState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -83,15 +84,16 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    // Configure the button bindings
+    // Configure the button bindingsP
     configureButtonBindings();
     NamedCommands.registerCommand("intakeBack", m_superstructure.resetLoadedAndIntakeBack());
     NamedCommands.registerCommand("intakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT));
-    NamedCommands.registerCommand("shoot", new SequentialCommandGroup(m_superstructure.shoot(), new WaitCommand(0.5), new InstantCommand(() -> m_robotDrive.disableRotatingToGoal()), m_superstructure.stopShooter()));
-    NamedCommands.registerCommand("rotateToGoal", new SequentialCommandGroup(new InstantCommand(() -> m_robotDrive.setRotatingToGoal()),new RotateToGoal(m_robotDrive, m_leftCamera), new WaitCommand(0.25)));
+    NamedCommands.registerCommand("extakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_FRONT));
+    NamedCommands.registerCommand("shoot", new SequentialCommandGroup(m_superstructure.shoot(), new WaitCommand(0.1), new InstantCommand(() -> m_robotDrive.disableRotatingToGoal()), m_superstructure.stopShooter()));
+    NamedCommands.registerCommand("rotateToGoal", new InstantCommand(() -> m_robotDrive.setRotatingToGoal()));
 
     NamedCommands.registerCommand("stopShooter", m_superstructure.stopShooter());
-    NamedCommands.registerCommand("stopIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_BACK));
+    NamedCommands.registerCommand("stopPIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
     NamedCommands.registerCommand("setupSubwoofer", m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
     NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());
     // NamedCommands.registerCommand("setupAllianceZone", m_shooter.readyAllianceZone());

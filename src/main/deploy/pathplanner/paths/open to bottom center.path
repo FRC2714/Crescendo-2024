@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 3.9253871891967713,
-        "y": 2.0262131109503945
+        "x": 2.9,
+        "y": 2.5588773823858073
       },
       "prevControl": {
-        "x": 4.8340497698807114,
-        "y": 1.5666596218688629
+        "x": 3.8086625806839387,
+        "y": 2.0993238933042755
       },
       "nextControl": null,
       "isLocked": false,
@@ -93,7 +93,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "Open 2 note",
   "previewStartingState": {
     "rotation": 89.02897806892084,
     "velocity": 0

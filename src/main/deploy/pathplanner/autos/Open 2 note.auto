@@ -30,6 +30,18 @@
           }
         },
         {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.5
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stopIntake"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "open to bottom center"
