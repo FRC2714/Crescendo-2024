@@ -26,12 +26,6 @@
         {
           "type": "named",
           "data": {
-            "name": "alignToGoal"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "intakeBack"
           }
         },
