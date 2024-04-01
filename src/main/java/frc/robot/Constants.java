@@ -151,6 +151,8 @@ public final class Constants {
 
     public static final double kPassUnderStageAngle  = 0; //need tuning
     public static final double kPassUnderStageFlywheelVelocity  = 3000;
+    public static final double kShortFlywheelVelocity  = 500;
+
 
 
     

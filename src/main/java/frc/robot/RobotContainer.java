@@ -96,6 +96,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("stopPIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
     NamedCommands.registerCommand("setupSubwoofer", m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
     NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());
+    NamedCommands.registerCommand("setupShort", m_stateMachine.readyShort());
+
     // NamedCommands.registerCommand("setupAllianceZone", m_shooter.readyAllianceZone());
     // NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(1000)));
     // NamedCommands.registerCommand("setupFast", new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)));

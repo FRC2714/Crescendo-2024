@@ -31,6 +31,7 @@ public class StateMachine extends SubsystemBase {
     PASSTOAMP,
     SOURCETOMID,
     UNDERSTAGE,
+    SHORT,
     AMP,
     STOW
   }
@@ -190,6 +191,14 @@ public class StateMachine extends SubsystemBase {
     );
   }
 
+  public Command readyShort()
+  {
+      return new SequentialCommandGroup(
+      setCurrentShooterState(ShooterState.UNDERSTAGE),
+      m_superstructure.readyUnderstage()
+    );
+  }
+
 
   public Command readyShooterToAmp() {
     return new SequentialCommandGroup(
@@ -286,7 +295,8 @@ public class StateMachine extends SubsystemBase {
       Map.entry(ShooterState.DYNAMIC, enableDynamicShooter()),
       Map.entry(ShooterState.PASSTOAMP, readyPassToAmp()),
       Map.entry(ShooterState.SOURCETOMID, readyPassToMid()),
-      Map.entry(ShooterState.UNDERSTAGE, readyPassUnderstage())
+      Map.entry(ShooterState.UNDERSTAGE, readyPassUnderstage()),
+      Map.entry(ShooterState.SHORT, readyShort())
     ), () -> shooterState);
   }
 

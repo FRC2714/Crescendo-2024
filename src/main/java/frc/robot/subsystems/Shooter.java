@@ -273,6 +273,12 @@ public class Shooter extends SubsystemBase {
                                     setFlywheelVelocityCommand(ShooterConstants.kPassUnderStageFlywheelVelocity));
   }
 
+      public Command readyShort() {
+    return new ParallelCommandGroup(disableDynamic(),
+                                    setPivotAngleCommand(ShooterConstants.kPassUnderStageAngle),
+                                    setFlywheelVelocityCommand(ShooterConstants.kShortFlywheelVelocity));
+  }
+
 
 
 
