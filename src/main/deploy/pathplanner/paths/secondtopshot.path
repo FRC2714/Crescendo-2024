@@ -1,0 +1,92 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 4.12,
+        "y": 6.25
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.069150830413621,
+        "y": 6.914191131181245
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.437366900179093,
+        "y": 5.702641023602658
+      },
+      "prevControl": {
+        "x": 7.967369013618434,
+        "y": 5.002866392501233
+      },
+      "nextControl": {
+        "x": 9.184390233559142,
+        "y": 6.814875764412953
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.12,
+        "y": 6.4755264370579635
+      },
+      "prevControl": {
+        "x": 5.247994927745583,
+        "y": 6.914191131181244
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1,
+      "rotationDegrees": 171.43085812016233,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeBack"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -160.98088130608193,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "ryans 4 note 2 center",
+  "previewStartingState": {
+    "rotation": -161.77620009221437,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

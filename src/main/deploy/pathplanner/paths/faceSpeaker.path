@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4535216733541423,
+        "y": 7.001760527838968
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4535216733541423,
+        "y": 7.021236913173707
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 1.45,
+        "y": 7.0
+      },
+      "prevControl": {
+        "x": 1.4535217050432203,
+        "y": 7.001760464448267
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 0.02,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -122.57274662053015,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "ryans 4 note 2 center",
+  "previewStartingState": {
+    "rotation": -179.80906395140664,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}
