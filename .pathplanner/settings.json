@@ -3,6 +3,7 @@
   "robotLength": 0.736,
   "holonomicMode": true,
   "pathFolders": [
+    "2 Note Bottom Disruptor",
     "2 Note Wing",
     "3 Note Auto Amp",
     "3 Note Auto Stage",
@@ -10,6 +11,7 @@
     "3 Note Source Center",
     "4 Note 2 Center",
     "4 Note Wing",
+    "Amp Side 2 Note Disruptor",
     "Open 2 note",
     "Open Podium",
     "essential"

@@ -1,0 +1,58 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.550181292560492,
+        "y": 6.441723558994216
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.589525995417357,
+        "y": 6.457461440136962
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.8393984513944295,
+        "y": 6.441723558994216
+      },
+      "prevControl": {
+        "x": 4.81579162968031,
+        "y": 6.425985677851471
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.6,
+      "rotationDegrees": -178.0164431188794,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 2.0,
+    "maxAcceleration": 1.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -167.7352262721077,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Amp Side 2 Note Disruptor",
+  "previewStartingState": {
+    "rotation": 180.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

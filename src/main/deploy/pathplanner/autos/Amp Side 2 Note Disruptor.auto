@@ -1,0 +1,124 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.550181292560492,
+      "y": 6.441723558994216
+    },
+    "rotation": 177.95459151111254
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "setLoaded"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "setupDynamic"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Open Amp Side to Shoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Shoot to C1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C5 To Pass Understage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "understage"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Understage to C4"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "intakeBack"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "C4 To Pass Understage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "understage"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "stowShooter"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
