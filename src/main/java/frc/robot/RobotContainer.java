@@ -60,7 +60,7 @@ public class RobotContainer {
   // private final Amp m_amp = new Amp();
   // private final AutosCommands m_autosCommands = new AutosCommands(m_robotDrive, m_limelight, m_shooter, m_intake);
   private double kPThetaController = .3;//.7
-  private SendableChooser<Command> autoChooser;
+  // private SendableChooser<Command> autoChooser;
   // private final Climber m_climber = new Climber();
 
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -99,8 +99,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("enableStoppedState", m_robotDrive.enableStopped());
     NamedCommands.registerCommand("disableStoppedState", m_robotDrive.disableStopped());
 
-    autoChooser = AutoBuilder.buildAutoChooser("3 Note Auto Top");
-    SmartDashboard.putData("Auto Chooser", autoChooser);
+    // autoChooser = AutoBuilder.buildAutoChooser("3 Note Auto Top");
+    // SmartDashboard.putData("Auto Chooser", autoChooser);
     // Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -143,6 +143,7 @@ public class RobotContainer {
     
     m_operatorController.povUp().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
     m_operatorController.povDown().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.STOW));
+
     m_operatorController.povLeft().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
     m_operatorController.povRight().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.DYNAMIC));
 
@@ -204,16 +205,16 @@ public class RobotContainer {
     m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE);
   }
 
-  public void setAutonomousDefaultStates() {
-    new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
-  }
+  // public void setAutonomousDefaultStates() {
+  //   new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
+  // }
 
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
-  }
+  // /**
+  //  * Use this to pass the autonomous command to the main {@link Robot} class.
+  //  *
+  //  * @return the command to run in autonomous
+  //  */
+  // public Command getAutonomousCommand() {
+  //   return autoChooser.getSelected();
+  // }
 }

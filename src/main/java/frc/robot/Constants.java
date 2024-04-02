@@ -115,7 +115,7 @@ public final class Constants {
     public static final double kPivotGearRatio = 25;
     public static final double kFlywheelGearRatio = 2;
 
-    public static final double kPivotEncoderZeroOffset = 208 * kPivotGearRatio;
+    public static final double kPivotEncoderZeroOffset = 330 * kPivotGearRatio;
     public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
 
     public static final double kMinPivotAngle = 0;
@@ -135,7 +135,7 @@ public final class Constants {
     public static final double kAmpAngle = 25;
     public static final double kAmpFlywheelVelocity = 2500;
 
-    public static final double kPassToAmpAngle = 50;
+    public static final double kPassToAmpAngle = 35;
     public static final double kPassToAmpFlywheelVelocity  = 4800;
 
     public static final double kSourceToMidAngle  = 40;
@@ -198,8 +198,8 @@ public final class Constants {
     public static final Pose2d kInitialBluePose = new Pose2d(1.0381, 5.547, new Rotation2d(180));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 6.77;
-    public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+    public static final double kMaxSpeedMetersPerSecond = 20;
+    public static final double kMaxAngularSpeed = 10 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
