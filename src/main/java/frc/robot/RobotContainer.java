@@ -29,6 +29,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.superstructure.StateMachine;
 import frc.robot.subsystems.superstructure.Superstructure;
+import frc.robot.subsystems.superstructure.StateMachine.ClimberState;
 import frc.robot.subsystems.superstructure.StateMachine.ShooterState;
 import frc.robot.subsystems.superstructure.StateMachine.TriggerState;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -61,7 +62,7 @@ public class RobotContainer {
   // The robot's subsystems
   private final Limelight m_limelight = new Limelight();
   private final LED m_blinkin = new LED();
-  private final Vision m_leftCamera = new Vision(PhotonConstants.kLeftCameraName, PhotonConstants.kLeftCameraLocation, m_blinkin);
+  private final Vision m_leftCamera = new Vision(PhotonConstants.kLeftCameraName, PhotonConstants.kLeftCameraLocation);
   private final Vision m_rightCamera = new Vision(PhotonConstants.kRightCameraName, PhotonConstants.kRightCameraLocation);
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_leftCamera);
   // private final Shooter m_shooter = new Shooter(m_robotDrive);
@@ -177,30 +178,36 @@ public class RobotContainer {
     m_operatorController.leftTrigger(OIConstants.kTriggerThreshold)
       .onTrue(m_stateMachine.shooterSelectCommand(ShooterState.AMP));
     m_operatorController.povLeft().onTrue(m_stateMachine.shooterSelectCommand(ShooterState.PASSTOAMP));
-    m_operatorController.povUp().onTrue(m_stateMachine.extendClimbers());
-    m_operatorController.povDown().onTrue(m_stateMachine.retractClimbers());
-    m_operatorController.povRight().onTrue(m_stateMachine.zeroClimbers());
+    m_operatorController.povUp().onTrue(m_stateMachine.climberSelectCommand(ClimberState.EXTENDED));
+    m_operatorController.povDown().onTrue(m_stateMachine.climberSelectCommand(ClimberState.RETRACTED));
+    m_operatorController.povRight().onTrue(m_stateMachine.climberSelectCommand(ClimberState.ZERO));
 
-    m_configureController.leftBumper().whileTrue(new ParallelCommandGroup(m_climber.extendLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
-    m_configureController.rightBumper().whileTrue(new ParallelCommandGroup(m_climber.extendRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
-    m_configureController.leftTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopLeftClimber());
-    m_configureController.rightTrigger(0.1).whileTrue(new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(0.1)))).whileFalse(m_climber.stopRightClimber());
+    m_configureController.leftBumper().whileTrue(m_superstructure.configureExtendLeftClimber())
+      .whileFalse(m_climber.stopLeftClimber());
+    m_configureController.rightBumper().whileTrue(m_superstructure.configureExtendRightClimber())
+      .whileFalse(m_climber.stopRightClimber());
+    m_configureController.leftTrigger(OIConstants.kTriggerThreshold).whileTrue(m_superstructure.configureRetractLeftClimber())
+      .whileFalse(m_climber.stopLeftClimber());
+    m_configureController.rightTrigger(OIConstants.kTriggerThreshold).whileTrue(m_superstructure.configureRetractRightClimber())
+      .whileFalse(m_climber.stopRightClimber());
     m_configureController.x().onTrue(m_climber.setLeftClimberZero());
     m_configureController.b().onTrue(m_climber.setRightClimberZero());
   }
 
   public void setTeleopDefaultStates() {
-    m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kTeleOpMaxSpeedMetersPerSecond);
-    m_robotDrive.setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed);
+    m_robotDrive.disableVoltageCompensation().schedule();
+    m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kTeleOpMaxSpeedMetersPerSecond).schedule();
+    m_robotDrive.setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed).schedule();
     m_stateMachine.shooterSelectCommand(ShooterState.STOW).schedule();
     m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE).schedule();
   }
 
   public void setAutonomousDefaultStates() {
-    m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kAutoMaxSpeedMetersPerSecond);
-    m_robotDrive.setMaxAngularSpeed(DriveConstants.kAutoMaxAngularSpeed);
-    // new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
+    m_robotDrive.enableVoltageCompensation().schedule();
+    m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kAutoMaxSpeedMetersPerSecond).schedule();
+    m_robotDrive.setMaxAngularSpeed(DriveConstants.kAutoMaxAngularSpeed).schedule();
     m_amp.stow().schedule();
+    // new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
   }
 
   public void setRobotDefaultStates() {

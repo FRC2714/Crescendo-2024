@@ -235,7 +235,13 @@ public class StateMachine extends SubsystemBase {
     );
   }
 
-
+  public Command climberSelectCommand(ClimberState climberState) {
+    return new SelectCommand<ClimberState>(Map.ofEntries(
+      Map.entry(ClimberState.ZERO, zeroClimbers()),
+      Map.entry(ClimberState.RETRACTED, retractClimbers()),
+      Map.entry(ClimberState.EXTENDED, extendClimbers())
+    ), () -> climberState);
+  }
 
   public Command intakeSelectCommand(IntakeState intakeState) {
     // System.out.println(currentTriggerState);

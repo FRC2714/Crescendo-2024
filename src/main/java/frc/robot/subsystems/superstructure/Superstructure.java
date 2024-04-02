@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Amp;
@@ -36,6 +37,7 @@ public class Superstructure extends SubsystemBase {
   Vision m_vision;
   Climber m_climber;
   Amp m_amp;
+  LED m_blinkin;
   CommandXboxController m_driverController;
   CommandXboxController m_operatorController;
 
@@ -48,6 +50,7 @@ public class Superstructure extends SubsystemBase {
     this.m_intake = new Intake();
     this.m_climber = m_climber;
     this.m_amp = m_amp;
+    this.m_blinkin = m_blinkin;
     this.m_driverController = m_driverController;
     this.m_operatorController = m_operatorController;
   }
@@ -111,8 +114,6 @@ public class Superstructure extends SubsystemBase {
     return m_intake.shoot();
   }
 
-
-
   public Command stopShooter() {
     return new SequentialCommandGroup(
       m_intake.stopShooter(),
@@ -170,8 +171,6 @@ public class Superstructure extends SubsystemBase {
     return m_shooter.readyUnderstage();
   }
 
-  
-
   public Command readyShooterToAmp() {
     return new ParallelCommandGroup(m_shooter.readyAmp(),
                                     m_amp.extend());
@@ -205,6 +204,31 @@ public class Superstructure extends SubsystemBase {
       m_climber.zeroClimbersCommand());
   }
 
+  public Command configureExtendLeftClimber() {
+    return new ParallelCommandGroup(m_climber.extendLeftClimberToReset(),
+                                    new InstantCommand(() -> m_amp.setPivot(AmpConstants.kClimbPivot)));
+  }
+
+  public Command configureExtendRightClimber() {
+    return new ParallelCommandGroup(m_climber.extendRightClimberToReset(),
+                                    new InstantCommand(() -> m_amp.setPivot(AmpConstants.kClimbPivot)));
+  }
+
+  public Command configureRetractLeftClimber() {
+    return new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(AmpConstants.kClimbPivot)));
+  }
+
+  public Command configureRetractRightClimber() {
+    return new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(AmpConstants.kClimbPivot)));
+  }
+
+  public boolean isReadyToShoot() {
+    return m_intake.getLoaded()
+      && m_shooter.getFlywheelVelocity() >= ShooterConstants.kGoalFlywheelVelocity
+      && m_vision.getSpeakerXOffsetDegrees() < 1
+      && m_vision.hasSpeakerTarget();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -217,6 +241,16 @@ public class Superstructure extends SubsystemBase {
       if (!getLoaded()) elapsedRumbleTime = 0;
       m_driverController.getHID().setRumble(RumbleType.kBothRumble, 0);
       m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
+    }
+
+    if (isReadyToShoot()) {
+      m_blinkin.setFire();
+    }
+    else if (m_vision.hasSpeakerTarget()) {
+      m_blinkin.setGreen();
+    }
+    else {
+      m_blinkin.setRed();
     }
   }
 }

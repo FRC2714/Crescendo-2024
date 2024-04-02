@@ -50,6 +50,7 @@ import frc.robot.utils.SwerveUtils;
 import frc.robot.utils.TunableNumber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -312,7 +313,26 @@ translationP.setDefault(1.5);
         // return an empty optional when we don't want to override the path's rotation
         return Optional.empty();
     }
-}
+  }
+
+  public Command enableVoltageCompensation() {
+    return new ParallelCommandGroup(
+      m_frontLeft.enableModuleVoltageCompensation(),
+      m_frontRight.enableModuleVoltageCompensation(),
+      m_rearLeft.enableModuleVoltageCompensation(),
+      m_rearRight.enableModuleVoltageCompensation()
+    );
+  }
+
+  public Command disableVoltageCompensation() {
+    return new ParallelCommandGroup(
+      m_frontLeft.disableModuleVoltageCompensation(),
+      m_frontRight.disableModuleVoltageCompensation(),
+      m_rearLeft.disableModuleVoltageCompensation(),
+      m_rearRight.disableModuleVoltageCompensation()
+    );
+  }
+
   public void toggleRotatingToGoal() {
     rotatingToGoal = !rotatingToGoal;
   }

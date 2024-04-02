@@ -8,6 +8,9 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -113,6 +116,20 @@ public class MAXSwerveModule {
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
     m_drivingEncoder.setPosition(0);
+  }
+
+  public Command enableModuleVoltageCompensation() {
+    return new ParallelCommandGroup(
+      new InstantCommand(() -> m_drivingSparkFlex.enableVoltageCompensation(ModuleConstants.kNominalVoltage)),
+      new InstantCommand(() -> m_turningSparkMax.enableVoltageCompensation(ModuleConstants.kNominalVoltage))
+    );
+  }
+
+  public Command disableModuleVoltageCompensation() {
+    return new ParallelCommandGroup(
+      new InstantCommand(() -> m_drivingSparkFlex.disableVoltageCompensation()),
+      new InstantCommand(() -> m_turningSparkMax.disableVoltageCompensation())
+    );
   }
 
   /**
