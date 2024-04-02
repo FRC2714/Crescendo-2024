@@ -70,6 +70,12 @@ public class Superstructure extends SubsystemBase {
       new IntakeCommand(m_intake, IntakeCommand.IntakeState.BACK)
         .until(() -> m_intake.getLoaded())
     );
+  }  
+  public Command intakeBackRaw() {
+    return new SequentialCommandGroup(
+      m_intake.stopFront(),
+      new IntakeCommand(m_intake, IntakeCommand.IntakeState.BACK)
+    );
   }
 
   public Command intakeFront() {

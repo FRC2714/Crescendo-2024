@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.commands.IntakeCommand.IntakeState;
@@ -87,13 +88,15 @@ public class RobotContainer {
     // Configure the button bindingsP
     configureButtonBindings();
     NamedCommands.registerCommand("intakeBack", m_superstructure.resetLoadedAndIntakeBack());
+    NamedCommands.registerCommand("intakeBackRaw", m_superstructure.intakeBackRaw());
+
     NamedCommands.registerCommand("intakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT));
     NamedCommands.registerCommand("extakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_FRONT));
     NamedCommands.registerCommand("shoot", new SequentialCommandGroup(m_superstructure.shoot(), new WaitCommand(0.1), new InstantCommand(() -> m_robotDrive.disableRotatingToGoal()), m_superstructure.stopShooter()));
     NamedCommands.registerCommand("rotateToGoal", new InstantCommand(() -> m_robotDrive.setRotatingToGoal()));
 
     NamedCommands.registerCommand("stopShooter", m_superstructure.stopShooter());
-    NamedCommands.registerCommand("stopPIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
+    NamedCommands.registerCommand("stopIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
     NamedCommands.registerCommand("setupSubwoofer", m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
     NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());
     NamedCommands.registerCommand("setupShort", m_stateMachine.readyShort());
