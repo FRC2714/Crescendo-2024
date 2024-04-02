@@ -101,6 +101,8 @@ public class DriveSubsystem extends SubsystemBase {
   private Vision m_camera;
 
   private TunableNumber translationP, rotationP;
+
+  private double maxSpeedMetersPerSecond, maxAngularSpeed;
   
   // Pose class for tracking robot pose
   Vector<N3> stateStdDevs = VecBuilder.fill(0.01, 0.01, Units.degreesToRadians(0.01)); // Increase for less state trust
@@ -121,6 +123,9 @@ public class DriveSubsystem extends SubsystemBase {
   public DriveSubsystem(Vision m_camera) {
     m_gyro.calibrate();
     this.m_camera = m_camera;
+
+    maxSpeedMetersPerSecond = DriveConstants.kAutoMaxSpeedMetersPerSecond;
+    maxAngularSpeed = DriveConstants.kAutoMaxAngularSpeed;
     
     PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     translationP = new TunableNumber("translation P");
@@ -248,6 +253,14 @@ translationP.setDefault(1.5);
     SmartDashboard.putNumber("Distance to goal meters", getDistanceToGoalMeters(getPose()));
     SmartDashboard.putNumber("Pose rotation", getPose().getRotation().getDegrees());
     SmartDashboard.putNumber("Pose rotation to goal", Units.radiansToDegrees(getRotationFromGoalRadians(getPose())));
+  }
+
+  public Command setMaxSpeedMetersPerSecond(double maxSpeedMetersPerSecond) {
+    return new InstantCommand(() -> this.maxSpeedMetersPerSecond = maxSpeedMetersPerSecond);
+  }
+
+  public Command setMaxAngularSpeed(double maxAngularSpeed) {
+    return new InstantCommand(() -> this.maxAngularSpeed = maxAngularSpeed);
   }
 
   // public double getSpeakerTargetYaw() {
@@ -508,9 +521,9 @@ translationP.setDefault(1.5);
     }
 
     // Convert the commanded speeds into the correct units for the drivetrain
-    double xSpeedDelivered = xSpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double ySpeedDelivered = ySpeedCommanded * DriveConstants.kMaxSpeedMetersPerSecond;
-    double rotDelivered = m_currentRotation * DriveConstants.kMaxAngularSpeed;
+    double xSpeedDelivered = xSpeedCommanded * maxSpeedMetersPerSecond;
+    double ySpeedDelivered = ySpeedCommanded * maxSpeedMetersPerSecond;
+    double rotDelivered = m_currentRotation * maxAngularSpeed;
 
     var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(
       ChassisSpeeds.discretize(
@@ -519,7 +532,7 @@ translationP.setDefault(1.5);
             : new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered),
           PeriodicConstants.kPeriodSeconds));
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        swerveModuleStates, maxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
     m_frontRight.setDesiredState(swerveModuleStates[1]);
     m_rearLeft.setDesiredState(swerveModuleStates[2]);
@@ -551,7 +564,7 @@ translationP.setDefault(1.5);
    */
   public void setModuleStates(SwerveModuleState[] desiredStates) {
     SwerveDriveKinematics.desaturateWheelSpeeds(
-        desiredStates, DriveConstants.kMaxSpeedMetersPerSecond);
+        desiredStates, maxSpeedMetersPerSecond);
     m_frontLeft.setDesiredState(desiredStates[0]);
     m_frontRight.setDesiredState(desiredStates[1]);
     m_rearLeft.setDesiredState(desiredStates[2]);

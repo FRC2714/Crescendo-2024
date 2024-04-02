@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonConstants;
@@ -189,11 +190,15 @@ public class RobotContainer {
   }
 
   public void setTeleopDefaultStates() {
+    m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kTeleOpMaxSpeedMetersPerSecond);
+    m_robotDrive.setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed);
     m_stateMachine.shooterSelectCommand(ShooterState.STOW).schedule();
     m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE).schedule();
   }
 
   public void setAutonomousDefaultStates() {
+    m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kAutoMaxSpeedMetersPerSecond);
+    m_robotDrive.setMaxAngularSpeed(DriveConstants.kAutoMaxAngularSpeed);
     // new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
     m_amp.stow().schedule();
   }

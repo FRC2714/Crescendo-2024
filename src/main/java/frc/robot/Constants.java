@@ -212,8 +212,11 @@ public final class Constants {
     public static final Pose2d kInitialBluePose = new Pose2d(1.0381, 5.547, new Rotation2d(180));
     // Driving Parameters - Note that these are not the maximum capable speeds of
     // the robot, rather the allowed maximum speeds
-    public static final double kMaxSpeedMetersPerSecond = 6.77;
-    public static final double kMaxAngularSpeed = 2 * Math.PI; // radians per second
+    public static final double kAutoMaxSpeedMetersPerSecond = 6.77;
+    public static final double kAutoMaxAngularSpeed = 2 * Math.PI; // radians per second
+
+    public static final double kTeleOpMaxSpeedMetersPerSecond = 20;
+    public static final double kTeleOpMaxAngularSpeed = 10 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)
