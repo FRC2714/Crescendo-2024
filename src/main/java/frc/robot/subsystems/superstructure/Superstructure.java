@@ -154,7 +154,11 @@ public class Superstructure extends SubsystemBase {
     return m_shooter.readySubwoofer();
   }
 
-    public Command readyPassToAmp() {
+  public Command readyShort() {
+    return m_shooter.readyShort();
+  }
+
+  public Command readyPassToAmp() {
     return m_shooter.readyPassToAmp();
   }
 

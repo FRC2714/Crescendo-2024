@@ -1,0 +1,121 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.4924744440236215,
+        "y": 1.3633469734317891
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.492474444023621,
+        "y": 1.3633469734317891
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.38,
+        "y": 0.7108880647180038
+      },
+      "prevControl": {
+        "x": 8.38,
+        "y": 0.5742060172644956
+      },
+      "nextControl": {
+        "x": 8.38,
+        "y": 1.7308880647180036
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.38,
+        "y": 7.59
+      },
+      "prevControl": {
+        "x": 8.380000000000003,
+        "y": 1.942925760881896
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.95,
+      "rotationDegrees": -145.0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.65,
+      "maxWaypointRelativePos": 1.0,
+      "constraints": {
+        "maxVelocity": 3.0,
+        "maxAcceleration": 1.5,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
+  "eventMarkers": [
+    {
+      "name": "Spit Notes",
+      "waypointRelativePos": 0.6,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "intakeBackRaw"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "setupFlywheels",
+      "waypointRelativePos": 0.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "setupShort"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -135.0000000000001,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "Open Disruptor",
+  "previewStartingState": {
+    "rotation": -179.57242749316651,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

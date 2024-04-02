@@ -102,6 +102,9 @@ public class MAXSwerveModule {
     m_drivingSparkFlex.setSmartCurrentLimit(ModuleConstants.kDrivingMotorCurrentLimit);
     m_turningSparkMax.setSmartCurrentLimit(ModuleConstants.kTurningMotorCurrentLimit);
 
+    m_drivingSparkFlex.enableVoltageCompensation(ModuleConstants.kNominalVoltage);
+    m_turningSparkMax.enableVoltageCompensation(ModuleConstants.kNominalVoltage);
+
     // Save the SPARK MAX configurations. If a SPARK MAX browns out during
     // operation, it will maintain the above configurations.
     m_drivingSparkFlex.burnFlash();

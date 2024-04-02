@@ -194,8 +194,8 @@ public class StateMachine extends SubsystemBase {
   public Command readyShort()
   {
       return new SequentialCommandGroup(
-      setCurrentShooterState(ShooterState.UNDERSTAGE),
-      m_superstructure.readyUnderstage()
+      setCurrentShooterState(ShooterState.SHORT),
+      m_superstructure.readyShort()
     );
   }
 

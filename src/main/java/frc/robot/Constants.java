@@ -151,7 +151,7 @@ public final class Constants {
 
     public static final double kPassUnderStageAngle  = 0; //need tuning
     public static final double kPassUnderStageFlywheelVelocity  = 3000;
-    public static final double kShortFlywheelVelocity  = 500;
+    public static final double kShortFlywheelVelocity = 1500;
 
 
 
@@ -275,6 +275,8 @@ public final class Constants {
     // This changes the drive speed of the module (a pinion gear with more teeth will result in a
     // robot that drives faster).
     public static final int kDrivingMotorPinionTeeth = 15;
+
+    public static final int kNominalVoltage = 12;
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
     // the steering motor in the MAXSwerve Module.

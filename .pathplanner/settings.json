@@ -3,7 +3,6 @@
   "robotLength": 0.736,
   "holonomicMode": true,
   "pathFolders": [
-    "2 Note Bottom Disruptor",
     "2 Note Wing",
     "3 Note Auto Amp",
     "3 Note Auto Stage",
@@ -13,6 +12,7 @@
     "4 Note Wing",
     "Amp Side 2 Note Disruptor",
     "ryans 4 note 2 center",
+    "Open Disruptor",
     "Open 2 note",
     "Open Podium",
     "essential"
@@ -24,5 +24,5 @@
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
-  "maxModuleSpeed": 4.92
+  "maxModuleSpeed": 6.77
 }

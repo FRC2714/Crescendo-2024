@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.4924744440236215,
+      "y": 1.3633469734317891
+    },
+    "rotation": -179.55238582913935
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Disruptor Path"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "States Autos",
+  "choreoAuto": false
+}
