@@ -75,15 +75,15 @@ public final class Constants {
     public static final int kConveyorSmartCurrentLimit = 80; // TBD
     public static final int kFeederSmartCurrentLimit = 80;
 
-    public static final double kFrontRollerVoltage = 5; // TBD
-    public static final double kBackBottomRollerVoltage = 3; // TBD
-    public static final double kBackDirectionRollerVoltageFrontSide = 3; // TBD
-    public static final double kFrontDirectionRollerVoltageFrontSide = 3; // TBD
-    public static final double kBackBottomRollerVoltageFrontSide = 3;
-    public static final double kBackDirectionRollerVoltageBackSide = 3; // TBD
-    public static final double kBackBottomRollerVoltageBackSide = 3;
-    public static final double kFrontDirectionRollerVoltageBackSide = 3; // TBD
-    public static final double kConveyorVoltage = 5; // TBD
+    public static final double kFrontRollerVoltage = 12; // TBD
+    public static final double kBackBottomRollerVoltage = 12; // TBD
+    public static final double kBackDirectionRollerVoltageFrontSide = 12; // TBD
+    public static final double kFrontDirectionRollerVoltageFrontSide = 12; // TBD
+    public static final double kBackBottomRollerVoltageFrontSide = 12;
+    public static final double kBackDirectionRollerVoltageBackSide = 12; // TBD
+    public static final double kBackBottomRollerVoltageBackSide = 12;
+    public static final double kFrontDirectionRollerVoltageBackSide = 12; // TBD
+    public static final double kConveyorVoltage = 12; // TBD
     public static final double kFeederIntakeVoltage = 2; // TBD
     public static final double kFeederShootVoltage = 12;
   }
@@ -197,23 +197,24 @@ public final class Constants {
     public static final Pose2d kRedSpeakerAprilTagLocation = new Pose2d(16.57, 5.547, new Rotation2d(0));
   }
   public static final class AmpConstants {
-      public static final int kAmpCanId = 0;
+      public static final int kAmpCanId = 19;
 
       public static final int kSmartCurrentLimit = 20;
-
-      public static final double kPivotConversionFactor = 0;
-      public static final double kPivotZeroOffset = 0;
-      public static final double kPivotEncoderKinematicOffset = 0;
       public static final double kPivotGearRatio = 45;
+
+      public static final double kPivotZeroOffset = 338 * kPivotGearRatio;
+      public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
+
+      public static final double kPivotConversionFactor = 360 * kPivotGearRatio;
 
       public static final double kMinPivotAngle = 0;
       public static final double kMaxPivotAngle = 0;
 
       public static final double kStowAngle = 0;
-      public static final double kDeployAngle = 0;
+      public static final double kDeployAngle = 78;
 
       public static final class AmpPIDConstants {
-        public static final double kP = 0;
+        public static final double kP = 0.07;
         public static final double kI = 0;
         public static final double kD = 0;
       }

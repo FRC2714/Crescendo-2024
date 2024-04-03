@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.AmpConstants.AmpPIDConstants;
+import frc.robot.utils.TunableNumber;
 import frc.robot.Constants.ShooterConstants;
 
 public class Amp extends SubsystemBase {
@@ -24,6 +25,7 @@ public class Amp extends SubsystemBase {
   private CANSparkFlex pivotMotor;
   private AbsoluteEncoder pivotEncoder;
   private PIDController pivotController;
+  private TunableNumber tunableAngle, tunableP;
 
   public Amp() {
 
@@ -33,8 +35,14 @@ public class Amp extends SubsystemBase {
     pivotMotor.setSmartCurrentLimit(AmpConstants.kSmartCurrentLimit);
 
     pivotEncoder = pivotMotor.getAbsoluteEncoder();
+    pivotEncoder.setInverted(true);
     pivotEncoder.setPositionConversionFactor(AmpConstants.kPivotConversionFactor);
     pivotEncoder.setZeroOffset(AmpConstants.kPivotZeroOffset);
+
+    tunableAngle = new TunableNumber("Tuanble Amp Angle");
+    tunableP = new TunableNumber("Tunable Amp P");
+    tunableAngle.setDefault(0);
+    tunableP.setDefault(0);
   
     pivotController = new PIDController(AmpPIDConstants.kP, AmpPIDConstants.kI, AmpPIDConstants.kD);
     
@@ -50,12 +58,7 @@ public class Amp extends SubsystemBase {
   }
 
   public void setPivotAngle(double targetAngle) {
-    if (targetAngle > AmpConstants.kMaxPivotAngle)
-      pivotController.setSetpoint(AmpConstants.kMaxPivotAngle);
-    else if (targetAngle < AmpConstants.kMinPivotAngle)
-      pivotController.setSetpoint(AmpConstants.kMinPivotAngle);
-    else
-      pivotController.setSetpoint(targetAngle);
+    pivotController.setSetpoint(targetAngle);
   }
 
   public Command deploy() {
@@ -74,6 +77,15 @@ public class Amp extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Amp Angle", getPivotAngle());
+    SmartDashboard.putNumber("Amp goal", pivotController.getSetpoint());
+    SmartDashboard.putNumber("Amp P goal", pivotController.getP());
     setCalculatedPivotVoltage();
+
+    if (tunableAngle.hasChanged()) {
+      setPivotAngle(tunableAngle.get());
+    }
+    if (tunableP.hasChanged()) {
+      pivotController.setP(tunableP.get());
+    }
   }
 }
