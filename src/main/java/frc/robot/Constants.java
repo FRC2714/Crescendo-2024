@@ -197,10 +197,26 @@ public final class Constants {
     public static final Pose2d kRedSpeakerAprilTagLocation = new Pose2d(16.57, 5.547, new Rotation2d(0));
   }
   public static final class AmpConstants {
-      public static final int kLeftAmpPivotChannel = 0;
-      public static final int kRightAmpPivotChannel = 1;
+      public static final int kAmpCanId = 0;
 
-      public static final double kClimbPivot = 0.1;
+      public static final int kSmartCurrentLimit = 20;
+
+      public static final double kPivotConversionFactor = 0;
+      public static final double kPivotZeroOffset = 0;
+      public static final double kPivotEncoderKinematicOffset = 0;
+      public static final double kPivotGearRatio = 45;
+
+      public static final double kMinPivotAngle = 0;
+      public static final double kMaxPivotAngle = 0;
+
+      public static final double kStowAngle = 0;
+      public static final double kDeployAngle = 0;
+
+      public static final class AmpPIDConstants {
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+      }
     }
 
   public static final class DriveConstants {

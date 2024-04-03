@@ -18,6 +18,7 @@ import com.revrobotics.SparkPIDController;
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.REVLibError;
 import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ModuleConstants;
@@ -34,6 +35,9 @@ public class MAXSwerveModule {
 
   private double m_chassisAngularOffset = 0;
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
+
+  private double drivingPosition;
+  private double turningPosition;
 
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
@@ -116,6 +120,9 @@ public class MAXSwerveModule {
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
     m_drivingEncoder.setPosition(0);
+
+    drivingPosition = m_drivingEncoder.getPosition();
+    turningPosition = m_turningEncoder.getPosition();
   }
 
   public Command enableModuleVoltageCompensation() {
@@ -152,9 +159,17 @@ public class MAXSwerveModule {
   public SwerveModulePosition getPosition() {
     // Apply chassis angular offset to the encoder position to get the position
     // relative to the chassis.
+    if (m_drivingSparkFlex.getLastError() == REVLibError.kOk) {
+      drivingPosition = m_drivingEncoder.getPosition();
+    }
+
+    if (m_turningSparkMax.getLastError() == REVLibError.kOk) {
+      turningPosition = m_turningEncoder.getPosition();
+    }
+
     return new SwerveModulePosition(
-        m_drivingEncoder.getPosition(),
-        new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
+        drivingPosition,
+        new Rotation2d(turningPosition - m_chassisAngularOffset));
   }
 
   /**

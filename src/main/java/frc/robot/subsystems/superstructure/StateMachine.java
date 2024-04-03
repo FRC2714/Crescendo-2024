@@ -9,6 +9,7 @@ import java.util.Map;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -54,11 +55,17 @@ public class StateMachine extends SubsystemBase {
     RETRACTED
   }
 
+  public enum AmpState {
+    STOW,
+    DEPLOY
+  }
+
   private IntakeState currentIntakeState;
   private TriggerState currentTriggerState;
   private BumperState currentBumperState;
   private ShooterState currentShooterState;
   private ClimberState currentClimberState;
+  private AmpState currentAmpState;
   public StateMachine(Superstructure m_superstructure) {
     this.m_superstructure = m_superstructure;
 
@@ -67,6 +74,7 @@ public class StateMachine extends SubsystemBase {
     currentBumperState = BumperState.NONE;
     currentShooterState = ShooterState.STOW;
     currentClimberState = ClimberState.ZERO;
+    currentAmpState = AmpState.STOW;
   }
 
   public void setTriggerState(TriggerState triggerState) {
@@ -89,6 +97,10 @@ public class StateMachine extends SubsystemBase {
     currentClimberState = climberState;
   }
 
+  public void setAmpState(AmpState ampState) {
+    currentAmpState = ampState;
+  }
+
   public Command setCurrentIntakeState(IntakeState intakeState) {
     return new InstantCommand(() -> setIntakeState(intakeState));
   }
@@ -109,13 +121,16 @@ public class StateMachine extends SubsystemBase {
     return new InstantCommand(() -> setClimberState(climberState));
   }
 
+  public Command setCurrentAmpState(AmpState ampState) {
+    return new InstantCommand(() -> setAmpState(ampState));
+  }
+
   public Command intakeBack() {
     return new SequentialCommandGroup(
       setCurrentTriggerState(TriggerState.RIGHT),
       m_superstructure.intakeBack()
     );
   }
-
 
   public Command intakeFront() {
     return new SequentialCommandGroup(
@@ -155,7 +170,10 @@ public class StateMachine extends SubsystemBase {
   public Command stowShooter() {
     return new SequentialCommandGroup(
       setCurrentShooterState(ShooterState.STOW),
-      m_superstructure.stowShooter()
+      new ParallelCommandGroup(
+        m_superstructure.stowShooter(),
+        stowAmp()
+      )
     );
   }
 
@@ -203,7 +221,10 @@ public class StateMachine extends SubsystemBase {
   public Command readyShooterToAmp() {
     return new SequentialCommandGroup(
       setCurrentShooterState(ShooterState.AMP),
-      m_superstructure.readyShooterToAmp()
+      new ParallelCommandGroup(
+        m_superstructure.readyShooterToAmp(),
+        deployAmp()
+      )
     );
   }
 
@@ -233,6 +254,33 @@ public class StateMachine extends SubsystemBase {
       setCurrentClimberState(ClimberState.ZERO),
       m_superstructure.zeroClimbers()
     );
+  }
+
+  public Command stowAmp() {
+    if (currentClimberState != ClimberState.EXTENDED) {
+      return new SequentialCommandGroup(
+        setCurrentAmpState(AmpState.STOW),
+        m_superstructure.stowAmp()
+      );
+    }
+    else return new InstantCommand();
+  }
+
+  public Command deployAmp() {
+    if (currentClimberState != ClimberState.EXTENDED) {
+      return new SequentialCommandGroup(
+        setCurrentAmpState(AmpState.DEPLOY),
+        m_superstructure.deployAmp()
+      );
+    }
+    else return new InstantCommand();
+  }
+
+  public Command ampSelectCommand(AmpState ampState) {
+    return new SelectCommand<AmpState>(Map.ofEntries(
+      Map.entry(AmpState.STOW, stowAmp()),
+      Map.entry(AmpState.DEPLOY, deployAmp())
+    ), () -> ampState);
   }
 
   public Command climberSelectCommand(ClimberState climberState) {
@@ -314,5 +362,6 @@ public class StateMachine extends SubsystemBase {
     SmartDashboard.putString("Bumper State", currentBumperState.toString());
     SmartDashboard.putString("Shooter State", currentShooterState.toString());
     SmartDashboard.putString("Climber State", currentClimberState.toString());
+    SmartDashboard.putString("Amp State", currentAmpState.toString());
   }
 }

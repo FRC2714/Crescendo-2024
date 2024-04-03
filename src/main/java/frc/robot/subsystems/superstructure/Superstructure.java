@@ -103,6 +103,14 @@ public class Superstructure extends SubsystemBase {
     );
   }
 
+  public Command stowAmp() {
+    return m_amp.stow();
+  }
+
+  public Command deployAmp() {
+    return m_amp.deploy();
+  }
+
 
   public Command shootAndSetLoadedFalse(){
     return new SequentialCommandGroup(m_intake.shoot(),
@@ -172,13 +180,11 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command readyShooterToAmp() {
-    return new ParallelCommandGroup(m_shooter.readyAmp(),
-                                    m_amp.extend());
+    return new ParallelCommandGroup(m_shooter.readyAmp());
   }
 
   public Command stowShooter() {
-    return new ParallelCommandGroup(m_shooter.stow(),
-                                    m_amp.stow());
+    return new ParallelCommandGroup(m_shooter.stow());
   }
 
   public Command cancelAllCommands() {
@@ -187,39 +193,31 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command extendClimbers() {
-    return new SequentialCommandGroup(
-      m_amp.toClimberPosition(),
-      m_climber.extendClimbersCommand());
+    return m_climber.extendClimbersCommand();
   }
 
   public Command retractClimbers() {
-    return new SequentialCommandGroup(
-      m_amp.toClimberPosition(),
-      m_climber.retractClimbersCommand());
+    return m_climber.retractClimbersCommand();
   }
 
   public Command zeroClimbers() {
-    return new SequentialCommandGroup(
-      m_amp.toClimberPosition(),
-      m_climber.zeroClimbersCommand());
+    return m_climber.zeroClimbersCommand();
   }
 
   public Command configureExtendLeftClimber() {
-    return new ParallelCommandGroup(m_climber.extendLeftClimberToReset(),
-                                    new InstantCommand(() -> m_amp.setPivot(AmpConstants.kClimbPivot)));
+    return m_climber.extendLeftClimberToReset();
   }
 
   public Command configureExtendRightClimber() {
-    return new ParallelCommandGroup(m_climber.extendRightClimberToReset(),
-                                    new InstantCommand(() -> m_amp.setPivot(AmpConstants.kClimbPivot)));
+    return m_climber.extendRightClimberToReset();
   }
 
   public Command configureRetractLeftClimber() {
-    return new ParallelCommandGroup(m_climber.retractLeftClimberToReset(), new InstantCommand(() -> m_amp.setPivot(AmpConstants.kClimbPivot)));
+    return new ParallelCommandGroup(m_climber.retractLeftClimberToReset());
   }
 
   public Command configureRetractRightClimber() {
-    return new ParallelCommandGroup(m_climber.retractRightClimberToReset(), new InstantCommand(() -> m_amp.setPivot(AmpConstants.kClimbPivot)));
+    return new ParallelCommandGroup(m_climber.retractRightClimberToReset());
   }
 
   public boolean isReadyToShoot() {

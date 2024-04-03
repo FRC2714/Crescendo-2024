@@ -117,7 +117,11 @@ public class DriveSubsystem extends SubsystemBase {
           m_frontRight.getPosition(),
           m_rearLeft.getPosition(),
           m_rearRight.getPosition()
-      }, DriverStation.getAlliance().toString().equals("Red") ? DriveConstants.kInitialRedPose : DriveConstants.kInitialBluePose, stateStdDevs, visionMeasurementStdDevs);
+      }, DriverStation.getAlliance().toString().equals("Red")
+        ? DriveConstants.kInitialRedPose
+        : DriveConstants.kInitialBluePose,
+        stateStdDevs,
+        visionMeasurementStdDevs);
   
 
   /** Creates a new DriveSubsystem. */
@@ -132,7 +136,7 @@ public class DriveSubsystem extends SubsystemBase {
     translationP = new TunableNumber("translation P");
     rotationP = new TunableNumber("rotation P");
     
-translationP.setDefault(1.5);
+    translationP.setDefault(1.5);
     rotationP.setDefault(2.8);
 
 // PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
