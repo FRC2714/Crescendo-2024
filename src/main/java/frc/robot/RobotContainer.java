@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.commands.AlignToPass;
 import frc.robot.commands.AutosCommands;
 import frc.robot.commands.DriveToAmp;
 // import frc.robot.commands.RotateToGoal;
@@ -155,6 +156,7 @@ public class RobotContainer {
     m_driverController.a()                                        
       .whileTrue(m_superstructure.shoot())
       .onFalse(m_superstructure.stopShooter());
+    m_driverController.leftBumper().onTrue(new AlignToPass(m_robotDrive));
     m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
