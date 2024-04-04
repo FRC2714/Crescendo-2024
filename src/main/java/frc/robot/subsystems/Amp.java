@@ -10,6 +10,9 @@ import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.ProfiledPIDController;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -17,14 +20,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.AmpConstants.AmpPIDConstants;
 import frc.robot.utils.TunableNumber;
-import frc.robot.Constants.ShooterConstants;
 
 public class Amp extends SubsystemBase {
   /** Creates a new Amp. */
 
   private CANSparkFlex pivotMotor;
   private AbsoluteEncoder pivotEncoder;
-  private PIDController pivotController;
+  private ProfiledPIDController pivotController;
   private TunableNumber tunableAngle, tunableP;
 
   public Amp() {
@@ -44,7 +46,7 @@ public class Amp extends SubsystemBase {
     tunableAngle.setDefault(0);
     tunableP.setDefault(0);
   
-    pivotController = new PIDController(AmpPIDConstants.kP, AmpPIDConstants.kI, AmpPIDConstants.kD);
+    pivotController = new ProfiledPIDController(AmpPIDConstants.kP, AmpPIDConstants.kI, AmpPIDConstants.kD, new Constraints(4, 2));
     
     pivotMotor.burnFlash();
   }
@@ -54,11 +56,11 @@ public class Amp extends SubsystemBase {
   }
 
   public double getTargetPivotAngle() {
-    return pivotController.getSetpoint();
+    return pivotController.getGoal().position;
   }
 
   public void setPivotAngle(double targetAngle) {
-    pivotController.setSetpoint(targetAngle);
+    pivotController.setGoal(new State(targetAngle, 0));
   }
 
   public Command deploy() {
@@ -77,7 +79,7 @@ public class Amp extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Amp Angle", getPivotAngle());
-    SmartDashboard.putNumber("Amp goal", pivotController.getSetpoint());
+    SmartDashboard.putNumber("Amp goal", pivotController.getGoal().position);
     SmartDashboard.putNumber("Amp P goal", pivotController.getP());
     setCalculatedPivotVoltage();
 
