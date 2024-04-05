@@ -7,6 +7,8 @@ package frc.robot.subsystems.superstructure;
 import java.util.Optional;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -220,6 +222,24 @@ public class Superstructure extends SubsystemBase {
     return new ParallelCommandGroup(m_climber.retractRightClimberToReset());
   }
 
+  public Command setCenterHeading() {
+    return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(180)));
+  }
+
+  public Command setAmpSideHeading() {
+    if (DriverStation.getAlliance().get().toString().equals("Blue"))
+      return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(240)));
+    else
+      return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(120)));
+  }
+
+  public Command setSourceSideHeading() {
+    if (DriverStation.getAlliance().get().toString().equals("Blue"))
+      return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(120)));
+    else
+      return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(240)));
+  }
+
   public boolean isReadyToShoot() {
     return m_intake.getLoaded()
       && m_shooter.getFlywheelVelocity() >= ShooterConstants.kGoalFlywheelVelocity
@@ -241,10 +261,10 @@ public class Superstructure extends SubsystemBase {
       m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
 
-    if (isReadyToShoot()) {
-      m_blinkin.setFire();
-    }
-    else if (m_vision.hasSpeakerTarget()) {
+    // if (isReadyToShoot()) {
+    //   m_blinkin.setWhiteHeartbeat();
+    // }
+    if (m_shooter.getFlywheelVelocity() >= 8000) {
       m_blinkin.setGreen();
     }
     else {

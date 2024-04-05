@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 7.97,
-        "y": 2.53
+        "y": 3.78
       },
       "prevControl": {
-        "x": 6.917956796411813,
-        "y": 1.5894198634423369
+        "x": 7.950523614665259,
+        "y": 2.231627365888183
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "3 Note Source Center",
+  "folder": "3 Note Source More Center",
   "previewStartingState": {
     "rotation": 132.90314974239632,
     "velocity": 0

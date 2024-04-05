@@ -69,22 +69,22 @@ public final class Constants {
 
     public static final double kRollerNominalVoltage = 11;
 
-    public static final int kFrontRollerSmartCurrentLimit = 80; // TBD
-    public static final int kBackBottomRollerSmartCurrentLimit = 80; // TBD
-    public static final int kBackDirectionRollerSmartCurrentLimit = 80; // TBD
-    public static final int kConveyorSmartCurrentLimit = 80; // TBD
+    public static final int kFrontRollerSmartCurrentLimit = 80;
+    public static final int kBackBottomRollerSmartCurrentLimit = 80;
+    public static final int kBackDirectionRollerSmartCurrentLimit = 80;
+    public static final int kConveyorSmartCurrentLimit = 80;
     public static final int kFeederSmartCurrentLimit = 80;
 
-    public static final double kFrontRollerVoltage = 12; // TBD
-    public static final double kBackBottomRollerVoltage = 12; // TBD
-    public static final double kBackDirectionRollerVoltageFrontSide = 12; // TBD
-    public static final double kFrontDirectionRollerVoltageFrontSide = 12; // TBD
-    public static final double kBackBottomRollerVoltageFrontSide = 12;
-    public static final double kBackDirectionRollerVoltageBackSide = 12; // TBD
-    public static final double kBackBottomRollerVoltageBackSide = 12;
-    public static final double kFrontDirectionRollerVoltageBackSide = 12; // TBD
-    public static final double kConveyorVoltage = 12; // TBD
-    public static final double kFeederIntakeVoltage = 2; // TBD
+    public static final double kFrontRollerVoltage = 5;
+    public static final double kBackBottomRollerVoltage = 3;
+    public static final double kBackDirectionRollerVoltageFrontSide = 3;
+    public static final double kFrontDirectionRollerVoltageFrontSide = 3;
+    public static final double kBackBottomRollerVoltageFrontSide = 3;
+    public static final double kBackDirectionRollerVoltageBackSide = 3;
+    public static final double kBackBottomRollerVoltageBackSide = 3;
+    public static final double kFrontDirectionRollerVoltageBackSide = 3;
+    public static final double kConveyorVoltage = 5;
+    public static final double kFeederIntakeVoltage = 2;
     public static final double kFeederShootVoltage = 12;
   }
 
@@ -113,6 +113,7 @@ public final class Constants {
     public static final double kGreen = 0.77;
     public static final double kRed = 0.61;
     public static final double kGold = 0.67;
+    public static final double kWhiteHeartbeat = -0.21;
   }
 
   public static final class ShooterConstants {
@@ -199,7 +200,7 @@ public final class Constants {
   public static final class AmpConstants {
       public static final int kAmpCanId = 19;
 
-      public static final int kSmartCurrentLimit = 20;
+      public static final int kSmartCurrentLimit = 40;
       public static final double kPivotGearRatio = 45;
 
       public static final double kPivotZeroOffset = 338 * kPivotGearRatio;
@@ -211,10 +212,10 @@ public final class Constants {
       public static final double kMaxPivotAngle = 0;
 
       public static final double kStowAngle = 0;
-      public static final double kDeployAngle = 78;
+      public static final double kDeployAngle = 90;
 
       public static final class AmpPIDConstants {
-        public static final double kP = 0.07;
+        public static final double kP = 0.05;
         public static final double kI = 0;
         public static final double kD = 0;
       }
@@ -231,6 +232,7 @@ public final class Constants {
 
     public static final double kTeleOpMaxSpeedMetersPerSecond = 20;
     public static final double kTeleOpMaxAngularSpeed = 10 * Math.PI; // radians per second
+    public static final double kAutoRotatingMaxAngularSpeed = 2 * Math.PI; // radians per second
 
     public static final double kDirectionSlewRate = 1.2; // radians per second
     public static final double kMagnitudeSlewRate = 1.8; // percent per second (1 = 100%)

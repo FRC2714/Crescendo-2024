@@ -51,6 +51,7 @@ import frc.robot.utils.TunableNumber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -170,6 +171,8 @@ public class DriveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Update the odometry in the periodic block
+
+    SmartDashboard.putNumber("rotation max", maxAngularSpeed);
 
     if (translationP.hasChanged() || rotationP.hasChanged()) {
       AutoBuilder.configureHolonomic(
@@ -351,6 +354,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   public boolean getRotatingToGoal(double joystickInput) {
     if (Math.abs(joystickInput) > 0) {
+      setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed).schedule();
       rotatingToGoal = false;
     }
     return rotatingToGoal;
@@ -361,7 +365,8 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public Command setRotatingToGoalCommand() {
-    return new InstantCommand(() -> setRotatingToGoal());
+    return new SequentialCommandGroup(setMaxAngularSpeed(DriveConstants.kAutoRotatingMaxAngularSpeed),
+    new InstantCommand(() -> setRotatingToGoal()));
   }
 
   public Command disableRotatingToGoalCommand() {

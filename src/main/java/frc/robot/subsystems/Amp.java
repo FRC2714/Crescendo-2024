@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
@@ -26,7 +27,7 @@ public class Amp extends SubsystemBase {
 
   private CANSparkFlex pivotMotor;
   private AbsoluteEncoder pivotEncoder;
-  private ProfiledPIDController pivotController;
+  private PIDController pivotController;
   private TunableNumber tunableAngle, tunableP;
 
   public Amp() {
@@ -46,7 +47,8 @@ public class Amp extends SubsystemBase {
     tunableAngle.setDefault(0);
     tunableP.setDefault(0);
   
-    pivotController = new ProfiledPIDController(AmpPIDConstants.kP, AmpPIDConstants.kI, AmpPIDConstants.kD, new Constraints(4, 2));
+    
+    pivotController = new PIDController(AmpPIDConstants.kP, AmpPIDConstants.kI, AmpPIDConstants.kD);
     
     pivotMotor.burnFlash();
   }
@@ -56,11 +58,11 @@ public class Amp extends SubsystemBase {
   }
 
   public double getTargetPivotAngle() {
-    return pivotController.getGoal().position;
+    return pivotController.getSetpoint();
   }
 
   public void setPivotAngle(double targetAngle) {
-    pivotController.setGoal(new State(targetAngle, 0));
+    pivotController.setSetpoint(targetAngle);
   }
 
   public Command deploy() {
@@ -79,15 +81,15 @@ public class Amp extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Amp Angle", getPivotAngle());
-    SmartDashboard.putNumber("Amp goal", pivotController.getGoal().position);
+    SmartDashboard.putNumber("Amp goal", pivotController.getSetpoint());
     SmartDashboard.putNumber("Amp P goal", pivotController.getP());
     setCalculatedPivotVoltage();
 
-    if (tunableAngle.hasChanged()) {
-      setPivotAngle(tunableAngle.get());
-    }
-    if (tunableP.hasChanged()) {
-      pivotController.setP(tunableP.get());
-    }
+    // if (tunableAngle.hasChanged()) {
+    //   setPivotAngle(tunableAngle.get());
+    // }
+    // if (tunableP.hasChanged()) {
+    //   pivotController.setP(tunableP.get());
+    // }
   }
 }

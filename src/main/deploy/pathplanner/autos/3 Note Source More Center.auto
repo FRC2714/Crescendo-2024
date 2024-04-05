@@ -48,7 +48,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Sub to Source Center"
+                  "pathName": "C4 Sub to Source Center"
                 }
               },
               {
@@ -63,7 +63,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Center to Wing"
+            "pathName": "C4 Source Center to Wing"
           }
         },
         {
@@ -79,7 +79,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Wing to Source Center"
+                  "pathName": "C4 Wing to Source Center"
                 }
               },
               {
@@ -94,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Center to Wing 2"
+            "pathName": "C4 Source Center to Wing 2"
           }
         },
         {

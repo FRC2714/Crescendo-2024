@@ -104,6 +104,10 @@ public class RobotContainer {
     NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());
     NamedCommands.registerCommand("setupShort", m_stateMachine.readyShort());
 
+    NamedCommands.registerCommand("setCenterHeading", m_superstructure.setCenterHeading());
+    NamedCommands.registerCommand("setAmpSideHeading", m_superstructure.setAmpSideHeading());
+    NamedCommands.registerCommand("setSourceSideHeading", m_superstructure.setSourceSideHeading());
+
     // NamedCommands.registerCommand("setupAllianceZone", m_shooter.readyAllianceZone());
     // NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(1000)));
     // NamedCommands.registerCommand("setupFast", new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)));
@@ -209,7 +213,6 @@ public class RobotContainer {
     m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kAutoMaxSpeedMetersPerSecond).schedule();
     m_robotDrive.setMaxAngularSpeed(DriveConstants.kAutoMaxAngularSpeed).schedule();
     m_amp.stow().schedule();
-    // new InstantCommand(() -> m_robotDrive.setHeading(180.0)).schedule();
   }
 
   public void setRobotDefaultStates() {
