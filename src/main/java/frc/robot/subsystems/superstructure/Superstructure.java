@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -223,21 +224,21 @@ public class Superstructure extends SubsystemBase {
   }
 
   public Command setCenterHeading() {
-    return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(180)));
+    return new InstantCommand(() -> m_drivetrain.setHeading(180));
   }
 
   public Command setAmpSideHeading() {
     if (DriverStation.getAlliance().get().toString().equals("Blue"))
-      return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(240)));
+      return new InstantCommand(() -> m_drivetrain.setHeading(240));
     else
-      return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(120)));
+      return new InstantCommand(() -> m_drivetrain.setHeading(120));
   }
 
   public Command setSourceSideHeading() {
     if (DriverStation.getAlliance().get().toString().equals("Blue"))
-      return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(120)));
+      return new InstantCommand(() -> m_drivetrain.setHeading(120));
     else
-      return new InstantCommand(() -> m_drivetrain.setHeading(Units.degreesToRadians(240)));
+      return new InstantCommand(() -> m_drivetrain.setHeading(240));
   }
 
   public boolean isReadyToShoot() {
@@ -250,6 +251,7 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putString("Alliance", DriverStation.getAlliance().get().toString());
     if (getLoaded() && elapsedRumbleTime < OIConstants.kRumbleTimeMS) {
       elapsedRumbleTime += 20;
       m_driverController.getHID().setRumble(RumbleType.kBothRumble, OIConstants.kRumblePower);

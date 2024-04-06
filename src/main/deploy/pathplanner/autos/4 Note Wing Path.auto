@@ -14,6 +14,12 @@
         {
           "type": "named",
           "data": {
+            "name": "setCenterHeading"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
             "name": "setLoaded"
           }
         },
@@ -26,7 +32,7 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.5
+            "waitTime": 3.0
           }
         },
         {
