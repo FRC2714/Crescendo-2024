@@ -8,21 +8,21 @@
     "3 Note Auto Stage",
     "3 Note Podium",
     "3 Note Source Center",
-    "3 Note Source More Center",
     "4 Note 2 Center",
     "4 Note Wing",
-    "3 Note Source Center Path",
-    "Open 2 note",
+    "Amp Side 2 Note Disruptor",
+    "ryans 4 note 2 center",
     "Open Disruptor",
+    "Open 2 note",
     "Open Podium",
     "essential"
   ],
   "autoFolders": [
     "States Autos"
   ],
-  "defaultMaxVel": 4.0,
-  "defaultMaxAccel": 4.0,
+  "defaultMaxVel": 3.0,
+  "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
-  "maxModuleSpeed": 6.77
+  "maxModuleSpeed": 4.5
 }
