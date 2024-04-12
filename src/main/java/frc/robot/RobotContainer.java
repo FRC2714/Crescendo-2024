@@ -163,7 +163,7 @@ public class RobotContainer {
     m_driverController.a()                                        
       .whileTrue(m_superstructure.shoot())
       .onFalse(m_superstructure.stopShooter());
-    m_driverController.leftBumper().onTrue(new AlignToPass(m_robotDrive));
+    m_driverController.leftBumper().onTrue(m_robotDrive.enableRotatingToPass());
     m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     // m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
@@ -207,6 +207,8 @@ public class RobotContainer {
     m_robotDrive.disableVoltageCompensation().schedule();
     m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kTeleOpMaxSpeedMetersPerSecond).schedule();
     m_robotDrive.setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed).schedule();
+    m_robotDrive.setTeleOpDriveP().schedule();
+    m_robotDrive.setTeleOpTurnP().schedule();
     m_stateMachine.shooterSelectCommand(ShooterState.STOW).schedule();
     m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE).schedule();
   }
@@ -215,6 +217,8 @@ public class RobotContainer {
     m_robotDrive.enableVoltageCompensation().schedule();
     m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kAutoMaxSpeedMetersPerSecond).schedule();
     m_robotDrive.setMaxAngularSpeed(DriveConstants.kAutoMaxAngularSpeed).schedule();
+    m_robotDrive.setAutoDriveP().schedule();
+    m_robotDrive.setAutoTurnP().schedule();
     m_amp.stow().schedule();
   }
 

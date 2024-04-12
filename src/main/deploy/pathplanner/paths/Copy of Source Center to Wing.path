@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.83,
-        "y": 1.76
+        "x": 8.07,
+        "y": 0.82
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.615400445510263,
-        "y": 1.5581108267791868
+        "x": 5.247238602585313,
+        "y": 1.063140865020469
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 8.27025654051308,
-        "y": 2.4150717815077387
+        "x": 2.09,
+        "y": 3.213603580232072
       },
       "prevControl": {
-        "x": 8.289732925847819,
-        "y": 2.4150717815077387
+        "x": 3.9666747443404775,
+        "y": 2.4278038104343342
       },
       "nextControl": null,
       "isLocked": false,
@@ -39,13 +39,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 178.91907581333936,
+    "rotation": 122.61386339276346,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": null,
+  "folder": "3 Note Source Center Path",
   "previewStartingState": {
-    "rotation": -179.6321003299011,
+    "rotation": 180.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

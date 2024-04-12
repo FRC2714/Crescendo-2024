@@ -151,6 +151,22 @@ public class MAXSwerveModule {
         new Rotation2d(m_turningEncoder.getPosition() - m_chassisAngularOffset));
   }
 
+  public Command setAutoDriveP() {
+    return new InstantCommand(() -> m_drivingPIDController.setP(1));
+  }
+
+  public Command setTeleOpDriveP() {
+    return new InstantCommand(() -> m_drivingPIDController.setP(0.04));
+  }
+
+  public Command setAutoTurnP() {
+    return new InstantCommand(() -> m_turningPIDController.setP(1));
+  }
+
+  public Command setTeleOpTurnP() {
+    return new InstantCommand(() -> m_turningPIDController.setP(1));
+  }
+
   /**
    * Returns the current position of the module.
    *

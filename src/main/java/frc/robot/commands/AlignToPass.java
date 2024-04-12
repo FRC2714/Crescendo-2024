@@ -32,7 +32,7 @@ public class AlignToPass extends Command {
      
     
     thetaController.setSetpoint(Units.degreesToRadians(DriverStation.getAlliance().get().toString().equals("Blue") ? 135 : 225));
-    thetaController.setTolerance(Units.degreesToRadians(0),0);
+    thetaController.setTolerance(Units.degreesToRadians(5),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
   }
 

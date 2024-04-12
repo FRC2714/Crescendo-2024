@@ -89,6 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   private boolean rotatingToGoal = false;
+  private boolean rotatingToPass = false;
   private boolean stopped = false;
 
   private FieldRelativeVelocity m_fieldRelativeVelocity = new FieldRelativeVelocity();
@@ -147,9 +148,9 @@ public class DriveSubsystem extends SubsystemBase {
             this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(1.5, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(1.5, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
+                    new PIDConstants(4, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(8, 0.0, 0.0), // Rotation PID constants
+                    6.77, // Max module speed, in m/s
                     0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
             ),
@@ -173,6 +174,7 @@ public class DriveSubsystem extends SubsystemBase {
     // Update the odometry in the periodic block
 
     SmartDashboard.putNumber("rotation max", maxAngularSpeed);
+    SmartDashboard.putBoolean("rotatingtoPass", rotatingToPass);
 
     if (translationP.hasChanged() || rotationP.hasChanged()) {
       AutoBuilder.configureHolonomic(
@@ -267,6 +269,38 @@ public class DriveSubsystem extends SubsystemBase {
     return new InstantCommand(() -> this.maxSpeedMetersPerSecond = maxSpeedMetersPerSecond);
   }
 
+  public Command setAutoDriveP() {
+    return new ParallelCommandGroup(
+      m_frontLeft.setAutoDriveP(),
+      m_frontRight.setAutoDriveP(),
+      m_rearLeft.setAutoDriveP(),
+      m_rearRight.setAutoDriveP());
+  }
+
+  public Command setTeleOpDriveP() {
+    return new ParallelCommandGroup(
+      m_frontLeft.setTeleOpDriveP(),
+      m_frontRight.setTeleOpDriveP(),
+      m_rearLeft.setTeleOpDriveP(),
+      m_rearRight.setTeleOpDriveP());
+  }
+
+  public Command setAutoTurnP() {
+    return new ParallelCommandGroup(
+      m_frontLeft.setAutoTurnP(),
+      m_frontRight.setAutoTurnP(),
+      m_rearLeft.setAutoTurnP(),
+      m_rearRight.setAutoTurnP());
+  }
+
+  public Command setTeleOpTurnP() {
+    return new ParallelCommandGroup(
+      m_frontLeft.setTeleOpTurnP(),
+      m_frontRight.setTeleOpTurnP(),
+      m_rearLeft.setTeleOpTurnP(),
+      m_rearRight.setTeleOpTurnP());
+  }
+
   public Command setMaxAngularSpeed(double maxAngularSpeed) {
     return new InstantCommand(() -> this.maxAngularSpeed = maxAngularSpeed);
   }
@@ -352,12 +386,22 @@ public class DriveSubsystem extends SubsystemBase {
     rotatingToGoal = false;
   }
 
+  public Command enableRotatingToPass() {
+    return new SequentialCommandGroup(setMaxAngularSpeed(DriveConstants.kAutoRotatingMaxAngularSpeed),
+    new InstantCommand(() -> rotatingToPass = true));
+  }
+
+  public Command disableRotatingToPass() {
+    return new InstantCommand(() -> rotatingToPass = false);
+  }
+
   public boolean getRotatingToGoal(double joystickInput) {
     if (Math.abs(joystickInput) > 0) {
       setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed).schedule();
       rotatingToGoal = false;
+      rotatingToPass = false;
     }
-    return rotatingToGoal;
+    return rotatingToGoal || rotatingToPass;
   }
 
   public Command toggleRotatingToGoalCommand() {
@@ -389,9 +433,18 @@ public class DriveSubsystem extends SubsystemBase {
     thetaController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0
+    SmartDashboard.putNumber("Drive rot setpoint", thetaController.getSetpoint());
+    
+    if (rotatingToPass) {
+      thetaController.setSetpoint(DriverStation.getAlliance().get().toString().equals("Blue") ? Units.degreesToRadians(135)
+      : Units.degreesToRadians(225));
+      return thetaController.calculate(Units.degreesToRadians(getHeading()));
+    }
+    else {
+      thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0
       ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters()
       : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
+    }
 
     return m_camera.speakerVisible() ? thetaController.calculate(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees())) : 0;
   }
