@@ -51,6 +51,7 @@ public class Shooter extends SubsystemBase {
   private TunableNumber flywheelVelocityTunableNumber;
   private TunableNumber pivotP, flywheelP, flywheelV, flywheelD;
 
+
   private boolean dynamicEnabled;
 
 
@@ -380,7 +381,11 @@ public class Shooter extends SubsystemBase {
   public Command setFlywheelVelocityCommand(double targetVelocity) {
     return new InstantCommand(() -> setFlywheelVelocity(targetVelocity));
   }
-
+  
+  // public boolean flywheelAtSetpoint(){
+  //   return flywheelController.
+  // }
+  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

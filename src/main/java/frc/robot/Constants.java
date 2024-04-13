@@ -76,13 +76,13 @@ public final class Constants {
     public static final int kFeederSmartCurrentLimit = 80;
 
     public static final double kFrontRollerVoltage = 5;
-    public static final double kBackBottomRollerVoltage = 3;
-    public static final double kBackDirectionRollerVoltageFrontSide = 3;
-    public static final double kFrontDirectionRollerVoltageFrontSide = 3;
-    public static final double kBackBottomRollerVoltageFrontSide = 3;
-    public static final double kBackDirectionRollerVoltageBackSide = 3;
-    public static final double kBackBottomRollerVoltageBackSide = 3;
-    public static final double kFrontDirectionRollerVoltageBackSide = 3;
+    public static final double kBackBottomRollerVoltage = 6;
+    public static final double kBackDirectionRollerVoltageFrontSide = 6;
+    public static final double kFrontDirectionRollerVoltageFrontSide = 6;
+    public static final double kBackBottomRollerVoltageFrontSide = 6;
+    public static final double kBackDirectionRollerVoltageBackSide = 6;
+    public static final double kBackBottomRollerVoltageBackSide = 6;
+    public static final double kFrontDirectionRollerVoltageBackSide = 6;
     public static final double kConveyorVoltage = 5;
     public static final double kFeederIntakeVoltage = 2;
     public static final double kFeederShootVoltage = 12;
@@ -106,6 +106,7 @@ public final class Constants {
     public static final double kRainbow = -0.99;
     public static final double kSinelonLava = -0.73;
 
+    public static final double kBlack = 0.99;
     public static final double kPink = 0.57;
     public static final double kOrange = 0.65;
     public static final double kPurple = 0.91;
