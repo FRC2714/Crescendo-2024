@@ -152,7 +152,7 @@ public class MAXSwerveModule {
   }
 
   public Command setAutoDriveP() {
-    return new InstantCommand(() -> m_drivingPIDController.setP(1));
+    return new InstantCommand(() -> m_drivingPIDController.setP(0.1));
   }
 
   public Command setTeleOpDriveP() {

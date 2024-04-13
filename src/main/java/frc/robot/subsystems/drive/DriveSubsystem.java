@@ -148,8 +148,8 @@ public class DriveSubsystem extends SubsystemBase {
             this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
             this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(4, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(8, 0.0, 0.0), // Rotation PID constants
+                    new PIDConstants(5, 0.0, 0.0), // Translation PID constants
+                    new PIDConstants(1, 0.0, 0.0), // Rotation PID constants
                     4.5, // Max module speed, in m/s
                     0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
                     new ReplanningConfig() // Default path replanning config. See the API for the options here
