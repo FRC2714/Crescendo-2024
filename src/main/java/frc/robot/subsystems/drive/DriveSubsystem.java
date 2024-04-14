@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems.drive;
 
+import static edu.wpi.first.units.Units.Seconds;
+import static edu.wpi.first.units.Units.Volts;
+
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -53,6 +56,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -485,6 +489,20 @@ public class DriveSubsystem extends SubsystemBase {
         m_rearRight.getState());
   }
 
+  public SysIdRoutine sysIdDrive() {
+  return new SysIdRoutine(
+      new SysIdRoutine.Config(Volts.of(0.25).per(Seconds.of(1)), Volts.of(5), Seconds.of(10)),
+      new SysIdRoutine.Mechanism(
+          (voltage) -> this.driveVoltageForwardTest(voltage.in(Volts)), null, this));
+  }
+
+  private void driveVoltageForwardTest(double voltage) {
+    var direction = new Rotation2d();
+    m_frontLeft.setVoltageAngle(voltage, direction);
+    m_frontRight.setVoltageAngle(voltage, direction);
+    m_rearLeft.setVoltageAngle(voltage, direction);
+    m_rearRight.setVoltageAngle(voltage, direction);
+  }
   /**
    * Method to drive the robot using joystick info.
    *

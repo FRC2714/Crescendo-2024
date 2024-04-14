@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
@@ -23,7 +24,7 @@ import com.revrobotics.RelativeEncoder;
 
 import frc.robot.Constants.ModuleConstants;
 
-public class MAXSwerveModule {
+public class MAXSwerveModule extends SubsystemBase {
   private final CANSparkFlex m_drivingSparkFlex;
   private final CANSparkMax m_turningSparkMax;
 
@@ -38,6 +39,9 @@ public class MAXSwerveModule {
 
   private double drivingPosition;
   private double turningPosition;
+
+  private boolean m_voltageDriveMode;
+  private double m_voltageDrive;
 
   /**
    * Constructs a MAXSwerveModule and configures the driving and turning motor,
@@ -196,6 +200,20 @@ public class MAXSwerveModule {
 
   public double getDesiredStateSpeed() {
     return m_desiredState.speedMetersPerSecond;
+  }
+
+  @Override
+  public void periodic() {
+    if (m_voltageDriveMode) {
+      m_drivingSparkFlex.setVoltage(m_voltageDrive);
+    }
+  }
+
+  public void setVoltageAngle(double voltage, Rotation2d angle) {
+    m_desiredState.speedMetersPerSecond = 0.0;
+    m_desiredState.angle = angle.minus(Rotation2d.fromRadians(m_chassisAngularOffset));
+    m_voltageDriveMode = true;
+    m_voltageDrive = voltage;
   }
 
   public double getDesiredStateAngleDeg() {

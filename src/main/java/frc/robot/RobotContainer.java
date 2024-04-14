@@ -13,6 +13,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
@@ -42,6 +43,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AlignToPass;
 import frc.robot.commands.AutosCommands;
 import frc.robot.commands.DriveToAmp;
@@ -52,6 +54,8 @@ import frc.robot.commands.RotateToGoal;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.util.PathPlannerLogging;
+
 import frc.robot.commands.SeekNote;
 
 /*
@@ -75,6 +79,9 @@ public class RobotContainer {
   private SendableChooser<Command> autoChooser;
   private final Climber m_climber = new Climber();
 
+  private final Field2d field;
+
+
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   CommandXboxController m_configureController = new CommandXboxController(OIConstants.kConfigureControllerPort);
@@ -88,7 +95,25 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
+    field = new Field2d();
+    SmartDashboard.putData("Field", field);
+    // Logging callback for current robot pose
+    PathPlannerLogging.setLogCurrentPoseCallback((pose) -> {
+        // Do whatever you want with the pose here
+        field.setRobotPose(pose);
+    });
 
+    // Logging callback for target robot pose
+    PathPlannerLogging.setLogTargetPoseCallback((pose) -> {
+        // Do whatever you want with the pose here
+        field.getObject("target pose").setPose(pose);
+    });
+
+    // Logging callback for the active path, this is sent as a list of poses
+    PathPlannerLogging.setLogActivePathCallback((poses) -> {
+        // Do whatever you want with the poses here
+        field.getObject("path").setPoses(poses);
+    });
     // Configure the button bindingsP
     configureButtonBindings();
     NamedCommands.registerCommand("intakeBack", m_superstructure.resetLoadedAndIntakeBack());
@@ -201,6 +226,9 @@ public class RobotContainer {
       .whileFalse(m_climber.stopRightClimber());
     m_configureController.x().onTrue(m_climber.setLeftClimberZero());
     m_configureController.b().onTrue(m_climber.setRightClimberZero());
+
+    m_configureController.povUp().whileTrue(m_robotDrive.sysIdDrive().dynamic(Direction.kForward));
+    m_configureController.povDown().whileTrue(m_robotDrive.sysIdDrive().dynamic(Direction.kReverse));
   }
 
   public void setTeleopDefaultStates() {
