@@ -236,9 +236,9 @@ public class Superstructure extends SubsystemBase {
 
   public Command setSourceSideHeading() {
     if (DriverStation.getAlliance().get().toString().equals("Blue"))
-      return new InstantCommand(() -> m_drivetrain.setHeading(120));
-    else
       return new InstantCommand(() -> m_drivetrain.setHeading(240));
+    else
+      return new InstantCommand(() -> m_drivetrain.setHeading(120));
   }
 
   public boolean isReadyToShoot() {

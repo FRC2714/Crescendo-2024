@@ -136,7 +136,37 @@ public class Shooter extends SubsystemBase {
   }
 
   public void populatePivotAngleMap() {
-    pivotAngleMap.put(1.61, 35.0);
+      // pivotAngleMap.put(1.64, 39.0);
+      // pivotAngleMap.put(1.77, 39.0);
+      // pivotAngleMap.put(1.88, 37.0);
+      // pivotAngleMap.put(1.95, 36.0);
+      // pivotAngleMap.put(2.11, 34.0);
+      // pivotAngleMap.put(2.28, 31.0);
+      // pivotAngleMap.put(2.39, 30.0);
+      // pivotAngleMap.put(2.54, 27.0);
+      // pivotAngleMap.put(2.66, 26.0);
+      // pivotAngleMap.put(2.78, 24.0);
+      // pivotAngleMap.put(2.88, 23.0);
+      // pivotAngleMap.put(2.99, 22.0);
+      // pivotAngleMap.put(3.06, 22.0);
+      // pivotAngleMap.put(3.19, 20.0);
+      // pivotAngleMap.put(3.34, 19.0);
+      // pivotAngleMap.put(3.51, 18.0);
+      // pivotAngleMap.put(3.69, 17.0);
+      // pivotAngleMap.put(3.86, 16.0);
+      // pivotAngleMap.put(4.00, 15.0);
+      // pivotAngleMap.put(4.11, 14.0);
+      // pivotAngleMap.put(4.25, 14.0);
+      // pivotAngleMap.put(4.39, 14.0);
+      // pivotAngleMap.put(4.52, 14.0);
+      // pivotAngleMap.put(4.65, 13.5);
+      // pivotAngleMap.put(4.76, 13.0);
+      // pivotAngleMap.put(4.85, 12.5);
+      // pivotAngleMap.put(4.96, 12.0);
+      // pivotAngleMap.put(5.12, 12.0);
+      // pivotAngleMap.put(5.22, 11.0);
+      // pivotAngleMap.put(5.35, 11.0);
+   pivotAngleMap.put(1.61, 35.0);
    pivotAngleMap.put(1.73, 35.0);
    pivotAngleMap.put(1.84, 33.0);
    pivotAngleMap.put(1.95, 33.0);

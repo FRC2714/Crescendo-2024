@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kPivotGearRatio = 25;
     public static final double kFlywheelGearRatio = 2;
 
-    public static final double kPivotEncoderZeroOffset = 131.25 * kPivotGearRatio;
+    public static final double kPivotEncoderZeroOffset = 130 * kPivotGearRatio;
     public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
 
     public static final double kMinPivotAngle = 0;
@@ -146,10 +146,10 @@ public final class Constants {
     public static final double kAmpFlywheelVelocity = 2500;
 
     public static final double kPassToAmpAngle = 35; //need tuning
-    public static final double kPassToAmpFlywheelVelocity  = 4800;
+    public static final double kPassToAmpFlywheelVelocity = 4000;
 
     public static final double kSourceToMidAngle  = 37; //need tuning
-    public static final double kPassToMidFlywheelVelocity  = 4000;
+    public static final double kPassToMidFlywheelVelocity  = 3500;
 
     public static final double kPassUnderStageAngle  = 0; //need tuning
     public static final double kPassUnderStageFlywheelVelocity  = 3000;

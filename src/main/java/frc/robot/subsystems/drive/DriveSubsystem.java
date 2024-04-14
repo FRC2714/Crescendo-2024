@@ -671,6 +671,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.setGyroAngleZ(angle);
   }
 
+  public void calibrateGyro(){
+    m_gyro.calibrate();
+  }
   /**
    * Returns the heading of the robot.
    *

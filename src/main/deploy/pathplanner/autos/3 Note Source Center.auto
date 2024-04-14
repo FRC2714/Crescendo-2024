@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "setSourceSideHeading"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "setLoaded"
           }
         },
@@ -48,7 +42,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Sub to Source Center"
+                  "pathName": "Copy of Sub to Source Center"
                 }
               },
               {
@@ -63,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Center to Wing"
+            "pathName": "Copy of Source Center to Wing"
           }
         },
         {
@@ -79,7 +73,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Wing to Source Center"
+                  "pathName": "Copy of Wing to Source Center"
                 }
               },
               {
@@ -94,7 +88,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Source Center to Wing 2"
+            "pathName": "Copy of Source Center to Wing 2"
           }
         },
         {
