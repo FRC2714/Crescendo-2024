@@ -89,6 +89,7 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   private boolean rotatingToGoal = false;
+  private boolean rotatingToPass = false;
   private boolean stopped = false;
 
   private FieldRelativeVelocity m_fieldRelativeVelocity = new FieldRelativeVelocity();
@@ -173,34 +174,7 @@ public class DriveSubsystem extends SubsystemBase {
     // Update the odometry in the periodic block
 
     SmartDashboard.putNumber("rotation max", maxAngularSpeed);
-
-    if (translationP.hasChanged() || rotationP.hasChanged()) {
-      AutoBuilder.configureHolonomic(
-            this::getPose, // Robot pose supplier
-            this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(translationP.get(), 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(rotationP.get(), 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
-                    0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
-            ),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
-    );
-    }
+    SmartDashboard.putBoolean("rotatingtoPass", rotatingToPass);
 
     SmartDashboard.putBoolean("Stopped?", stopped);
 
@@ -352,12 +326,22 @@ public class DriveSubsystem extends SubsystemBase {
     rotatingToGoal = false;
   }
 
+  public Command enableRotatingToPass() {
+    return new SequentialCommandGroup(setMaxAngularSpeed(DriveConstants.kAutoRotatingMaxAngularSpeed),
+    new InstantCommand(() -> rotatingToPass = true));
+  }
+
+  public Command disableRotatingToPass() {
+    return new InstantCommand(() -> rotatingToPass = false);
+  }
+
   public boolean getRotatingToGoal(double joystickInput) {
     if (Math.abs(joystickInput) > 0) {
       setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed).schedule();
       rotatingToGoal = false;
+      rotatingToPass = false;
     }
-    return rotatingToGoal;
+    return rotatingToGoal || rotatingToPass;
   }
 
   public Command toggleRotatingToGoalCommand() {
@@ -389,9 +373,18 @@ public class DriveSubsystem extends SubsystemBase {
     thetaController.setTolerance(Units.degreesToRadians(0),0);
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
-    thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0
+    SmartDashboard.putNumber("Drive rot setpoint", thetaController.getSetpoint());
+    
+    if (rotatingToPass) {
+      thetaController.setSetpoint(DriverStation.getAlliance().get().toString().equals("Blue") ? Units.degreesToRadians(135)
+      : Units.degreesToRadians(225));
+      return thetaController.calculate(Units.degreesToRadians(getHeading()));
+    }
+    else {
+      thetaController.setSetpoint(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees()) < 0
       ? Units.degreesToRadians(-15) / m_camera.getDistanceToGoalMeters()
       : Units.degreesToRadians(15) / m_camera.getDistanceToGoalMeters());
+    }
 
     return m_camera.speakerVisible() ? thetaController.calculate(Units.degreesToRadians(m_camera.getSpeakerXOffsetDegrees())) : 0;
   }
@@ -618,6 +611,9 @@ public class DriveSubsystem extends SubsystemBase {
     m_gyro.setGyroAngleZ(angle);
   }
 
+  public void calibrateGyro(){
+    m_gyro.calibrate();
+  }
   /**
    * Returns the heading of the robot.
    *

@@ -263,10 +263,10 @@ public class Superstructure extends SubsystemBase {
       m_operatorController.getHID().setRumble(RumbleType.kBothRumble, 0);
     }
 
-    // if (isReadyToShoot()) {
-    //   m_blinkin.setWhiteHeartbeat();
-    // }
-    if (m_shooter.getFlywheelVelocity() >= 8000) {
+    if (isReadyToShoot()) {
+      m_blinkin.setWhiteHeartbeat();
+    }
+    else if (m_intake.getLoaded()) {
       m_blinkin.setGreen();
     }
     else {

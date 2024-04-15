@@ -76,13 +76,13 @@ public final class Constants {
     public static final int kFeederSmartCurrentLimit = 80;
 
     public static final double kFrontRollerVoltage = 5;
-    public static final double kBackBottomRollerVoltage = 3;
-    public static final double kBackDirectionRollerVoltageFrontSide = 3;
-    public static final double kFrontDirectionRollerVoltageFrontSide = 3;
-    public static final double kBackBottomRollerVoltageFrontSide = 3;
-    public static final double kBackDirectionRollerVoltageBackSide = 3;
-    public static final double kBackBottomRollerVoltageBackSide = 3;
-    public static final double kFrontDirectionRollerVoltageBackSide = 3;
+    public static final double kBackBottomRollerVoltage = 6;
+    public static final double kBackDirectionRollerVoltageFrontSide = 6;
+    public static final double kFrontDirectionRollerVoltageFrontSide = 6;
+    public static final double kBackBottomRollerVoltageFrontSide = 6;
+    public static final double kBackDirectionRollerVoltageBackSide = 6;
+    public static final double kBackBottomRollerVoltageBackSide = 6;
+    public static final double kFrontDirectionRollerVoltageBackSide = 6;
     public static final double kConveyorVoltage = 5;
     public static final double kFeederIntakeVoltage = 2;
     public static final double kFeederShootVoltage = 12;
@@ -145,10 +145,10 @@ public final class Constants {
     public static final double kAmpFlywheelVelocity = 2500;
 
     public static final double kPassToAmpAngle = 35; //need tuning
-    public static final double kPassToAmpFlywheelVelocity  = 4800;
+    public static final double kPassToAmpFlywheelVelocity = 4000;
 
-    public static final double kSourceToMidAngle  = 37; //need tuning
-    public static final double kPassToMidFlywheelVelocity  = 4000;
+    public static final double kSourceToMidAngle = 37; //need tuning
+    public static final double kPassToMidFlywheelVelocity  = 3500;
 
     public static final double kPassUnderStageAngle  = 0; //need tuning
     public static final double kPassUnderStageFlywheelVelocity  = 3000;
