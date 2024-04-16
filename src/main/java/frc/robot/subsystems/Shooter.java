@@ -51,6 +51,8 @@ public class Shooter extends SubsystemBase {
   private TunableNumber flywheelVelocityTunableNumber;
   private TunableNumber pivotP, flywheelP, flywheelV, flywheelD;
 
+  private double flywheelReference;
+
   private boolean dynamicEnabled;
 
 
@@ -120,6 +122,8 @@ public class Shooter extends SubsystemBase {
     flywheelP.setDefault(0);
     flywheelV.setDefault(0);
     this.m_vision = m_vision;
+
+    flywheelReference = 0;
   }
 
   public void toggleDynamic() {
@@ -135,6 +139,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void populatePivotAngleMap() {
+
     pivotAngleMap.put(1.61, 35.0);
    pivotAngleMap.put(1.73, 35.0);
    pivotAngleMap.put(1.84, 33.0);
@@ -218,6 +223,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setFlywheelVelocity(double targetVelocity) {
+    flywheelReference = targetVelocity;
     flywheelController.setReference(targetVelocity, ControlType.kVelocity);
   }
 
@@ -364,6 +370,10 @@ public class Shooter extends SubsystemBase {
       e.printStackTrace();
     }
     
+  }
+
+  public boolean flywheelAtSetpoint() {
+    return Math.abs(flywheelReference - flywheelEncoder.getVelocity()) < 500;
   }
 
   public ParallelCommandGroup setupShot(double shootingDistance) {

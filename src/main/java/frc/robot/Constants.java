@@ -150,7 +150,7 @@ public final class Constants {
     public static final double kSourceToMidAngle = 37; //need tuning
     public static final double kPassToMidFlywheelVelocity  = 3500;
 
-    public static final double kPassUnderStageAngle  = 0; //need tuning
+    public static final double kPassUnderStageAngle = 0; //need tuning
     public static final double kPassUnderStageFlywheelVelocity  = 3000;
     public static final double kShortFlywheelVelocity = 1500;
 

@@ -243,8 +243,8 @@ public class Superstructure extends SubsystemBase {
 
   public boolean isReadyToShoot() {
     return m_intake.getLoaded()
-      && m_shooter.getFlywheelVelocity() >= ShooterConstants.kGoalFlywheelVelocity
-      && m_vision.getSpeakerXOffsetDegrees() < 1
+      && m_shooter.flywheelAtSetpoint()
+      && Math.abs(m_vision.getSpeakerXOffsetDegrees()) < 10
       && m_vision.hasSpeakerTarget();
   }
 
