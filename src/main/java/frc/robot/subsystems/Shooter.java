@@ -140,7 +140,7 @@ public class Shooter extends SubsystemBase {
 
   public void populatePivotAngleMap() {
 
-    pivotAngleMap.put(1.61, 35.0);
+    pivotAngleMap.put(1.61, 37.0);
    pivotAngleMap.put(1.73, 35.0);
    pivotAngleMap.put(1.84, 33.0);
    pivotAngleMap.put(1.95, 33.0);
@@ -373,7 +373,7 @@ public class Shooter extends SubsystemBase {
   }
 
   public boolean flywheelAtSetpoint() {
-    return Math.abs(flywheelReference - flywheelEncoder.getVelocity()) < 500;
+    return Math.abs(flywheelReference - flywheelEncoder.getVelocity()) < 500 && flywheelReference != 0;
   }
 
   public ParallelCommandGroup setupShot(double shootingDistance) {

@@ -231,7 +231,7 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("Distance To Goal Meters " + this.cameraName, getDistanceToGoalMeters());
 
     SmartDashboard.putBoolean("Speaker?", speakerVisible());
-    SmartDashboard.putBoolean("Amp?", ampVisible());
+    SmartDashboard.putBoolean("Amp?" + this.cameraName, ampVisible());
 
     SmartDashboard.putNumber("offset deg", getSpeakerXOffsetDegrees());
     // SmartDashboard.putNumber("Best target x distance", getMultiTagLatestResult().estimatedPose.best.getX());

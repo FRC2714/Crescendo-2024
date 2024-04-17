@@ -65,7 +65,7 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
   private final LED m_blinkin = new LED();
   private final Vision m_leftCamera = new Vision(PhotonConstants.kLeftCameraName, PhotonConstants.kLeftCameraLocation);
-  // private final Vision m_rightCamera = new Vision(PhotonConstants.kRightCameraName, PhotonConstants.kRightCameraLocation);
+  private final Vision m_rightCamera = new Vision(PhotonConstants.kRightCameraName, PhotonConstants.kRightCameraLocation);
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_leftCamera);
   // private final Shooter m_shooter = new Shooter(m_robotDrive);
   // private final Intake m_intake = new Intake();
@@ -166,7 +166,7 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(m_robotDrive.enableRotatingToPass());
     m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    // m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
+    m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
     m_driverController.y()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),

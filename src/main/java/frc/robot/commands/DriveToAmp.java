@@ -21,12 +21,12 @@ public class DriveToAmp extends Command {
   private PIDController thetaController;
   private PIDController xController, yController;
 
-  private double kPThetaController = 2;
-  private double kPXController = 0.3;
+  private double kPThetaController = 0.5;
+  private double kPXController = 0.8;
   private double kPYController = 0.5;
 
 
-  /** Creates a new RotateToGoal. */
+  /** Creates a new DriveToAmp. */
   public DriveToAmp(DriveSubsystem m_drivetrain, Vision m_camera) {
     this.m_drivetrain = m_drivetrain;
     this.m_camera = m_camera;
@@ -43,7 +43,7 @@ public class DriveToAmp extends Command {
     xController.setSetpoint(0);
     xController.setTolerance(Units.degreesToRadians(0),0);
 
-    yController.setSetpoint(-Units.inchesToMeters(PhotonConstants.kRightCameraLocation.getY()));
+    yController.setSetpoint(0.14);
     yController.setTolerance(Units.degreesToRadians(0),0);
 
     thetaController.enableContinuousInput(-Math.PI, Math.PI);

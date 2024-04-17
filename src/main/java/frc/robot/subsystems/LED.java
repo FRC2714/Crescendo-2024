@@ -30,6 +30,10 @@ public class LED extends SubsystemBase {
     set(LEDConstants.kWhiteHeartbeat);
   }
 
+  public void setBlue() {
+    set(LEDConstants.kBlue);
+  }
+
   public void setOrange() {
     set(LEDConstants.kOrange);
   }

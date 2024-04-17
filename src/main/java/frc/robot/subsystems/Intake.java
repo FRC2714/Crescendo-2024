@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -51,6 +52,12 @@ public class Intake extends SubsystemBase {
     backDirectionRollerMotor = new CANSparkFlex(IntakeConstants.kBackDirectionRollerCanId, MotorType.kBrushless);
     conveyorMotor = new CANSparkFlex(IntakeConstants.kConveyorCanId, MotorType.kBrushless);
     feederMotor = new CANSparkFlex(IntakeConstants.kFeederCanId, MotorType.kBrushless);
+
+    frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
+    backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
+    backDirectionRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
+    conveyorMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
+    feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
 
     breakBeam = new DigitalInput(IntakeConstants.kBreakBeamChannel);
 

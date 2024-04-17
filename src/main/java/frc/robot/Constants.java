@@ -114,6 +114,7 @@ public final class Constants {
     public static final double kRed = 0.61;
     public static final double kGold = 0.67;
     public static final double kWhiteHeartbeat = -0.21;
+    public static final double kBlue = 0.01;
   }
 
   public static final class ShooterConstants {

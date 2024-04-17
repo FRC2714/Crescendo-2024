@@ -264,7 +264,7 @@ public class Superstructure extends SubsystemBase {
     }
 
     if (isReadyToShoot()) {
-      m_blinkin.setWhiteHeartbeat();
+      m_blinkin.setBlue();
     }
     else if (m_intake.getLoaded()) {
       m_blinkin.setGreen();
