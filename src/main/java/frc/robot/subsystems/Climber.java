@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -43,6 +44,15 @@ public class Climber extends SubsystemBase {
 
     leftClimberMotor.setSmartCurrentLimit(ClimberConstants.kLeftClimberSmartCurrentLimit);
     rightClimberMotor.setSmartCurrentLimit(ClimberConstants.kRightClimberSmartCurrentLimit);
+
+    leftClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
+    rightClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
+
+    leftClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
+    rightClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
+
+    leftClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
+    rightClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
 
     leftClimberController = new PIDController(ClimberConstants.kP, 0, 0);
     rightClimberController = new PIDController(ClimberConstants.kP, 0, 0);

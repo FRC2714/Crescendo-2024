@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 
 import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 import com.revrobotics.SparkPIDController;
 import com.revrobotics.AbsoluteEncoder;
@@ -61,6 +62,10 @@ public class MAXSwerveModule {
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
     m_turningPIDController.setFeedbackDevice(m_turningEncoder);
+
+    m_drivingSparkFlex.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
+    m_drivingSparkFlex.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
+    m_drivingSparkFlex.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
 
     // Apply position and velocity conversion factors for the driving encoder. The
     // native units for position and velocity are rotations and RPM, respectively,

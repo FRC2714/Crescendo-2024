@@ -53,11 +53,23 @@ public class Intake extends SubsystemBase {
     conveyorMotor = new CANSparkFlex(IntakeConstants.kConveyorCanId, MotorType.kBrushless);
     feederMotor = new CANSparkFlex(IntakeConstants.kFeederCanId, MotorType.kBrushless);
 
-    frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
-    backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
-    backDirectionRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
-    conveyorMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
-    feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 1000);
+    frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
+    backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
+    backDirectionRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
+    conveyorMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
+    feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
+
+    frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
+    backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
+    backDirectionRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
+    conveyorMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
+    feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
+
+    frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
+    backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
+    backDirectionRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
+    conveyorMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
+    feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
 
     breakBeam = new DigitalInput(IntakeConstants.kBreakBeamChannel);
 
