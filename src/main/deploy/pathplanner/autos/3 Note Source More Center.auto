@@ -14,12 +14,6 @@
         {
           "type": "named",
           "data": {
-            "name": "setSourceSideHeading"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
             "name": "setLoaded"
           }
         },

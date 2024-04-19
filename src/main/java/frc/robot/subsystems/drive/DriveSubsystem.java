@@ -376,8 +376,8 @@ public class DriveSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Drive rot setpoint", thetaController.getSetpoint());
     
     if (rotatingToPass) {
-      thetaController.setSetpoint(DriverStation.getAlliance().get().toString().equals("Blue") ? Units.degreesToRadians(135)
-      : Units.degreesToRadians(225));
+      thetaController.setSetpoint(DriverStation.getAlliance().get().toString().equals("Blue") ? Units.degreesToRadians(138)
+      : Units.degreesToRadians(222));
       return thetaController.calculate(Units.degreesToRadians(getHeading()));
     }
     else {
