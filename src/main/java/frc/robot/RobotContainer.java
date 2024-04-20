@@ -163,7 +163,7 @@ public class RobotContainer {
     m_driverController.a()                                        
       .whileTrue(m_superstructure.shoot())
       .onFalse(m_superstructure.stopShooter());
-    m_driverController.leftBumper().onTrue(m_robotDrive.enableRotatingToPass());
+    m_driverController.leftBumper().onTrue(m_robotDrive.enableRotatingToAmp());
     m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
     m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
@@ -172,6 +172,8 @@ public class RobotContainer {
             () -> m_robotDrive.setX(),
             m_robotDrive));
 
+    m_operatorController.start().onTrue(m_robotDrive.enableRotatingToSubwoofer());
+    m_operatorController.back().onTrue(m_robotDrive.disableRotatingToSubwoofer());
     m_operatorController.rightBumper()
       .onTrue(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_BACK))
       .onFalse(m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));

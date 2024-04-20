@@ -155,7 +155,7 @@ public final class Constants {
     public static final double kPassUnderStageFlywheelVelocity  = 3000;
     public static final double kShortFlywheelVelocity = 1500;
 
-    public static final double kSubwooferAngle = 40.0;
+    public static final double kSubwooferAngle = 37.0;
     public static final double kPodiumAngle = 18.9; //use later
 
     public static final double kSubwooferFlywheelVelocity = 8000;

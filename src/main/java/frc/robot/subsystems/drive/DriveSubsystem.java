@@ -89,7 +89,8 @@ public class DriveSubsystem extends SubsystemBase {
   private double m_prevTime = WPIUtilJNI.now() * 1e-6;
 
   private boolean rotatingToGoal = false;
-  private boolean rotatingToPass = false;
+  private boolean rotatingToAmp = false;
+  private boolean rotatingToSubwoofer = false;
   private boolean stopped = false;
 
   private FieldRelativeVelocity m_fieldRelativeVelocity = new FieldRelativeVelocity();
@@ -174,7 +175,9 @@ public class DriveSubsystem extends SubsystemBase {
     // Update the odometry in the periodic block
 
     SmartDashboard.putNumber("rotation max", maxAngularSpeed);
-    SmartDashboard.putBoolean("rotatingtoPass", rotatingToPass);
+    SmartDashboard.putBoolean("rotatingtoAmp", rotatingToAmp);
+     SmartDashboard.putBoolean("rotatingToSub", rotatingToSubwoofer);
+
 
     SmartDashboard.putBoolean("Stopped?", stopped);
 
@@ -326,22 +329,31 @@ public class DriveSubsystem extends SubsystemBase {
     rotatingToGoal = false;
   }
 
-  public Command enableRotatingToPass() {
+  public Command enableRotatingToAmp() {
     return new SequentialCommandGroup(setMaxAngularSpeed(DriveConstants.kAutoRotatingMaxAngularSpeed),
-    new InstantCommand(() -> rotatingToPass = true));
+    new InstantCommand(() -> rotatingToAmp = true));
   }
 
-  public Command disableRotatingToPass() {
-    return new InstantCommand(() -> rotatingToPass = false);
+ public Command enableRotatingToSubwoofer() {
+    return new SequentialCommandGroup(setMaxAngularSpeed(DriveConstants.kAutoRotatingMaxAngularSpeed),
+    new InstantCommand(() -> rotatingToSubwoofer = true));
+  }
+
+  public Command disableRotatingToAmp() {
+    return new InstantCommand(() -> rotatingToAmp = false);
+  }
+
+    public Command disableRotatingToSubwoofer() {
+    return new InstantCommand(() -> rotatingToSubwoofer = false);
   }
 
   public boolean getRotatingToGoal(double joystickInput) {
     if (Math.abs(joystickInput) > 0) {
       setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed).schedule();
       rotatingToGoal = false;
-      rotatingToPass = false;
+      rotatingToAmp = false;
     }
-    return rotatingToGoal || rotatingToPass;
+    return rotatingToGoal || rotatingToAmp;
   }
 
   public Command toggleRotatingToGoalCommand() {
@@ -374,8 +386,13 @@ public class DriveSubsystem extends SubsystemBase {
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     SmartDashboard.putNumber("Drive rot setpoint", thetaController.getSetpoint());
-    
-    if (rotatingToPass) {
+
+    if(rotatingToAmp) {
+      if (rotatingToSubwoofer) {
+        thetaController.setSetpoint(DriverStation.getAlliance().get().toString().equals("Blue") ? Units.degreesToRadians(135)
+        : Units.degreesToRadians(225));
+        return thetaController.calculate(Units.degreesToRadians(getHeading()));
+      }
       thetaController.setSetpoint(DriverStation.getAlliance().get().toString().equals("Blue") ? Units.degreesToRadians(138)
       : Units.degreesToRadians(222));
       return thetaController.calculate(Units.degreesToRadians(getHeading()));
