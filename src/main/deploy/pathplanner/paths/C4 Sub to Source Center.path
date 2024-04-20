@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.76,
-        "y": 4.480646518544946
+        "x": 1.4,
+        "y": 4.09
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.0036180530376333,
-        "y": 1.5248820319523597
+        "x": 2.643618053037633,
+        "y": 1.1342355134074138
       },
       "isLocked": false,
       "linkedName": null
@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "3 Note Source More Center",
   "previewStartingState": {
-    "rotation": 119.35775354279129,
+    "rotation": 126.48665558323309,
     "velocity": 0
   },
   "useDefaultConstraints": false
