@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import java.util.logging.Logger;
+
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkBase.IdleMode;
@@ -14,7 +16,12 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -29,6 +36,10 @@ public class Amp extends SubsystemBase {
   private AbsoluteEncoder pivotEncoder;
   private PIDController pivotController;
   private TunableNumber tunableAngle, tunableP;
+
+  private Mechanism2d ampMech;
+  private MechanismRoot2d ampMechRoot;
+  private MechanismLigament2d ampMechArm;
 
   public Amp() {
 
@@ -51,6 +62,13 @@ public class Amp extends SubsystemBase {
     pivotController = new PIDController(AmpPIDConstants.kP, AmpPIDConstants.kI, AmpPIDConstants.kD);
     
     pivotMotor.burnFlash();
+
+
+    ampMech = new Mechanism2d(3, 3);
+    ampMechRoot = ampMech.getRoot("amp", 1, 1);
+    ampMechArm = ampMechRoot.append(
+      new MechanismLigament2d("ampArm", 1, 45, 6, new Color8Bit(Color.kOrange))
+    );
   }
 
   public double getPivotAngle() {
@@ -83,7 +101,10 @@ public class Amp extends SubsystemBase {
     SmartDashboard.putNumber("Amp Angle", getPivotAngle());
     SmartDashboard.putNumber("Amp goal", pivotController.getSetpoint());
     SmartDashboard.putNumber("Amp P goal", pivotController.getP());
+    SmartDashboard.putData("Amp Mech2d", ampMech);
     setCalculatedPivotVoltage();
+
+    ampMechArm.setAngle(getPivotAngle());
 
     // if (tunableAngle.hasChanged()) {
     //   setPivotAngle(tunableAngle.get());

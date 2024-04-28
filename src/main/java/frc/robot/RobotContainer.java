@@ -106,8 +106,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("setupShort", m_stateMachine.readyShort());
 
     NamedCommands.registerCommand("setCenterHeading", m_superstructure.setCenterHeading());
-    NamedCommands.registerCommand("setAmpSideHeading", m_superstructure.setAmpSideHeading());
-    NamedCommands.registerCommand("setSourceSideHeading", m_superstructure.setSourceSideHeading());
+    // NamedCommands.registerCommand("setAmpSideHeading", m_superstructure.setAmpSideHeading());
+    // NamedCommands.registerCommand("setSourceSideHeading", m_superstructure.setSourceSideHeading());
 
     // NamedCommands.registerCommand("setupAllianceZone", m_shooter.readyAllianceZone());
     // NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(1000)));

@@ -17,7 +17,12 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
+import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -56,6 +61,9 @@ public class Shooter extends SubsystemBase {
 
   private boolean dynamicEnabled;
 
+  private Mechanism2d shooterMech;
+  private MechanismRoot2d shooterMechRoot;
+  private MechanismLigament2d shooterMechArm;
 
   public Shooter(Vision m_vision) {
     pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
@@ -134,6 +142,12 @@ public class Shooter extends SubsystemBase {
     this.m_vision = m_vision;
 
     flywheelReference = 0;
+
+    shooterMech = new Mechanism2d(3, 3);
+    shooterMechRoot = shooterMech.getRoot("shooter", 1, 1);
+    shooterMechArm = shooterMechRoot.append(
+      new MechanismLigament2d("shooterArm", 1, 0, 10, new Color8Bit(Color.kOrange))
+    );
   }
 
   public void toggleDynamic() {
@@ -423,6 +437,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putBoolean("Dynamic Enabled?", dynamicEnabled);
     SmartDashboard.putNumber("Pivot Current", pivotMotor.getOutputCurrent());
     SmartDashboard.putNumber("Flywheel Current", topFlywheelMotor.getOutputCurrent());
+    SmartDashboard.putData("Shooter Mech2d", shooterMech);
+
+    shooterMechArm.setAngle(getPivotAngle());
 
     if (pivotAngleTunableNumber.hasChanged()) {
       tunePivotAngle();

@@ -1,0 +1,33 @@
+{
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Amp Mech2d": "Mechanism2d",
+      "/SmartDashboard/Auto Chooser": "String Chooser",
+      "/SmartDashboard/Field Position": "Field2d",
+      "/SmartDashboard/Shooter Mech2d": "Mechanism2d"
+    },
+    "windows": {
+      "/SmartDashboard/Amp Mech2d": {
+        "window": {
+          "visible": true
+        }
+      },
+      "/SmartDashboard/Shooter Mech2d": {
+        "window": {
+          "visible": true
+        }
+      }
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "FMSInfo": {
+        "open": true
+      }
+    }
+  },
+  "NetworkTables Info": {
+    "visible": true
+  }
+}
