@@ -232,6 +232,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     SmartDashboard.putNumber("Gyro Angle", (m_gyro.getAngle(IMUAxis.kZ) % 360));
 
+    SmartDashboard.putNumber("front left pos", m_frontLeft.getPosition().distanceMeters);
     SmartDashboard.putNumber("gyro heading", getHeading());
     SmartDashboard.putData("Field Position", m_field);
     SmartDashboard.putNumber("Pose X", getPose().getX());

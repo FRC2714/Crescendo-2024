@@ -17,6 +17,10 @@ import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
 import com.revrobotics.SparkAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.simulation.EncoderSim;
+import edu.wpi.first.wpilibj.simulation.SingleJointedArmSim;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
@@ -64,6 +68,9 @@ public class Shooter extends SubsystemBase {
   private Mechanism2d shooterMech;
   private MechanismRoot2d shooterMechRoot;
   private MechanismLigament2d shooterMechArm;
+
+  private SingleJointedArmSim shooterSim;
+  private EncoderSim encoderSim;
 
   public Shooter(Vision m_vision) {
     pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
@@ -148,6 +155,16 @@ public class Shooter extends SubsystemBase {
     shooterMechArm = shooterMechRoot.append(
       new MechanismLigament2d("shooterArm", 1, 0, 10, new Color8Bit(Color.kOrange))
     );
+
+    shooterSim = new SingleJointedArmSim(
+      DCMotor.getNeoVortex(1),
+      ShooterConstants.kPivotGearRatio,
+      1,
+      1,
+      Units.degreesToRadians(ShooterConstants.kMinPivotAngle),
+      Units.degreesToRadians(ShooterConstants.kMaxPivotAngle),
+      false,
+      0);
   }
 
   public void toggleDynamic() {
@@ -389,6 +406,10 @@ public class Shooter extends SubsystemBase {
     pivotMotor.setVoltage(pivotController.calculate(getPivotAngle()));
   }
 
+  public void setCalculatedPivotVoltageSim() {
+    shooterSim.setInputVoltage(pivotController.calculate(Units.degreesToRadians(shooterSim.getAngleRads())));
+  }
+
   public ParallelCommandGroup stow() {
     return new ParallelCommandGroup(
       disableDynamic(),
@@ -468,5 +489,12 @@ public class Shooter extends SubsystemBase {
     if (dynamicEnabled) setDynamic();
 
     setCalculatedPivotVoltage();
+  }
+
+  @Override
+  public void simulationPeriodic() {
+    setCalculatedPivotVoltageSim();
+    shooterSim.update(0.020);
+    SmartDashboard.putNumber("Shooter pivot Sim", shooterSim.getAngleRads());
   }
 }
