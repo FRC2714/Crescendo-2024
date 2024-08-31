@@ -6,6 +6,7 @@ package frc.robot.subsystems.drive;
 
 import java.util.Optional;
 
+import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -15,6 +16,11 @@ import com.pathplanner.lib.util.PIDConstants;
 import com.pathplanner.lib.util.ReplanningConfig;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonTrackedTarget;
+
+import static edu.wpi.first.units.Units.Volts;
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Seconds;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
@@ -31,9 +37,15 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
+import edu.wpi.first.units.MutableMeasure;
+import edu.wpi.first.units.Velocity;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,6 +65,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -125,7 +138,16 @@ public class DriveSubsystem extends SubsystemBase {
         : DriveConstants.kInitialBluePose,
         stateStdDevs,
         visionMeasurementStdDevs);
-  
+   
+  private final SysIdRoutine m_sysIdRoutine =
+  new SysIdRoutine(
+      new SysIdRoutine.Config(
+          null,
+          null,
+          null,
+          (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
+      new SysIdRoutine.Mechanism(
+          (voltage) -> this.voltageDrive(voltage.in(Volts)), null, this));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Vision m_camera) {
@@ -168,6 +190,13 @@ public class DriveSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
+  }
+
+  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
+    return m_sysIdRoutine.quasistatic(direction);
+  }
+  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
+      return m_sysIdRoutine.dynamic(direction);
   }
 
   @Override
@@ -493,6 +522,19 @@ public class DriveSubsystem extends SubsystemBase {
     return DriveConstants.kDriveKinematics.toChassisSpeeds(m_frontLeft.getState(), m_frontRight.getState(),
         m_rearLeft.getState(),
         m_rearRight.getState());
+  }
+
+  public void voltageDrive(double voltage) {
+
+    m_frontLeft.setDesiredRotationState(new SwerveModuleState(0, new Rotation2d(DriveConstants.kFrontLeftChassisAngularOffset)));
+    m_frontRight.setDesiredRotationState(new SwerveModuleState(0, new Rotation2d(DriveConstants.kFrontRightChassisAngularOffset)));
+    m_rearLeft.setDesiredRotationState(new SwerveModuleState(0, new Rotation2d(DriveConstants.kBackLeftChassisAngularOffset)));
+    m_rearRight.setDesiredRotationState(new SwerveModuleState(0, new Rotation2d(DriveConstants.kBackRightChassisAngularOffset)));
+
+    m_frontLeft.setVoltage(voltage);
+    m_frontRight.setVoltage(voltage);
+    m_rearLeft.setVoltage(voltage);
+    m_rearRight.setVoltage(voltage);
   }
 
   /**

@@ -9,21 +9,15 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonConstants;
-import frc.robot.commands.IntakeCommand.IntakeState;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
@@ -32,27 +26,21 @@ import frc.robot.subsystems.superstructure.StateMachine;
 import frc.robot.subsystems.superstructure.Superstructure;
 import frc.robot.subsystems.superstructure.StateMachine.ClimberState;
 import frc.robot.subsystems.superstructure.StateMachine.ShooterState;
-import frc.robot.subsystems.superstructure.StateMachine.TriggerState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AlignToPass;
-import frc.robot.commands.AutosCommands;
 import frc.robot.commands.DriveToAmp;
 // import frc.robot.commands.RotateToGoal;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.RotateToGoal;
 //import frc.robot.commands.RotateToGoalProfiled;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
-import frc.robot.commands.SeekNote;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -65,7 +53,7 @@ public class RobotContainer {
   private final Limelight m_limelight = new Limelight();
   private final LED m_blinkin = new LED();
   private final Vision m_leftCamera = new Vision(PhotonConstants.kLeftCameraName, PhotonConstants.kLeftCameraLocation);
-  private final Vision m_rightCamera = new Vision(PhotonConstants.kRightCameraName, PhotonConstants.kRightCameraLocation);
+  // private final Vision m_rightCamera = new Vision(PhotonConstants.kRightCameraName, PhotonConstants.kRightCameraLocation);
   private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_leftCamera);
   // private final Shooter m_shooter = new Shooter(m_robotDrive);
   // private final Intake m_intake = new Intake();
@@ -78,6 +66,7 @@ public class RobotContainer {
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
   CommandXboxController m_operatorController = new CommandXboxController(OIConstants.kOperatorControllerPort);
   CommandXboxController m_configureController = new CommandXboxController(OIConstants.kConfigureControllerPort);
+  CommandXboxController m_sysIDController = new CommandXboxController(OIConstants.kSysIDControllerPort);
 
   private final Superstructure m_superstructure = new Superstructure(m_robotDrive, m_leftCamera, m_climber, m_amp, m_blinkin, m_driverController, m_operatorController);
   private final StateMachine m_stateMachine = new StateMachine(m_superstructure);
@@ -105,9 +94,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());
     NamedCommands.registerCommand("setupShort", m_stateMachine.readyShort());
 
-    NamedCommands.registerCommand("setCenterHeading", m_superstructure.setCenterHeading());
-    NamedCommands.registerCommand("setAmpSideHeading", m_superstructure.setAmpSideHeading());
-    NamedCommands.registerCommand("setSourceSideHeading", m_superstructure.setSourceSideHeading());
+    // NamedCommands.registerCommand("setCenterHeading", m_superstructure.setCenterHeading());
+    // NamedCommands.registerCommand("setAmpSideHeading", m_superstructure.setAmpSideHeading());
+    // NamedCommands.registerCommand("setSourceSideHeading", m_superstructure.setSourceSideHeading());
 
     // NamedCommands.registerCommand("setupAllianceZone", m_shooter.readyAllianceZone());
     // NamedCommands.registerCommand("setupSlow", new InstantCommand(() -> m_shooter.setFlywheelVelocity(1000)));
@@ -166,7 +155,7 @@ public class RobotContainer {
     m_driverController.leftBumper().onTrue(m_robotDrive.enableRotatingToAmp());
     m_driverController.rightBumper().onTrue(m_robotDrive.setRotatingToGoalCommand());
     m_driverController.start().onTrue(new InstantCommand(() -> m_robotDrive.zeroHeading()));
-    m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
+    // m_driverController.b().whileTrue(new DriveToAmp(m_robotDrive, m_rightCamera));
     m_driverController.y()
         .whileTrue(new RunCommand(
             () -> m_robotDrive.setX(),
@@ -203,6 +192,11 @@ public class RobotContainer {
       .whileFalse(m_climber.stopRightClimber());
     m_configureController.x().onTrue(m_climber.setLeftClimberZero());
     m_configureController.b().onTrue(m_climber.setRightClimberZero());
+
+    m_sysIDController.povUp().onTrue(m_robotDrive.sysIdDynamic(Direction.kForward));
+    m_sysIDController.povDown().onTrue(m_robotDrive.sysIdDynamic(Direction.kReverse));
+    m_sysIDController.povRight().onTrue(m_robotDrive.sysIdQuasistatic(Direction.kForward));
+    m_sysIDController.povLeft().onTrue(m_robotDrive.sysIdQuasistatic(Direction.kReverse));
   }
 
   public void setTeleopDefaultStates() {

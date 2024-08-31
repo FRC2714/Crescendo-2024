@@ -251,7 +251,7 @@ public class Superstructure extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putString("Alliance", DriverStation.getAlliance().get().toString());
+    // SmartDashboard.putString("Alliance", DriverStation.getAlliance().get().toString());
     if (getLoaded() && elapsedRumbleTime < OIConstants.kRumbleTimeMS) {
       elapsedRumbleTime += 20;
       m_driverController.getHID().setRumble(RumbleType.kBothRumble, OIConstants.kRumblePower);
