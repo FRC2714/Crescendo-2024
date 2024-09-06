@@ -130,16 +130,19 @@ public class Vision extends SubsystemBase {
         }
       }
     }
+    
     return false;
   }
 
   public boolean ampVisible() {
-    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
-      if (i.getFiducialId() == 5 && DriverStation.getAlliance().get().toString().equals("Red")) {
-        return true;
-      }
-      else if (i.getFiducialId() == 6 && DriverStation.getAlliance().get().toString().equals("Blue")) {
-        return true;
+    if (getLatestResult() != null) {
+      for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+        if (i.getFiducialId() == 5 && DriverStation.getAlliance().get().toString().equals("Red")) {
+          return true;
+        }
+        else if (i.getFiducialId() == 6 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+          return true;
+        }
       }
     }
     return false;
