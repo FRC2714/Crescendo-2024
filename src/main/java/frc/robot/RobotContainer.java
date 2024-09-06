@@ -193,10 +193,10 @@ public class RobotContainer {
     m_configureController.x().onTrue(m_climber.setLeftClimberZero());
     m_configureController.b().onTrue(m_climber.setRightClimberZero());
 
-    m_sysIDController.povUp().onTrue(m_robotDrive.sysIdDynamic(Direction.kForward));
-    m_sysIDController.povDown().onTrue(m_robotDrive.sysIdDynamic(Direction.kReverse));
-    m_sysIDController.povRight().onTrue(m_robotDrive.sysIdQuasistatic(Direction.kForward));
-    m_sysIDController.povLeft().onTrue(m_robotDrive.sysIdQuasistatic(Direction.kReverse));
+    // m_sysIDController.povUp().onTrue(m_robotDrive.sysIdDynamic(Direction.kForward));
+    // m_sysIDController.povDown().onTrue(m_robotDrive.sysIdDynamic(Direction.kReverse));
+    // m_sysIDController.povRight().onTrue(m_robotDrive.sysIdQuasistatic(Direction.kForward));
+    // m_sysIDController.povLeft().onTrue(m_robotDrive.sysIdQuasistatic(Direction.kReverse));
   }
 
   public void setTeleopDefaultStates() {

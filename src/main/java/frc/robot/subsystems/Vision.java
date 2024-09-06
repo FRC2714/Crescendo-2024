@@ -120,12 +120,14 @@ public class Vision extends SubsystemBase {
   }
 
   public boolean speakerVisible() {
-    for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
-      if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
-        return true;
-      }
-      else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
-        return true;
+    if (getLatestResult() != null) {
+      for (PhotonTrackedTarget i : getLatestResult().getTargets()) {
+        if (i.getFiducialId() == 4 && DriverStation.getAlliance().get().toString().equals("Red")) {
+          return true;
+        }
+        else if (i.getFiducialId() == 7 && DriverStation.getAlliance().get().toString().equals("Blue")) {
+          return true;
+        }
       }
     }
     return false;
@@ -206,11 +208,11 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     //PhotonTrackedTarget speakerTarget=  getSpeakerTarget();
-    Optional<EstimatedRobotPose> photonPoseEstimation = getEstimatedGlobalPose();
-    photonPoseEstimation.ifPresent(poseEstimation -> {
-      SmartDashboard.putNumber("pv X", poseEstimation.estimatedPose.getX());
-      SmartDashboard.putNumber("pv Y", poseEstimation.estimatedPose.getY());
-    });
+    // Optional<EstimatedRobotPose> photonPoseEstimation = getEstimatedGlobalPose();
+    // photonPoseEstimation.ifPresent(poseEstimation -> {
+    //   SmartDashboard.putNumber("pv X", poseEstimation.estimatedPose.getX());
+    //   SmartDashboard.putNumber("pv Y", poseEstimation.estimatedPose.getY());
+    // });
 
     if (!speakerVisible()) {
       timeNoSpeakerTargetSeen += 20;
@@ -236,7 +238,7 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("offset deg", getSpeakerXOffsetDegrees());
     // SmartDashboard.putNumber("Best target x distance", getMultiTagLatestResult().estimatedPose.best.getX());
     // SmartDashboard.putNumber("Best target y distance", getMultiTagLatestResult().estimatedPose.best.getY());
-    SmartDashboard.putBoolean("photon pose", photonPoseEstimation.isPresent());
+    // SmartDashboard.putBoolean("photon pose", photonPoseEstimation.isPresent());
     SmartDashboard.putNumber("speakerYaw", currentDistance);
     // SmartDashboard.putNumber("Number of targets", photonCamera.getLatestResult().getTargets().size());
     // SmartDashboard.putNumber("Best Target ID", photonCamera.getLatestResult().getBestTarget().getFiducialId());

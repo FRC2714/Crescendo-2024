@@ -6,7 +6,7 @@ package frc.robot.subsystems.drive;
 
 import java.util.Optional;
 
-import org.littletonrobotics.junction.Logger;
+// import org.littletonrobotics.junction.Logger;
 import org.photonvision.EstimatedRobotPose;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -139,15 +139,6 @@ public class DriveSubsystem extends SubsystemBase {
         stateStdDevs,
         visionMeasurementStdDevs);
    
-  private final SysIdRoutine m_sysIdRoutine =
-  new SysIdRoutine(
-      new SysIdRoutine.Config(
-          null,
-          null,
-          null,
-          (state) -> Logger.recordOutput("Drive/SysIdState", state.toString())),
-      new SysIdRoutine.Mechanism(
-          (voltage) -> this.voltageDrive(voltage.in(Volts)), null, this));
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(Vision m_camera) {
@@ -190,13 +181,6 @@ public class DriveSubsystem extends SubsystemBase {
             },
             this // Reference to this subsystem to set requirements
     );
-  }
-
-  public Command sysIdQuasistatic(SysIdRoutine.Direction direction) {
-    return m_sysIdRoutine.quasistatic(direction);
-  }
-  public Command sysIdDynamic(SysIdRoutine.Direction direction) {
-      return m_sysIdRoutine.dynamic(direction);
   }
 
   @Override
