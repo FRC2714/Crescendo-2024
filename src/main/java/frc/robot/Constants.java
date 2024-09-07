@@ -50,7 +50,7 @@ public final class Constants {
     public static final int kLeftClimberSmartCurrentLimit = 80; // TBD
     public static final int kRightClimberSmartCurrentLimit = 80; // TBD
 
-    public static final double kMaxExtension = 70; // TBD
+    public static final double kMaxExtension = 65; // TBD
     public static final double kMinExtension = 0; // TBD
     public static final double kClimberVoltage = 8;
     public static final double kClimberConfigureVoltage = 1;
@@ -212,11 +212,11 @@ public final class Constants {
       public static final double kMinPivotAngle = 0;
       public static final double kMaxPivotAngle = 0;
 
-      public static final double kStowAngle = 0;
+      public static final double kStowAngle = 5;
       public static final double kDeployAngle = 90;
 
       public static final class AmpPIDConstants {
-        public static final double kP = 0.05;
+        public static final double kP = 0.04;
         public static final double kI = 0;
         public static final double kD = 0;
       }
