@@ -125,7 +125,7 @@ public final class Constants {
     public static final double kPivotGearRatio = 25;
     public static final double kFlywheelGearRatio = 2;
 
-    public static final double kPivotEncoderZeroOffset =  127.68 * kPivotGearRatio;
+    public static final double kPivotEncoderZeroOffset =  129.68 * kPivotGearRatio;
     public static final double kPivotEncoderKinematicOffset = 10 * kPivotGearRatio;
 
     public static final double kMinPivotAngle = 0;
