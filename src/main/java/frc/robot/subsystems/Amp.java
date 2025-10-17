@@ -5,22 +5,21 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
-import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs.AmpConfig;
 import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.AmpConstants.AmpPIDConstants;
-import frc.robot.utils.TunableNumber;
+import frc.robot.utils.TunableNumber;;
+
 
 public class Amp extends SubsystemBase {
   /** Creates a new Amp. */
@@ -33,14 +32,6 @@ public class Amp extends SubsystemBase {
   public Amp() {
 
     pivotMotor = new SparkFlex(AmpConstants.kAmpCanId, MotorType.kBrushless);
-    pivotMotor.setIdleMode(IdleMode.kBrake);
-
-    pivotMotor.setSmartCurrentLimit(AmpConstants.kSmartCurrentLimit);
-
-    pivotEncoder = pivotMotor.getAbsoluteEncoder();
-    pivotEncoder.setInverted(true);
-    pivotEncoder.setPositionConversionFactor(AmpConstants.kPivotConversionFactor);
-    pivotEncoder.setZeroOffset(AmpConstants.kPivotZeroOffset);
 
     tunableAngle = new TunableNumber("Tuanble Amp Angle");
     tunableP = new TunableNumber("Tunable Amp P");
@@ -50,7 +41,7 @@ public class Amp extends SubsystemBase {
     
     pivotController = new PIDController(AmpPIDConstants.kP, AmpPIDConstants.kI, AmpPIDConstants.kD);
     
-    pivotMotor.burnFlash();
+    pivotMotor.configure(AmpConfig.pivot, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
   }
 
   public double getPivotAngle() {
