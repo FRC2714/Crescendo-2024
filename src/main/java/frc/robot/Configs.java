@@ -6,6 +6,7 @@ import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.AmpConstants;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
@@ -65,6 +66,14 @@ public final class Configs {
                     .inverted(true)
                     .positionConversionFactor(AmpConstants.kPivotConversionFactor)
                     .zeroOffset(AmpConstants.kPivotZeroOffset);
+        }
+    }
+
+    public static final class ClimberConfig {
+        public static final SparkFlexConfig climber = new SparkFlexConfig();
+
+        static {
+            climber.idleMode(IdleMode.kBrake).smartCurrentLimit(ClimberConstants.kLeftClimberSmartCurrentLimit);
         }
     }
 }

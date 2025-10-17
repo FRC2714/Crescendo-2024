@@ -4,10 +4,11 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -15,8 +16,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs.ClimberConfig;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.utils.TunableNumber;
 
@@ -38,21 +39,6 @@ public class Climber extends SubsystemBase {
     leftClimberMotor = new SparkFlex(ClimberConstants.kLeftClimberCanId, MotorType.kBrushless);
     rightClimberMotor = new SparkFlex(ClimberConstants.kRightClimberCanId, MotorType.kBrushless);
 
-    leftClimberMotor.setIdleMode(IdleMode.kBrake);
-    rightClimberMotor.setIdleMode(IdleMode.kBrake);
-
-    leftClimberMotor.setSmartCurrentLimit(ClimberConstants.kLeftClimberSmartCurrentLimit);
-    rightClimberMotor.setSmartCurrentLimit(ClimberConstants.kRightClimberSmartCurrentLimit);
-
-    leftClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-    rightClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-
-    leftClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-    rightClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-
-    leftClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-    rightClimberMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-
     leftClimberController = new PIDController(ClimberConstants.kP, 0, 0);
     rightClimberController = new PIDController(ClimberConstants.kP, 0, 0);
 
@@ -63,8 +49,8 @@ public class Climber extends SubsystemBase {
     leftClimberEncoder = leftClimberMotor.getEncoder();
     rightClimberEncoder = rightClimberMotor.getEncoder();
 
-    leftClimberMotor.burnFlash();
-    rightClimberMotor.burnFlash();
+    leftClimberMotor.configure(ClimberConfig.climber, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    rightClimberMotor.configure(ClimberConfig.climber, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     configuring = false;
   }
