@@ -4,23 +4,19 @@
 
 package frc.robot.subsystems;
 
-import java.util.function.BooleanSupplier;
-
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkFlex;
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.Configs.IntakeConfig;
 import frc.robot.Constants.IntakeConstants;
 
 public class Intake extends SubsystemBase {
@@ -52,58 +48,13 @@ public class Intake extends SubsystemBase {
     conveyorMotor = new SparkFlex(IntakeConstants.kConveyorCanId, MotorType.kBrushless);
     feederMotor = new SparkFlex(IntakeConstants.kFeederCanId, MotorType.kBrushless);
 
-    frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-    backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-    backDirectionRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-    conveyorMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-    feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-
-    frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-    backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-    backDirectionRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-    conveyorMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-    feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-
-    frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-    backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-    backDirectionRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-    conveyorMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-    feederMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-
     breakBeam = new DigitalInput(IntakeConstants.kBreakBeamChannel);
 
-    frontRollerMotor.setInverted(false);
-    conveyorMotor.setInverted(false);
-
-    frontRollerMotor.setIdleMode(IdleMode.kBrake);
-    backBottomRollerMotor.setIdleMode(IdleMode.kBrake);
-    backDirectionRollerMotor.setIdleMode(IdleMode.kBrake);
-    conveyorMotor.setIdleMode(IdleMode.kBrake);
-    feederMotor.setIdleMode(IdleMode.kBrake);
-
-    frontRollerMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
-    backBottomRollerMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
-    backDirectionRollerMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
-    conveyorMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
-    feederMotor.enableVoltageCompensation(IntakeConstants.kRollerNominalVoltage);
-
-    frontRollerMotor.setSmartCurrentLimit(IntakeConstants.kFrontRollerSmartCurrentLimit);
-    backBottomRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackBottomRollerSmartCurrentLimit);
-    backDirectionRollerMotor.setSmartCurrentLimit(IntakeConstants.kBackDirectionRollerSmartCurrentLimit);
-    conveyorMotor.setSmartCurrentLimit(IntakeConstants.kConveyorSmartCurrentLimit);
-    feederMotor.setSmartCurrentLimit(IntakeConstants.kFeederSmartCurrentLimit);
-
-    // frontRollerEncoder = frontRollerMotor.getEncoder();
-    // backBottomRollerEncoder = backBottomRollerMotor.getEncoder();
-    // backDirectionRollerEncoder = backDirectionRollerMotor.getEncoder();
-    // conveyorEncoder = conveyorMotor.getEncoder();
-    // feederEncoder = feederMotor.getEncoder();
-
-    frontRollerMotor.burnFlash();
-    backBottomRollerMotor.burnFlash();
-    backDirectionRollerMotor.burnFlash();
-    conveyorMotor.burnFlash();
-    feederMotor.burnFlash();
+    frontRollerMotor.configure(IntakeConfig.frontRoller, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    backBottomRollerMotor.configure(IntakeConfig.backBottomRoller, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    backDirectionRollerMotor.configure(IntakeConfig.backDirectionRoller, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    conveyorMotor.configure(IntakeConfig.conveyor, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    feederMotor.configure(IntakeConfig.feeder, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     backRunning = false;
     frontRunning = false;

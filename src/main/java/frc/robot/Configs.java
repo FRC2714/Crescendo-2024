@@ -7,6 +7,7 @@ import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public final class Configs {
@@ -74,6 +75,40 @@ public final class Configs {
 
         static {
             climber.idleMode(IdleMode.kBrake).smartCurrentLimit(ClimberConstants.kLeftClimberSmartCurrentLimit);
+        }
+    }
+
+    public static final class IntakeConfig {
+        public static final SparkFlexConfig frontRoller = new SparkFlexConfig();
+        public static final SparkFlexConfig backBottomRoller = new SparkFlexConfig();
+        public static final SparkFlexConfig backDirectionRoller = new SparkFlexConfig();
+        public static final SparkFlexConfig conveyor = new SparkFlexConfig();
+        public static final SparkFlexConfig feeder = new SparkFlexConfig();
+
+        static {
+            frontRoller.inverted(false);
+            frontRoller.voltageCompensation(IntakeConstants.kRollerNominalVoltage);
+            frontRoller.idleMode(IdleMode.kBrake);
+            frontRoller.smartCurrentLimit(IntakeConstants.kFrontRollerSmartCurrentLimit);
+
+            conveyor.inverted(false);
+            conveyor.idleMode(IdleMode.kBrake);
+            conveyor.voltageCompensation(IntakeConstants.kRollerNominalVoltage);
+            conveyor.smartCurrentLimit(IntakeConstants.kConveyorSmartCurrentLimit);
+
+            backBottomRoller.idleMode(IdleMode.kBrake);
+            backBottomRoller.voltageCompensation(IntakeConstants.kRollerNominalVoltage);
+            backBottomRoller.smartCurrentLimit(IntakeConstants.kBackBottomRollerSmartCurrentLimit);
+        
+        
+            backDirectionRoller.voltageCompensation(IntakeConstants.kRollerNominalVoltage);
+            backDirectionRoller.idleMode(IdleMode.kBrake);
+            backDirectionRoller.smartCurrentLimit(IntakeConstants.kBackDirectionRollerSmartCurrentLimit);
+            
+            
+            feeder.idleMode(IdleMode.kBrake);
+            feeder.voltageCompensation(IntakeConstants.kRollerNominalVoltage);
+            feeder.smartCurrentLimit(IntakeConstants.kFeederSmartCurrentLimit);
         }
     }
 }
