@@ -6,22 +6,6 @@ package frc.robot.subsystems.drive;
 
 import java.util.Optional;
 
-// import org.littletonrobotics.junction.Logger;
-import org.photonvision.EstimatedRobotPose;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
-import com.pathplanner.lib.util.PIDConstants;
-import com.pathplanner.lib.util.ReplanningConfig;
-import org.photonvision.PhotonUtils;
-import org.photonvision.targeting.PhotonTrackedTarget;
-
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-import static edu.wpi.first.units.Units.Seconds;
-
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.controller.PIDController;
@@ -29,43 +13,31 @@ import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.units.Measure;
-import edu.wpi.first.units.MutableMeasure;
-import edu.wpi.first.units.measure.Velocity;
-import edu.wpi.first.units.measure.Voltage;
 import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.ADIS16470_IMU.IMUAxis;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
-import frc.robot.Constants.FieldConstants;
-import frc.robot.Constants.PeriodicConstants;
-import frc.robot.Constants.PhotonConstants;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Vision;
-import frc.robot.utils.FieldRelativeAcceleration;
-import frc.robot.utils.FieldRelativeVelocity;
-import frc.robot.utils.SwerveUtils;
-import frc.robot.utils.TunableNumber;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.DriveConstants.ThetaPIDConstants;
+import frc.robot.Constants.FieldConstants;
+import frc.robot.Constants.PeriodicConstants;
+import frc.robot.utils.FieldRelativeAcceleration;
+import frc.robot.utils.FieldRelativeVelocity;
+import frc.robot.utils.SwerveUtils;
+import frc.robot.utils.TunableNumber;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create MAXSwerveModules
@@ -115,7 +87,6 @@ public class DriveSubsystem extends SubsystemBase {
 
   private Field2d m_field = new Field2d();
 
-  private Vision m_camera;
 
   private TunableNumber translationP, rotationP;
 
@@ -141,46 +112,18 @@ public class DriveSubsystem extends SubsystemBase {
    
 
   /** Creates a new DriveSubsystem. */
-  public DriveSubsystem(Vision m_camera) {
+  public DriveSubsystem() {
     m_gyro.calibrate();
-    this.m_camera = m_camera;
 
     maxSpeedMetersPerSecond = DriveConstants.kAutoMaxSpeedMetersPerSecond;
     maxAngularSpeed = DriveConstants.kAutoMaxAngularSpeed;
     
-    PPHolonomicDriveController.setRotationTargetOverride(this::getRotationTargetOverride);
     translationP = new TunableNumber("translation P");
     rotationP = new TunableNumber("rotation P");
     
     translationP.setDefault(1.5);
     rotationP.setDefault(2.8);
 
-// PPHolonomicDriveController.setRotationTargetOverride(this::getDriveRotationToGoalOptional);
-    AutoBuilder.configureHolonomic(
-            this::getPose, // Robot pose supplier
-            this::resetPoseEstimator, // Method to reset odometry (will be called if your auto has a starti ng pose)
-            this::getChassisSpeed, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::driveRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
-            new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                    new PIDConstants(2, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(1.5, 0.0, 0.0), // Rotation PID constants
-                    4.5, // Max module speed, in m/s
-                    0.3706, // Drive base radius in meters. Distance from robot center to furthest module.
-                    new ReplanningConfig() // Default path replanning config. See the API for the options here
-            ),
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
-
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
-    );
   }
 
   @Override

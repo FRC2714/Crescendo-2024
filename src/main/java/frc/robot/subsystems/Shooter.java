@@ -42,7 +42,6 @@ public class Shooter extends SubsystemBase {
   private PIDController pivotController;
   private SparkPIDController flywheelController;
 
-  private Vision m_vision;
 
   private InterpolatingTreeMap pivotAngleMap;
   private InterpolatingTreeMap flywheelVelocityMap;
@@ -57,7 +56,7 @@ public class Shooter extends SubsystemBase {
   private boolean dynamicEnabled;
 
 
-  public Shooter(Vision m_vision) {
+  public Shooter() {
     pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
     topFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
     bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
@@ -131,7 +130,6 @@ public class Shooter extends SubsystemBase {
     pivotP.setDefault(0);
     flywheelP.setDefault(0);
     flywheelV.setDefault(0);
-    this.m_vision = m_vision;
 
     flywheelReference = 0;
   }
@@ -250,13 +248,6 @@ public class Shooter extends SubsystemBase {
     flywheelController.setReference(targetVelocity, ControlType.kVelocity);
   }
 
-  public double getDynamicPivotAngle() {
-    return pivotAngleMap.getInterpolated(m_vision.getDistanceToGoalMeters());
-  }
-
-  public double getDynamicFlywheelVelocity() {
-    return flywheelVelocityMap.getInterpolated(m_vision.getDistanceToGoalMeters());
-  }
 
   public double getDynamicPivotAngle(double adjustedDistance) {
     return pivotAngleMap.getInterpolated(adjustedDistance);

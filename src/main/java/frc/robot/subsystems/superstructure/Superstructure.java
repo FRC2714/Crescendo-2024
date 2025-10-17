@@ -4,13 +4,8 @@
 
 package frc.robot.subsystems.superstructure;
 
-import java.util.Optional;
-
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -18,18 +13,13 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ShooterConstants;
-import frc.robot.commands.RotateToGoal;
 import frc.robot.commands.IntakeCommand;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.LED;
-import frc.robot.subsystems.Limelight;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.drive.DriveSubsystem;
 
 public class Superstructure extends SubsystemBase {
@@ -37,7 +27,6 @@ public class Superstructure extends SubsystemBase {
   Shooter m_shooter;
   Intake m_intake;
   DriveSubsystem m_drivetrain;
-  Vision m_vision;
   Climber m_climber;
   Amp m_amp;
   LED m_blinkin;
@@ -46,10 +35,9 @@ public class Superstructure extends SubsystemBase {
 
   double elapsedRumbleTime = 0;
 
-  public Superstructure(DriveSubsystem m_drivetrain, Vision m_vision, Climber m_climber, Amp m_amp, LED m_blinkin, CommandXboxController m_driverController, CommandXboxController m_operatorController) {
-    this.m_vision = m_vision;
+  public Superstructure(DriveSubsystem m_drivetrain, Climber m_climber, Amp m_amp, LED m_blinkin, CommandXboxController m_driverController, CommandXboxController m_operatorController) {
     this.m_drivetrain = m_drivetrain;
-    this.m_shooter = new Shooter(m_vision);
+    this.m_shooter = new Shooter();
     this.m_intake = new Intake();
     this.m_climber = m_climber;
     this.m_amp = m_amp;
@@ -243,9 +231,7 @@ public class Superstructure extends SubsystemBase {
 
   public boolean isReadyToShoot() {
     return m_intake.getLoaded()
-      && m_shooter.flywheelAtSetpoint()
-      && Math.abs(m_vision.getSpeakerXOffsetDegrees()) < 10
-      && m_vision.hasSpeakerTarget();
+      && m_shooter.flywheelAtSetpoint();
   }
 
   @Override

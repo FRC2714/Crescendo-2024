@@ -13,34 +13,23 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.PhotonConstants;
-import frc.robot.subsystems.LED;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.Amp;
-import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.drive.DriveSubsystem;
-import frc.robot.subsystems.superstructure.StateMachine;
-import frc.robot.subsystems.superstructure.Superstructure;
-import frc.robot.subsystems.superstructure.StateMachine.ClimberState;
-import frc.robot.subsystems.superstructure.StateMachine.ShooterState;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
-import frc.robot.commands.AlignToPass;
-import frc.robot.commands.DriveToAmp;
-// import frc.robot.commands.RotateToGoal;
-//import frc.robot.commands.RotateToGoalProfiled;
-
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
+import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.PhotonConstants;
+import frc.robot.subsystems.Amp;
+import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.LED;
+import frc.robot.subsystems.Limelight;
+import frc.robot.subsystems.drive.DriveSubsystem;
+import frc.robot.subsystems.superstructure.StateMachine;
+import frc.robot.subsystems.superstructure.StateMachine.ClimberState;
+import frc.robot.subsystems.superstructure.StateMachine.ShooterState;
+import frc.robot.subsystems.superstructure.Superstructure;
 
 /*
  * This class is where the bulk of the robot should be declared.  Since Command-based is a
@@ -52,9 +41,8 @@ public class RobotContainer {
   // The robot's subsystems
   private final Limelight m_limelight = new Limelight();
   private final LED m_blinkin = new LED();
-  private final Vision m_leftCamera = new Vision(PhotonConstants.kLeftCameraName, PhotonConstants.kLeftCameraLocation);
   // private final Vision m_rightCamera = new Vision(PhotonConstants.kRightCameraName, PhotonConstants.kRightCameraLocation);
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem(m_leftCamera);
+  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   // private final Shooter m_shooter = new Shooter(m_robotDrive);
   // private final Intake m_intake = new Intake();
   private final Amp m_amp = new Amp();
@@ -68,7 +56,7 @@ public class RobotContainer {
   CommandXboxController m_configureController = new CommandXboxController(OIConstants.kConfigureControllerPort);
   CommandXboxController m_sysIDController = new CommandXboxController(OIConstants.kSysIDControllerPort);
 
-  private final Superstructure m_superstructure = new Superstructure(m_robotDrive, m_leftCamera, m_climber, m_amp, m_blinkin, m_driverController, m_operatorController);
+  private final Superstructure m_superstructure = new Superstructure(m_robotDrive, m_climber, m_amp, m_blinkin, m_driverController, m_operatorController);
   private final StateMachine m_stateMachine = new StateMachine(m_superstructure);
 
   ProfiledPIDController thetaController = new ProfiledPIDController(kPThetaController, 0, 0, new Constraints(10, 20));
@@ -80,19 +68,6 @@ public class RobotContainer {
 
     // Configure the button bindingsP
     configureButtonBindings();
-    NamedCommands.registerCommand("intakeBack", m_superstructure.resetLoadedAndIntakeBack());
-    NamedCommands.registerCommand("intakeBackRaw", m_superstructure.intakeBackRaw());
-
-    NamedCommands.registerCommand("intakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.INTAKE_FRONT));
-    NamedCommands.registerCommand("extakeFront", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.EXTAKE_FRONT));
-    NamedCommands.registerCommand("shoot", new SequentialCommandGroup(m_superstructure.shoot(), new WaitCommand(0.1), new InstantCommand(() -> m_robotDrive.disableRotatingToGoal()), m_superstructure.stopShooter()));
-    NamedCommands.registerCommand("rotateToGoal", new InstantCommand(() -> m_robotDrive.setRotatingToGoal()));
-
-    NamedCommands.registerCommand("stopShooter", m_superstructure.stopShooter());
-    NamedCommands.registerCommand("stopIntake", m_stateMachine.intakeSelectCommand(StateMachine.IntakeState.IDLE));
-    NamedCommands.registerCommand("setupSubwoofer", m_stateMachine.shooterSelectCommand(ShooterState.SUBWOOFER));
-    NamedCommands.registerCommand("setupDynamic", m_stateMachine.enableDynamicShooter());
-    NamedCommands.registerCommand("setupShort", m_stateMachine.readyShort());
 
     // NamedCommands.registerCommand("setCenterHeading", m_superstructure.setCenterHeading());
     // NamedCommands.registerCommand("setAmpSideHeading", m_superstructure.setAmpSideHeading());
@@ -108,11 +83,7 @@ public class RobotContainer {
     //                                                                       new InstantCommand(() -> m_shooter.setFlywheelVelocity(8000)))); //tbd
     //NamedCommands.registerCommand("alignToGoal", new RotateToGoal(m_robotDrive, m_leftCamera));
     // NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
-    NamedCommands.registerCommand("stowShooter", m_stateMachine.shooterSelectCommand(ShooterState.STOW)); //tbd
-    NamedCommands.registerCommand("enableStoppedState", m_robotDrive.enableStopped());
-    NamedCommands.registerCommand("disableStoppedState", m_robotDrive.disableStopped());
 
-    autoChooser = AutoBuilder.buildAutoChooser("3 Note Auto Top");
     SmartDashboard.putData("Auto Chooser", autoChooser);
     // Configure default commands
     m_robotDrive.setDefaultCommand(
