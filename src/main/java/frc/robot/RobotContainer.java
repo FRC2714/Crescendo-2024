@@ -48,7 +48,6 @@ public class RobotContainer {
   private final Amp m_amp = new Amp();
   // private final AutosCommands m_autosCommands = new AutosCommands(m_robotDrive, m_limelight, m_shooter, m_intake);
   private double kPThetaController = .3;//.7
-  private SendableChooser<Command> autoChooser;
   private final Climber m_climber = new Climber();
 
   CommandXboxController m_driverController = new CommandXboxController(OIConstants.kDriverControllerPort);
@@ -84,7 +83,6 @@ public class RobotContainer {
     //NamedCommands.registerCommand("alignToGoal", new RotateToGoal(m_robotDrive, m_leftCamera));
     // NamedCommands.registerCommand("pivot to 50", m_shooter.setPivotAngleCommand(30));
 
-    SmartDashboard.putData("Auto Chooser", autoChooser);
     // Configure default commands
     m_robotDrive.setDefaultCommand(
         // The left stick controls translation of the robot.
@@ -193,6 +191,6 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    return autoChooser.getSelected();
+    return new InstantCommand();
   }
 }

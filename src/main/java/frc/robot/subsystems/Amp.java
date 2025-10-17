@@ -32,6 +32,7 @@ public class Amp extends SubsystemBase {
   public Amp() {
 
     pivotMotor = new SparkFlex(AmpConstants.kAmpCanId, MotorType.kBrushless);
+    pivotEncoder = pivotMotor.getAbsoluteEncoder();
 
     tunableAngle = new TunableNumber("Tuanble Amp Angle");
     tunableP = new TunableNumber("Tunable Amp P");

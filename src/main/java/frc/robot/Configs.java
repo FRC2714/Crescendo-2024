@@ -67,8 +67,8 @@ public final class Configs {
             pivot.idleMode(IdleMode.kBrake).smartCurrentLimit(AmpConstants.kSmartCurrentLimit)
                 .absoluteEncoder
                     .inverted(true)
-                    .positionConversionFactor(AmpConstants.kPivotConversionFactor)
-                    .zeroOffset(AmpConstants.kPivotZeroOffset);
+                    .positionConversionFactor(AmpConstants.kPivotConversionFactor);
+                    // .zeroOffset(AmpConstants.kPivotZeroOffset); 
         }
     }
 
@@ -127,7 +127,7 @@ public final class Configs {
 
             pivot.absoluteEncoder.positionConversionFactor(ShooterConstants.kPivotEncoderConversionFactor);
             pivot.absoluteEncoder.inverted(true);
-            pivot.absoluteEncoder.zeroOffset(ShooterConstants.kPivotEncoderZeroOffset);
+            // pivot.absoluteEncoder.zeroOffset(ShooterConstants.kPivotEncoderZeroOffset);
 
             topFlywheel.idleMode(IdleMode.kCoast);
             topFlywheel.inverted(true);
