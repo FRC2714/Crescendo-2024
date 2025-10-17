@@ -25,7 +25,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
 import frc.robot.Constants.ShooterConstants.PivotPIDConstants;
-import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.utils.InterpolatingTreeMap;
 import frc.robot.utils.TunableNumber;
 

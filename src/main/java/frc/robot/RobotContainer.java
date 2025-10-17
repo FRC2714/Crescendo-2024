@@ -23,9 +23,9 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.PhotonConstants;
 import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.drive.DriveSubsystem;
 import frc.robot.subsystems.superstructure.StateMachine;
 import frc.robot.subsystems.superstructure.StateMachine.ClimberState;
 import frc.robot.subsystems.superstructure.StateMachine.ShooterState;
@@ -93,10 +93,8 @@ public class RobotContainer {
             () -> m_robotDrive.drive(
                 -MathUtil.applyDeadband(m_driverController.getLeftY(), OIConstants.kDriveDeadband),
                 -MathUtil.applyDeadband(m_driverController.getLeftX(), OIConstants.kDriveDeadband),
-                m_robotDrive.getRotatingToGoal(-MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband))
-                        ? m_robotDrive.getDriveRotationToGoal()
-                        : -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
-                true, false),
+                -MathUtil.applyDeadband(m_driverController.getRightX(), OIConstants.kDriveDeadband),
+                true),
             m_robotDrive));
       
       DriverStation.silenceJoystickConnectionWarning(true);
