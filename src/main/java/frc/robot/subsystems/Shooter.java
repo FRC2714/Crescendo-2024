@@ -10,6 +10,8 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 import com.revrobotics.spark.SparkFlex;
@@ -20,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Configs.ShooterConfig;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
 import frc.robot.Constants.ShooterConstants.PivotPIDConstants;
@@ -57,51 +60,17 @@ public class Shooter extends SubsystemBase {
     pivotMotor = new SparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
     topFlywheelMotor = new SparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
     bottomFlywheelMotor = new SparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
-
-    pivotMotor.setIdleMode(IdleMode.kBrake);
-    topFlywheelMotor.setIdleMode(IdleMode.kCoast);
-    bottomFlywheelMotor.setIdleMode(IdleMode.kCoast);
-
-    topFlywheelMotor.setInverted(true);
-
-    pivotMotor.setSmartCurrentLimit(ShooterConstants.kPivotSmartCurrentLimit);
-    topFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kTopFlywheelSmartCurrentLimit);
-    bottomFlywheelMotor.setSmartCurrentLimit(ShooterConstants.kBottomFlywheelSmartCurrentLimit);
-
-    topFlywheelMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-    bottomFlywheelMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
-
-    topFlywheelMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-    bottomFlywheelMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus5, 20000);
-
-    topFlywheelMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-    bottomFlywheelMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus6, 20000);
-
-    bottomFlywheelMotor.follow(topFlywheelMotor, false);
-
-    pivotEncoder = pivotMotor.getAbsoluteEncoder(Type.kDutyCycle);
-    pivotEncoder.setPositionConversionFactor(ShooterConstants.kPivotEncoderConversionFactor);
-    pivotEncoder.setInverted(true);
-    pivotEncoder.setZeroOffset(ShooterConstants.kPivotEncoderZeroOffset);
-
-    pivotMotor.setInverted(true);
-
-    flywheelEncoder = topFlywheelMotor.getEncoder();
-
-    flywheelEncoder.setVelocityConversionFactor(ShooterConstants.kFlywheelGearRatio);
-
-    topFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
-    bottomFlywheelMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
-    pivotMotor.enableVoltageCompensation(ShooterConstants.kNominalVoltage);
-
+    
     pivotController = new PIDController(PivotPIDConstants.kP, PivotPIDConstants.kI, PivotPIDConstants.kD);
-    flywheelController = topFlywheelMotor.getPIDController();
 
-    flywheelController.setP(FlywheelPIDConstants.kP);
-    flywheelController.setFF(FlywheelPIDConstants.kFF);
-    topFlywheelMotor.burnFlash();
-    bottomFlywheelMotor.burnFlash();
-    pivotMotor.burnFlash();
+    
+    flywheelEncoder = topFlywheelMotor.getEncoder();
+    flywheelController = topFlywheelMotor.getClosedLoopController();
+    pivotEncoder = pivotMotor.getAbsoluteEncoder();
+
+    topFlywheelMotor.configure(ShooterConfig.topFlywheel, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    bottomFlywheelMotor.configure(ShooterConfig.bottomFlywheel, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    pivotMotor.configure(ShooterConfig.pivot, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
     pivotAngleMap = new InterpolatingTreeMap();
     flywheelVelocityMap = new InterpolatingTreeMap();
@@ -337,22 +306,22 @@ public class Shooter extends SubsystemBase {
     pivotController.setP(pivotP.get());
   }
 
-  public void tuneFlywheelP() {
-    flywheelController.setP(flywheelP.get());
-  }
+  // public void tuneFlywheelP() {
+  //   flywheelController.setP(flywheelP.get());
+  // }
 
-  public void tuneFlywheelD() {
-    flywheelController.setD(flywheelD.get());
-  }
+  // public void tuneFlywheelD() {
+  //   flywheelController.setD(flywheelD.get());
+  // }
 
-  public void tuneFlywheelV() {
-    flywheelController.setFF(flywheelV.get());
-  }
+  // public void tuneFlywheelV() {
+  //   flywheelController.setFF(flywheelV.get());
+  // }
 
-  public void setDynamic() {
-    setPivotAngle(getDynamicPivotAngle());
-    setFlywheelVelocity(getDynamicFlywheelVelocity());
-  }
+  // public void setDynamic() {
+  //   setPivotAngle(getDynamicPivotAngle());
+  //   setFlywheelVelocity(getDynamicFlywheelVelocity());
+  // }
 
   public void setMoveAndShoot(double adjustedDistance) {
     setPivotAngle(getDynamicPivotAngle(adjustedDistance));
@@ -424,19 +393,19 @@ public class Shooter extends SubsystemBase {
       tuneFlywheelVelocity();
     }
 
-    if (flywheelP.hasChanged()) {
-      tuneFlywheelP();
-    }
+    // if (flywheelP.hasChanged()) {
+    //   tuneFlywheelP();
+    // }
 
-    if (flywheelV.hasChanged()) {
-      tuneFlywheelV();
-    }
+    // if (flywheelV.hasChanged()) {
+    //   tuneFlywheelV();
+    // }
 
-    if (flywheelD.hasChanged()) {
-      tuneFlywheelD();
-    }
+    // if (flywheelD.hasChanged()) {
+    //   tuneFlywheelD();
+    // }
 
-    if (dynamicEnabled) setDynamic();
+    // if (dynamicEnabled) setDynamic();
 
     setCalculatedPivotVoltage();
   }

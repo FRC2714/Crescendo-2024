@@ -9,6 +9,8 @@ import frc.robot.Constants.AmpConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.ModuleConstants;
+import frc.robot.Constants.ShooterConstants;
+import frc.robot.Constants.ShooterConstants.FlywheelPIDConstants;
 
 public final class Configs {
     public static final class MAXSwerveModule {
@@ -111,4 +113,37 @@ public final class Configs {
             feeder.smartCurrentLimit(IntakeConstants.kFeederSmartCurrentLimit);
         }
     }
+
+    public static final class ShooterConfig {
+        public static final SparkFlexConfig topFlywheel = new SparkFlexConfig();
+        public static final SparkFlexConfig bottomFlywheel = new SparkFlexConfig();
+        public static final SparkFlexConfig pivot = new SparkFlexConfig();
+
+        static {
+            pivot.idleMode(IdleMode.kBrake);
+            pivot.inverted(true);
+            pivot.smartCurrentLimit(ShooterConstants.kPivotSmartCurrentLimit);
+            pivot.voltageCompensation(ShooterConstants.kNominalVoltage);
+
+            pivot.absoluteEncoder.positionConversionFactor(ShooterConstants.kPivotEncoderConversionFactor);
+            pivot.absoluteEncoder.inverted(true);
+            pivot.absoluteEncoder.zeroOffset(ShooterConstants.kPivotEncoderZeroOffset);
+
+            topFlywheel.idleMode(IdleMode.kCoast);
+            topFlywheel.inverted(true);
+            topFlywheel.smartCurrentLimit(ShooterConstants.kTopFlywheelSmartCurrentLimit);
+            topFlywheel.voltageCompensation(ShooterConstants.kNominalVoltage);
+            
+            topFlywheel.encoder.velocityConversionFactor(ShooterConstants.kFlywheelGearRatio);
+            topFlywheel.closedLoop.p(FlywheelPIDConstants.kP);
+            topFlywheel.closedLoop.velocityFF(FlywheelPIDConstants.kFF);
+
+
+            bottomFlywheel.idleMode(IdleMode.kCoast);
+            bottomFlywheel.follow(ShooterConstants.kTopFlywheelCanId, false);
+            bottomFlywheel.smartCurrentLimit(ShooterConstants.kBottomFlywheelSmartCurrentLimit);
+            bottomFlywheel.voltageCompensation(ShooterConstants.kNominalVoltage);
+        }
+    }
+
 }
