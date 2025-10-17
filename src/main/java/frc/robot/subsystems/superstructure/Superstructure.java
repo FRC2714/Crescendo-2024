@@ -211,23 +211,23 @@ public class Superstructure extends SubsystemBase {
     return new ParallelCommandGroup(m_climber.retractRightClimberToReset());
   }
 
-  public Command setCenterHeading() {
-    return new InstantCommand(() -> m_drivetrain.setHeading(180));
-  }
+  // public Command setCenterHeading() {
+  //   return new InstantCommand(() -> m_drivetrain.setHeading(180));
+  // }
 
-  public Command setAmpSideHeading() {
-    if (DriverStation.getAlliance().get().toString().equals("Blue"))
-      return new InstantCommand(() -> m_drivetrain.setHeading(240));
-    else
-      return new InstantCommand(() -> m_drivetrain.setHeading(120));
-  }
+  // public Command setAmpSideHeading() {
+  //   if (DriverStation.getAlliance().get().toString().equals("Blue"))
+  //     return new InstantCommand(() -> m_drivetrain.setHeading(240));
+  //   else
+  //     return new InstantCommand(() -> m_drivetrain.setHeading(120));
+  // }
 
-  public Command setSourceSideHeading() {
-    if (DriverStation.getAlliance().get().toString().equals("Blue"))
-      return new InstantCommand(() -> m_drivetrain.setHeading(120));
-    else
-      return new InstantCommand(() -> m_drivetrain.setHeading(240));
-  }
+  // public Command setSourceSideHeading() {
+  //   if (DriverStation.getAlliance().get().toString().equals("Blue"))
+  //     return new InstantCommand(() -> m_drivetrain.setHeading(120));
+  //   else
+  //     return new InstantCommand(() -> m_drivetrain.setHeading(240));
+  // }
 
   public boolean isReadyToShoot() {
     return m_intake.getLoaded()

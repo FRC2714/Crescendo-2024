@@ -169,17 +169,17 @@ public class RobotContainer {
   }
 
   public void setTeleopDefaultStates() {
-    m_robotDrive.disableVoltageCompensation().schedule();
-    m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kTeleOpMaxSpeedMetersPerSecond).schedule();
-    m_robotDrive.setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed).schedule();
+    // m_robotDrive.disableVoltageCompensation().schedule();
+    // m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kTeleOpMaxSpeedMetersPerSecond).schedule();
+    // m_robotDrive.setMaxAngularSpeed(DriveConstants.kTeleOpMaxAngularSpeed).schedule();
     m_stateMachine.shooterSelectCommand(ShooterState.STOW).schedule();
     m_stateMachine.setCurrentIntakeState(StateMachine.IntakeState.IDLE).schedule();
   }
 
   public void setAutonomousDefaultStates() {
-    m_robotDrive.enableVoltageCompensation().schedule();
-    m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kAutoMaxSpeedMetersPerSecond).schedule();
-    m_robotDrive.setMaxAngularSpeed(DriveConstants.kAutoMaxAngularSpeed).schedule();
+    // m_robotDrive.enableVoltageCompensation().schedule();
+    // m_robotDrive.setMaxSpeedMetersPerSecond(DriveConstants.kAutoMaxSpeedMetersPerSecond).schedule();
+    // m_robotDrive.setMaxAngularSpeed(DriveConstants.kAutoMaxAngularSpeed).schedule();
     m_amp.stow().schedule();
   }
 
