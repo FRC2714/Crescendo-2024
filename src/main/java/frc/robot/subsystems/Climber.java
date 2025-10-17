@@ -4,11 +4,10 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkFlex;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,7 +23,7 @@ import frc.robot.utils.TunableNumber;
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
 
-  private CANSparkFlex leftClimberMotor, rightClimberMotor;
+  private SparkFlex leftClimberMotor, rightClimberMotor;
   private RelativeEncoder leftClimberEncoder, rightClimberEncoder;
 
   private PIDController leftClimberController;
@@ -36,8 +35,8 @@ public class Climber extends SubsystemBase {
 
   public Climber() {
 
-    leftClimberMotor = new CANSparkFlex(ClimberConstants.kLeftClimberCanId, MotorType.kBrushless);
-    rightClimberMotor = new CANSparkFlex(ClimberConstants.kRightClimberCanId, MotorType.kBrushless);
+    leftClimberMotor = new SparkFlex(ClimberConstants.kLeftClimberCanId, MotorType.kBrushless);
+    rightClimberMotor = new SparkFlex(ClimberConstants.kRightClimberCanId, MotorType.kBrushless);
 
     leftClimberMotor.setIdleMode(IdleMode.kBrake);
     rightClimberMotor.setIdleMode(IdleMode.kBrake);

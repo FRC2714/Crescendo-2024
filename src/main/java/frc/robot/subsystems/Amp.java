@@ -5,9 +5,9 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkFlex;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkFlex;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.math.controller.ArmFeedforward;
 import edu.wpi.first.math.controller.PIDController;
@@ -25,14 +25,14 @@ import frc.robot.utils.TunableNumber;
 public class Amp extends SubsystemBase {
   /** Creates a new Amp. */
 
-  private CANSparkFlex pivotMotor;
+  private SparkFlex pivotMotor;
   private AbsoluteEncoder pivotEncoder;
   private PIDController pivotController;
   private TunableNumber tunableAngle, tunableP;
 
   public Amp() {
 
-    pivotMotor = new CANSparkFlex(AmpConstants.kAmpCanId, MotorType.kBrushless);
+    pivotMotor = new SparkFlex(AmpConstants.kAmpCanId, MotorType.kBrushless);
     pivotMotor.setIdleMode(IdleMode.kBrake);
 
     pivotMotor.setSmartCurrentLimit(AmpConstants.kSmartCurrentLimit);

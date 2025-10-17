@@ -7,14 +7,12 @@ package frc.robot.subsystems;
 import java.util.concurrent.TimeUnit;
 
 import com.revrobotics.AbsoluteEncoder;
-import com.revrobotics.CANSparkFlex;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
-import com.revrobotics.SparkAbsoluteEncoder.Type;
+import com.revrobotics.spark.SparkClosedLoopController;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
+import com.revrobotics.spark.SparkFlex;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -31,15 +29,15 @@ import frc.robot.utils.TunableNumber;
 public class Shooter extends SubsystemBase {
   /** Creates a new Shooter. */
 
-  private CANSparkFlex topFlywheelMotor;
-  private CANSparkFlex bottomFlywheelMotor;
-  private CANSparkFlex pivotMotor;
+  private SparkFlex topFlywheelMotor;
+  private SparkFlex bottomFlywheelMotor;
+  private SparkFlex pivotMotor;
 
   private AbsoluteEncoder pivotEncoder;
   private RelativeEncoder flywheelEncoder;
 
   private PIDController pivotController;
-  private SparkPIDController flywheelController;
+  private SparkClosedLoopController flywheelController;
 
 
   private InterpolatingTreeMap pivotAngleMap;
@@ -56,9 +54,9 @@ public class Shooter extends SubsystemBase {
 
 
   public Shooter() {
-    pivotMotor = new CANSparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
-    topFlywheelMotor = new CANSparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
-    bottomFlywheelMotor = new CANSparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
+    pivotMotor = new SparkFlex(ShooterConstants.kPivotCanId, MotorType.kBrushless);
+    topFlywheelMotor = new SparkFlex(ShooterConstants.kTopFlywheelCanId, MotorType.kBrushless);
+    bottomFlywheelMotor = new SparkFlex(ShooterConstants.kBottomFlywheelCanId, MotorType.kBrushless);
 
     pivotMotor.setIdleMode(IdleMode.kBrake);
     topFlywheelMotor.setIdleMode(IdleMode.kCoast);

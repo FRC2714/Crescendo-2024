@@ -6,11 +6,10 @@ package frc.robot.subsystems;
 
 import java.util.function.BooleanSupplier;
 
-import com.revrobotics.CANSparkFlex;
+import com.revrobotics.spark.SparkFlex;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkBase.IdleMode;
-import com.revrobotics.CANSparkLowLevel.MotorType;
-import com.revrobotics.CANSparkLowLevel.PeriodicFrame;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkLowLevel.PeriodicFrame;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,11 +26,11 @@ import frc.robot.Constants.IntakeConstants;
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
 
-  private CANSparkFlex frontRollerMotor;
-  private CANSparkFlex backBottomRollerMotor;
-  private CANSparkFlex backDirectionRollerMotor;
-  private CANSparkFlex conveyorMotor;
-  private CANSparkFlex feederMotor;
+  private SparkFlex frontRollerMotor;
+  private SparkFlex backBottomRollerMotor;
+  private SparkFlex backDirectionRollerMotor;
+  private SparkFlex conveyorMotor;
+  private SparkFlex feederMotor;
 
   private DigitalInput breakBeam;
 
@@ -47,11 +46,11 @@ public class Intake extends SubsystemBase {
   private double elapsedShootTime;
   
   public Intake() {
-    frontRollerMotor = new CANSparkFlex(IntakeConstants.kFrontRollerCanId, MotorType.kBrushless);
-    backBottomRollerMotor = new CANSparkFlex(IntakeConstants.kBackBottomRollerCanId, MotorType.kBrushless);
-    backDirectionRollerMotor = new CANSparkFlex(IntakeConstants.kBackDirectionRollerCanId, MotorType.kBrushless);
-    conveyorMotor = new CANSparkFlex(IntakeConstants.kConveyorCanId, MotorType.kBrushless);
-    feederMotor = new CANSparkFlex(IntakeConstants.kFeederCanId, MotorType.kBrushless);
+    frontRollerMotor = new SparkFlex(IntakeConstants.kFrontRollerCanId, MotorType.kBrushless);
+    backBottomRollerMotor = new SparkFlex(IntakeConstants.kBackBottomRollerCanId, MotorType.kBrushless);
+    backDirectionRollerMotor = new SparkFlex(IntakeConstants.kBackDirectionRollerCanId, MotorType.kBrushless);
+    conveyorMotor = new SparkFlex(IntakeConstants.kConveyorCanId, MotorType.kBrushless);
+    feederMotor = new SparkFlex(IntakeConstants.kFeederCanId, MotorType.kBrushless);
 
     frontRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
     backBottomRollerMotor.setPeriodicFramePeriod(PeriodicFrame.kStatus4, 20000);
